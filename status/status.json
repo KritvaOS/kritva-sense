@@ -1,0 +1,12 @@
+{
+  "schema_version": "2.0",
+  "workstream_id": "SENSE",
+  "repo": "KritvaOS/kritva-sense",
+  "source": {
+    "branch": "main",
+    "commit": "244870835375ea29951128e698b6d3d8025198f0"
+  },
+  "tasks": [],
+  "updated_at": "2026-10-27T07:38:57Z"
+}
+
