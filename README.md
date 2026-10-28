@@ -16,7 +16,7 @@
 | Milestones | [planning/MILESTONE.md](planning/MILESTONE.md) and [planning/MILESTONE_STATUS.md](planning/MILESTONE_STATUS.md) |
 | Tasks | [planning/TASKS.md](planning/TASKS.md) |
 | Acceptance Criteria | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) |
-| Status Reporting | Not yet implemented: this repository has no `status/` directory and no generated status report (see section 10) |
+| Status Reporting | [status/status.json](status/status.json): schema 2.0 report with an empty task list, hand-maintained, no generator (see section 10) |
 | License | [LICENSE](LICENSE) (Apache License 2.0; see section 17 for an open question) |
 
 This README follows the Kritva README standard (`v2/planning/standards/README_STANDARD.md` in [kritva-program](https://github.com/KritvaOS/kritva-program)). It is a navigation map; the documents it links own the detail.
@@ -29,7 +29,7 @@ Kritva Sense is the part of Kritva OS V2 that will own the Sense data contract. 
 
 **This repository does not own**: motion commands (kritva-motion), inference (kritva-mind), skill orchestration (kritva-skill), device drivers below the contract, and the platform foundation (kritva-core).
 
-**Implementation state.** IMPLEMENTED: the governance baseline only: the planning records under [planning/](planning/), the acceptance criteria, the pull-request workflows and their scripts, the commit-message checker with its tests, and the `Makefile` structure check. NOT YET IMPLEMENTED: the contract, any source code, tests of the contract, a `src/` folder, unit, integration and regression gates, status reporting and any release. PROPOSED: the first task KOS-SENSE-001 (Sense architecture and data contract), which is "NOT_STARTED (proposed, awaiting owner approval)" in [planning/TASKS.md](planning/TASKS.md). Source folders are added only when a real task needs them, so their absence is intended and is not a defect.
+**Implementation state.** IMPLEMENTED: the governance baseline only: the planning records under [planning/](planning/), the acceptance criteria, the pull-request workflows and their scripts, the commit-message checker with its tests, the `Makefile` structure check, and the Stage 1 status report `status/status.json` (empty task list). NOT YET IMPLEMENTED: the contract, any source code, tests of the contract, a `src/` folder, unit, integration and regression gates, a status generator and any release. PROPOSED: the first task KOS-SENSE-001 (Sense architecture and data contract), which is "NOT_STARTED (proposed, awaiting owner approval)" in [planning/TASKS.md](planning/TASKS.md). Source folders are added only when a real task needs them, so their absence is intended and is not a defect.
 
 ## 2. Position in the KritvaOS Ecosystem
 
@@ -69,7 +69,8 @@ Labels: INPUT is edited by hand and read by a tool or review; GENERATED is writt
 | [.github/](.github/) | CODEOWNERS, pull request template, `kritva-gate.json` and four workflows | AUTHORITATIVE | `kritva-gate.json` configures the PR gate |
 | [Makefile](Makefile) | Check targets; unimplemented gates exit 3 | INPUT; IMPLEMENTED | See section 11 |
 | [AGENTS.md](AGENTS.md), [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [LICENSE](LICENSE) | Rules, contribution steps, security policy, licence | AUTHORITATIVE | |
-| `src/`, `include/`, `docs/`, `status/`, `examples/` | Source, interfaces, documentation, status report, examples | NOT YET IMPLEMENTED (absent) | Added only when a real task needs them |
+| [status/](status/) | `status.json`: the report the program ingests | INPUT; IMPLEMENTED (Stage 1) | Schema 2.0, `tasks: []`; reports facts only and earns no credit |
+| `src/`, `include/`, `docs/`, `examples/` | Source, interfaces, documentation, examples | NOT YET IMPLEMENTED (absent) | Added only when a real task needs them |
 
 ## 6. Toolchain and Development Workflow
 
@@ -110,7 +111,7 @@ Proposed milestones, from [planning/MILESTONE.md](planning/MILESTONE.md) (genera
 | V2-M7-SENSE-001 | V2-M7 LIVE & RESULTS | PROPOSED | Telemetry stream contract validated end to end (software scope). |
 | V2-M8-SENSE-001 | V2-M8 PRODUCTION | PROPOSED | Release and security review complete. |
 
-The target dates are in [planning/MILESTONE.md](planning/MILESTONE.md); they are proposed targets, not approved dates and not delivery commitments (program decision PD-001). The status table is "as of the governance baseline commit" and may lag the repository (it shows the governance baseline as IN_REVIEW although the baseline change has since been merged). A milestone closes only through an approved `COMPLETION_RECORD.md`; a tag or a merge does not close it, and no completion record exists.
+The target dates are in [planning/MILESTONE.md](planning/MILESTONE.md); they are proposed targets, not approved dates and not delivery commitments (program decision PD-001). The status table is "as of the governance baseline commit" and may lag the repository (it showed the governance baseline as IN_REVIEW; the table now records that the baseline change was merged and that the milestone is not closed). A milestone closes only through an approved `COMPLETION_RECORD.md`; a tag or a merge does not close it, and no completion record exists.
 
 ## 9. Tasks and Acceptance Criteria
 
@@ -120,11 +121,11 @@ The target dates are in [planning/MILESTONE.md](planning/MILESTONE.md); they are
 
 ## 10. Status Reporting and Program Integration
 
-Not yet implemented. This repository has no `status/` directory and generates no `status.json`. The program tracks its tasks through the registry named in `.github/kritva-gate.json` (`planning/TASKS.md`, type `repo-tasks-md`). This repository reports facts only and earns no program credit; nothing in it adds baseline weight (kritva-program decides baseline, weights, approvals and gates).
+Stage 1 is implemented: [status/status.json](status/status.json) (schema 2.0, workstream `SENSE`, `tasks: []`) is maintained by hand, and there is no status generator yet. The program lists this repository as a status source in kritva-program (`v2/tracking/sources.json`, program decision D-077, Stage 1 plan `v2/planning/STATUS_INGESTION_PLAN.md`). The empty task list means no approved task is reported; KOS-SENSE-001 stays proposed and outside the central baseline. The program tracks its tasks through the registry named in `.github/kritva-gate.json` (`planning/TASKS.md`, type `repo-tasks-md`). This repository reports facts only and earns no program credit; nothing in it adds baseline weight (kritva-program decides baseline, weights, approvals and gates).
 
 | Dimension | Source record | Authority |
 |---|---|---|
-| Execution | the task status in [planning/TASKS.md](planning/TASKS.md); KOS-SENSE-001 is NOT_STARTED | The task owner records it |
+| Execution | the task status in [planning/TASKS.md](planning/TASKS.md); KOS-SENSE-001 is NOT_STARTED; the report lists no task | The task owner records it |
 | Evidence | none recorded: no CI run, test result or review record is cited as task evidence | Evidence is recorded at acceptance, by the author, and checked by another reviewer |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md), the review record and the central approvals in kritva-program | The independent reviewer and the owner, never a status report |
 | Release readiness | not defined: no release, tag or completion record exists | The owner, through the central gates |
