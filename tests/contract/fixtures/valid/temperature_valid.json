@@ -1,0 +1,22 @@
+{
+  "description": "Valid temperature sample",
+  "sample": {
+    "contract_version": "0.1.0",
+    "frame_id": "world",
+    "kind": "temperature",
+    "measurements": {
+      "temperature": {
+        "unit": "K",
+        "value": 0.5
+      }
+    },
+    "sensor_id": "temp.battery",
+    "sequence": 10,
+    "timestamp": {
+      "clock": "monotonic",
+      "unit": "ns",
+      "value": 1000000000
+    },
+    "validity": "VALID"
+  }
+}

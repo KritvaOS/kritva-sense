@@ -1,0 +1,42 @@
+{
+  "description": "Valid IMU sample",
+  "sample": {
+    "contract_version": "0.1.0",
+    "frame_id": "base",
+    "kind": "imu",
+    "measurements": {
+      "accel_x": {
+        "unit": "m/s^2",
+        "value": 0.5
+      },
+      "accel_y": {
+        "unit": "m/s^2",
+        "value": 0.5
+      },
+      "accel_z": {
+        "unit": "m/s^2",
+        "value": 0.5
+      },
+      "gyro_x": {
+        "unit": "rad/s",
+        "value": 0.5
+      },
+      "gyro_y": {
+        "unit": "rad/s",
+        "value": 0.5
+      },
+      "gyro_z": {
+        "unit": "rad/s",
+        "value": 0.5
+      }
+    },
+    "sensor_id": "imu.base_0",
+    "sequence": 10,
+    "timestamp": {
+      "clock": "monotonic",
+      "unit": "ns",
+      "value": 1000000000
+    },
+    "validity": "VALID"
+  }
+}

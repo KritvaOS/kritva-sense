@@ -43,7 +43,7 @@ The contract defines inputs, outputs, error handling, versioning and lifecycle, 
 
 | Gate | Command | Required result | State |
 |---|---|---|---|
-| Unit | `make test-unit` | all pass | NOT_IMPLEMENTED until KOS-SENSE-002 (Contract validation and synthetic-data tests) |
+| Unit | `make test-unit` | all pass | implemented for the contract validator (KOS-SENSE-002 draft); counts as evidence only once the task is approved |
 | Integration | `make test-integration` | all pass, real dependency boundaries | NOT_IMPLEMENTED |
 | Regression | `make test-regression` | all pass, suite unchanged by the change | NOT_IMPLEMENTED |
 | Structure | `make check` | planning files present, commit checker self-test passes | implemented |
@@ -64,7 +64,7 @@ As in the program standard section 1: stable task ID, merged through the approve
 
 ## 9. Known limitations and exclusions
 
-- No implementation exists; criteria are not yet testable by automated gates (gates listed NOT_IMPLEMENTED).
+- The unit gate covers only the reference validator and synthetic fixtures. Lint, integration, regression and acceptance gates stay NOT_IMPLEMENTED (exit 3).
 - No coverage threshold is set; one needs an approved decision.
 - The architecture and safety reviewer roles are held by the owner on an interim basis (program decision D-047, resolving PD-007); independent review is not yet in place.
 - Licence: Apache-2.0, confirmed by the owner (program decision D-064, closing PD-013).
