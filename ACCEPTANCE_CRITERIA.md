@@ -1,6 +1,6 @@
 # Acceptance Criteria: kritva-sense
 
-Standard: kritva-program `v2/planning/ACCEPTANCE_STANDARD.md` (proposed; approval pending PD-005, PD-006). Criteria below are for task KOS-SENSE-001 (Sense architecture and data contract) and are proposed until the owner approves the task. Nothing here is accepted, weighted or credited.
+Standard: kritva-program `v2/planning/ACCEPTANCE_STANDARD.md` (proposed; approval pending PD-005, PD-006). Criteria in section 3 are for task KOS-SENSE-001 (Sense architecture and data contract) and criteria in section 3A for KOS-SENSE-002 (Contract validation and synthetic-data tests). Both are proposed until the owner approves the tasks. Nothing here is accepted, weighted or credited.
 
 ## 1. Purpose and scope
 
@@ -10,7 +10,7 @@ Does not own: motion commands (kritva-motion), inference (kritva-mind), skill or
 
 ## 2. Normative dependencies
 
-kritva-core (approved contract), kritvaos-community (public architecture description). Exact versions or commit SHAs are recorded here when the contracts they refer to are approved; none are pinned yet.
+kritva-core (approved contract), kritvaos-community (public architecture description). Contract 0.1.0 has no normative dependency on either, so no version or commit SHA is pinned (stated in `contract/SENSE_CONTRACT.md` section 2). A pin is recorded here when a dependency on an approved contract is introduced. KOS-SENSE-002 depends on KOS-SENSE-001: its validator implements the approved contract and never alters it.
 
 ## 3. Functional criteria (KOS-SENSE-001)
 
@@ -22,6 +22,19 @@ kritva-core (approved contract), kritvaos-community (public architecture descrip
 | AC-004 | Validity, stale-data and missing-data behaviour is specified, with an error for each failure. | contract review, fault-path tests |
 | AC-005 | A breaking contract change needs a new MAJOR version, a changelog entry and an approved decision. | review, regression suite |
 
+## 3A. Functional criteria (KOS-SENSE-002)
+
+Synthetic data only. No real sensor, hardware-in-loop or safety validation is required or claimed.
+
+| ID | Criterion (testable) | Verified by |
+|---|---|---|
+| AC-201 | A reference validator checks samples against the SENSE-001 contract and version; schema and validator constants agree. | `make test-unit` |
+| AC-202 | Synthetic fixtures for valid samples of every sensor kind pass, including identity, timestamp, units, frame and version fields. | `make test-unit` |
+| AC-203 | Fixtures with missing or malformed fields, invalid timestamps or units, and unsupported versions are rejected with deterministic, documented error codes. | `make test-unit` |
+| AC-204 | Stale, missing and invalid data and sequence regression are asserted explicitly against the contract's errors. | `make test-unit` |
+| AC-205 | `make test-unit` runs from a clean checkout, exits non-zero on failure and passes on the approved closing commit. | `make test-unit`, CI |
+| AC-206 | Validator, fixtures, test instructions and expected outcomes are documented; results and CI are bound to immutable commit SHAs. | review |
+
 ## 4. Interface and API compatibility
 
 The contract defines inputs, outputs, error handling, versioning and lifecycle, with time and units stated. Contracts are versioned independently of program phases. No import of mind, skill or motion internals; consumers (mind) use the versioned contract only.
@@ -30,7 +43,7 @@ The contract defines inputs, outputs, error handling, versioning and lifecycle, 
 
 | Gate | Command | Required result | State |
 |---|---|---|---|
-| Unit | `make test-unit` | all pass | NOT_IMPLEMENTED until KOS-SENSE-002 (Contract validation and synthetic-data tests) |
+| Unit | `make test-unit` | all pass NOT_IMPLEMENTED until KOS-SENSE-002 (Contract validation and synthetic-data tests) |
 | Integration | `make test-integration` | all pass, real dependency boundaries | NOT_IMPLEMENTED |
 | Regression | `make test-regression` | all pass, suite unchanged by the change | NOT_IMPLEMENTED |
 | Structure | `make check` | planning files present, commit checker self-test passes | implemented |
@@ -52,6 +65,7 @@ As in the program standard section 1: stable task ID, merged through the approve
 ## 9. Known limitations and exclusions
 
 - No implementation exists; criteria are not yet testable by automated gates (gates listed NOT_IMPLEMENTED).
+- No coverage threshold is set; one needs an approved decision.
 - The architecture and safety reviewer roles are held by the owner on an interim basis (program decision D-047, resolving PD-007); independent review is not yet in place.
 - Licence: Apache-2.0, confirmed by the owner (program decision D-064, closing PD-013).
 
