@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/KritvaOS/kritva-sense/contract/sense-sample.schema.json",
+  "title": "Kritva Sense sample, contract 0.1.0",
+  "description": "Machine-readable form of contract/SENSE_CONTRACT.md. The prose contract and the reference validator are normative where they are stricter (sensor_id pattern is mirrored; per-kind measurements and the error_code/validity coupling are in the validator).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "sensor_id",
+    "kind",
+    "sequence",
+    "timestamp",
+    "frame_id",
+    "validity",
+    "measurements"
+  ],
+  "properties": {
+    "contract_version": {
+      "enum": [
+        "0.1.0"
+      ]
+    },
+    "sensor_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{0,31}(\\.[a-z0-9_]{1,32}){0,3}$"
+    },
+    "kind": {
+      "enum": [
+        "encoder",
+        "imu",
+        "range",
+        "temperature"
+      ]
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "timestamp": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clock",
+        "unit",
+        "value"
+      ],
+      "properties": {
+        "clock": {
+          "enum": [
+            "monotonic",
+            "utc"
+          ]
+        },
+        "unit": {
+          "const": "ns"
+        },
+        "value": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "frame_id": {
+      "enum": [
+        "world",
+        "base",
+        "sensor"
+      ]
+    },
+    "validity": {
+      "enum": [
+        "VALID",
+        "STALE",
+        "MISSING",
+        "INVALID"
+      ]
+    },
+    "error_code": {
+      "enum": [
+        "MISSING_FIELD",
+        "MALFORMED_FIELD",
+        "UNKNOWN_FIELD",
+        "UNSUPPORTED_CONTRACT_VERSION",
+        "INVALID_SENSOR_ID",
+        "INVALID_TIMESTAMP",
+        "INVALID_UNIT",
+        "UNKNOWN_FRAME",
+        "INVALID_VALIDITY",
+        "NON_FINITE_VALUE",
+        "SEQUENCE_REGRESSION",
+        "STALE_DATA",
+        "MISSING_DATA",
+        "INVALID_DATA"
+      ]
+    },
+    "measurements": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "value",
+          "unit"
+        ],
+        "properties": {
+          "value": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
