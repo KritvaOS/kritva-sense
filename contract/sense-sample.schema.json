@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/KritvaOS/kritva-sense/contract/sense-sample.schema.json",
   "title": "Kritva Sense sample, contract 0.1.0",
-  "description": "Machine-readable form of contract/SENSE_CONTRACT.md. The prose contract and the reference validator are normative where they are stricter (sensor_id pattern is mirrored; per-kind measurements and the error_code/validity coupling are in the validator).",
+  "description": "Structural subset of contract/SENSE_CONTRACT.md. It does not express per-kind measurement sets and units, the validity/error_code/measurements coupling, or the context checks (freshness, sequence). Passing this schema does not prove conformance; the prose contract and the reference validator are normative.",
   "type": "object",
   "additionalProperties": false,
   "required": [

@@ -62,11 +62,15 @@ Frames are defined once, here, and referenced by name; none is implied.
 
 | Frame | Meaning |
 |---|---|
-| `world` | Fixed external frame. |
-| `base` | Rigidly attached to the robot body. |
-| `sensor` | Origin at the sensor, axes per the sensor datasheet mapped to the convention below. |
+| `world` | Fixed external frame. Z is opposite to gravity. Its origin and heading are set by the deployment and are not defined here. |
+| `base` | Rigidly attached to the robot body, X toward the robot's forward direction. Its origin is the robot reference point named by the robot description, outside this contract. |
+| `sensor` | Rigidly attached to the sensor, origin at the sensor reference point. Mounting offset and rotation relative to `base` are outside this contract. |
 
-All frames are right-handed with X forward, Y left, Z up. Rotation about an axis is positive counter-clockwise looking from the positive axis toward the origin. Transforms between frames are outside this version. A `frame_id` not in the table is `UNKNOWN_FRAME`.
+`frame_id` names the coordinate frame in which the sample's axis-bearing values are expressed. The producer maps the sensor's native axes into the convention below before emitting, so a consumer never needs a datasheet. Scalar kinds (`range`, `encoder`, `temperature`) are not rotated by `frame_id`; it names the frame of the sensor's reference point. This version defines no transform between frames, so a consumer must not assume `world`, `base` and `sensor` are related until a transform is provided outside this contract.
+
+All frames are right-handed with X forward, Y left, Z up. Rotation about an axis is positive counter-clockwise looking from the positive axis toward the origin. Transforms between frames are outside this version.
+
+Example: an `imu` sample with `frame_id` `base` reports `accel_x` as acceleration along the robot's forward axis in `m/s^2`. `accel` is specific force (what an accelerometer measures), so a robot at rest on level ground reports `accel_z` of about +9.81 `m/s^2`. `gyro_z` is positive for a counter-clockwise turn seen from above. This convention is part of the draft under review. A `frame_id` not in the table is `UNKNOWN_FRAME`.
 
 ## 6. Validity and stale data
 
@@ -78,6 +82,15 @@ All frames are right-handed with X forward, Y left, Z up. Rotation about an axis
 | `INVALID` | Reading present but not trustworthy. | Not usable: `INVALID_DATA`. |
 
 Freshness: a consumer declares `max_age_ns` per stream. A `VALID` sample whose age (now minus `timestamp.value`, same clock) exceeds `max_age_ns` is `STALE_DATA`. An age equal to the limit is fresh. A sample newer than the consumer's clock is `INVALID_TIMESTAMP`. A non-conformant sample is never usable and freshness is not evaluated for it (`INVALID_DATA`).
+
+### 6.1 Checks that need context
+
+Checking one sample against sections 3 to 5 proves structural conformance only. It does not prove freshness or sequence continuity, and a consumer must not treat a conformant sample as fresh or in order on that basis.
+
+- Freshness needs the consumer's `now` value in nanoseconds, the clock it came from (`monotonic` or `utc`) and `max_age_ns`. If any is absent, freshness is not evaluated. If the clock differs from the sample's `timestamp.clock`, the result is `INVALID_TIMESTAMP`.
+- Sequence continuity needs the previous sample of the same `sensor_id`. Without it, continuity is not evaluated. Samples of different sensors are independent.
+- For a `STALE` or `INVALID` sample the measurements are the last known values, present for diagnosis. A consumer must not use them as readings.
+- Precedence for a consumer: a non-conformant sample is rejected with its structural errors; otherwise a declared `MISSING`, `STALE` or `INVALID` state decides; otherwise freshness is evaluated.
 
 ## 7. Errors
 
@@ -106,4 +119,4 @@ This is contract 0.1.0, a draft. It becomes reviewable at the V2-M1-SENSE-001 mi
 
 ## 9. Versioning and compatibility
 
-The contract is versioned independently of program phases. Within a MAJOR version, a MINOR change may only add something optional and a PATCH change may only clarify. While MAJOR is 0, a MINOR change may also be breaking, and the validator supports exactly the versions it lists. A breaking change needs a new MAJOR version (or MINOR while 0.x), a changelog entry in `planning/CHANGELOG.md` and an approved decision (AC-005). Adding a kind, frame, unit, error code or field is a contract change and updates the schema, the validator and its tests together; `make test-unit` fails if they disagree.
+The contract is versioned independently of program phases. Within a MAJOR version, a MINOR change may only add something optional and a PATCH change may only clarify. While MAJOR is 0, a MINOR change may also be breaking, and the validator supports exactly the versions it lists. A breaking change needs a new MAJOR version (or MINOR while 0.x), a changelog entry in `planning/CHANGELOG.md` and an approved decision (AC-005). The JSON Schema is a structural subset of this contract. It does not express the per-kind measurement sets and units, the coupling between `validity`, `error_code` and `measurements`, or the context checks in section 6.1. A sample that passes the schema is not thereby conformant; this document and the reference validator are normative where they are stricter. Adding a kind, frame, unit, error code or field is a contract change and updates the schema, the validator and its tests together; `make test-unit` fails if they disagree.
