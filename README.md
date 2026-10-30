@@ -29,7 +29,7 @@ Kritva Sense is the part of Kritva OS V2 that will own the Sense data contract. 
 
 **This repository does not own**: motion commands (kritva-motion), inference (kritva-mind), skill orchestration (kritva-skill), device drivers below the contract, and the platform foundation (kritva-core).
 
-**Implementation state.** IMPLEMENTED: the governance baseline only: the planning records under [planning/](planning/), the acceptance criteria, the pull-request workflows and their scripts, the commit-message checker with its tests, the `Makefile` structure check, and the Stage 1 status report `status/status.json` (empty task list). DRAFTED, under review and not accepted: the Sense data contract 0.1.0 ([contract/](contract/), task KOS-SENSE-001) and its reference validator, synthetic fixtures and unit tests (`src/`, `tests/contract/`, task KOS-SENSE-002), both "IN_PROGRESS" in [planning/TASKS.md](planning/TASKS.md) and awaiting the central baseline amendment (proposed weights 5 and 4, not baselined, no credit). NOT YET IMPLEMENTED: lint, integration and regression gates, a status generator and any release. Other source folders are added only when a real task needs them, so their absence is intended and is not a defect.
+**Implementation state.** IMPLEMENTED: the governance baseline only: the planning records under [planning/](planning/), the acceptance criteria, the pull-request workflows and their scripts, the commit-message checker with its tests, the `Makefile` structure check, and the status report `status/status.json` (hand-maintained, checked against `planning/TASKS.md`). DRAFTED, under review and not accepted: the Sense data contract 0.1.0 ([contract/](contract/), task KOS-SENSE-001) and its reference validator, synthetic fixtures and unit tests (`src/`, `tests/contract/`, task KOS-SENSE-002), both "IN_REVIEW" in [planning/TASKS.md](planning/TASKS.md), baselined in kritva-program baseline v3 (D-078, weights 5 and 4) and awaiting owner and central approval; no credit until approved. NOT YET IMPLEMENTED: lint, integration and regression gates, a status generator and any release. Other source folders are added only when a real task needs them, so their absence is intended and is not a defect.
 
 ## 2. Position in the KritvaOS Ecosystem
 
@@ -69,7 +69,7 @@ Labels: INPUT is edited by hand and read by a tool or review; GENERATED is writt
 | [tasks/](tasks/) | `KOS-SENSE-001/TASK.md` and `KOS-SENSE-002/TASK.md` | INPUT; IN_PROGRESS | Planning records; proposed weights are not baselined |
 | [scripts/](scripts/) | `docs_check.py` (link check), `pipeline/pr_gate.py` (PR gate), `security/` (commit checkers), `check_readme.py` (README check) | INPUT; IMPLEMENTED | `pipeline/` and `security/` are protected paths of the gate |
 | [tests/](tests/) | `commit_message_check/`, `readme_check/` (checker tests) and `contract/` (validator, fixtures and CLI tests) | EVIDENCE; IMPLEMENTED | The contract tests use synthetic data only and are draft evidence until KOS-SENSE-002 is approved |
-| [.github/](.github/) | CODEOWNERS, pull request template, `kritva-gate.json` and four workflows | AUTHORITATIVE | `kritva-gate.json` configures the PR gate |
+| [.github/](.github/) | CODEOWNERS, pull request template, `kritva-gate.json` and five workflows | AUTHORITATIVE | `kritva-gate.json` configures the PR gate |
 | [Makefile](Makefile) | Check targets; unimplemented gates exit 3 | INPUT; IMPLEMENTED | See section 11 |
 | [AGENTS.md](AGENTS.md), [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [LICENSE](LICENSE) | Rules, contribution steps, security policy, licence | AUTHORITATIVE | |
 | [status/](status/) | `status.json`: the report the program ingests | INPUT; IMPLEMENTED (Stage 1) | Schema 2.0, `tasks: []`; reports facts only and earns no credit |
@@ -124,23 +124,24 @@ The target dates are in [planning/MILESTONE.md](planning/MILESTONE.md); they are
 
 ## 10. Status Reporting and Program Integration
 
-Stage 1 is implemented: [status/status.json](status/status.json) (schema 2.0, workstream `SENSE`, `tasks: []`) is maintained by hand, and there is no status generator yet. The program lists this repository as a status source in kritva-program (`v2/tracking/sources.json`, program decision D-077, Stage 1 plan `v2/planning/STATUS_INGESTION_PLAN.md`). The empty task list means no approved task is reported; KOS-SENSE-001 stays proposed and outside the central baseline. The program tracks its tasks through the registry named in `.github/kritva-gate.json` (`planning/TASKS.md`, type `repo-tasks-md`). This repository reports facts only and earns no program credit; nothing in it adds baseline weight (kritva-program decides baseline, weights, approvals and gates).
+[status/status.json](status/status.json) (schema 2.0, workstream `SENSE`) is maintained by hand and checked against `planning/TASKS.md` by `tests/status`; there is no status generator yet. It lists KOS-SENSE-001 and KOS-SENSE-002 with execution COMPLETE, meaning the implementation is finished and submitted for review. The program lists this repository as a status source in kritva-program (`v2/tracking/sources.json`, program decision D-077, Stage 1 plan `v2/planning/STATUS_INGESTION_PLAN.md`). Both tasks are in the central baseline v3 (D-078) without an approval, so they earn no credit. The program tracks its tasks through the registry named in `.github/kritva-gate.json` (`planning/TASKS.md`, type `repo-tasks-md`). This repository reports facts only and earns no program credit; nothing in it adds baseline weight (kritva-program decides baseline, weights, approvals and gates).
 
 | Dimension | Source record | Authority |
 |---|---|---|
-| Execution | the task status in [planning/TASKS.md](planning/TASKS.md); KOS-SENSE-001 is NOT_STARTED; the report lists no task | The task owner records it |
-| Evidence | none recorded: no CI run, test result or review record is cited as task evidence | Evidence is recorded at acceptance, by the author, and checked by another reviewer |
+| Execution | the task status in [planning/TASKS.md](planning/TASKS.md); both tasks are IN_REVIEW; the report lists them as execution COMPLETE | The task owner records it |
+| Evidence | criteria-reference entries only; a CI run on a closing commit is added after the `unit-tests` workflow has run on `main` | Evidence is recorded at acceptance, by the author, and checked by another reviewer |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md), the review record and the central approvals in kritva-program | The independent reviewer and the owner, never a status report |
 | Release readiness | not defined: no release, tag or completion record exists | The owner, through the central gates |
 
 ## 11. Build, Test, Regression and Validation
 
-CI runs four workflows. `make check` is a local command and is not the same as CI.
+CI runs five workflows. `make check` is a local command and is not the same as CI.
 
 | Workflow | Trigger | What it runs |
 |---|---|---|
 | `commit-message-check` | pull requests | the commit checker's unit tests, and the checker on the pull request's commits (rejects AI-session trailers and links only) |
 | `pr-acceptance-gate` | pull requests | `scripts/pipeline/pr_gate.py static` against `.github/kritva-gate.json`: report-only rules R01 commit format, R02 task exists and is open, R03 acceptance criteria changed, R04 protected paths, R05 completion record, R06 required workflows, R07 required approvals, R08 dependencies. REJECT fails the check; NEEDS_HUMAN and APPROVE pass it; it posts or updates a report comment and approves and merges nothing |
+| `unit-tests` | pull requests; push to `main` | `make check docs-check`, then `make test-unit`: the contract validator, synthetic fixture and status report tests (KOS-SENSE-002); a green run is evidence only once the task is approved |
 | `readme-check` | pull requests; push to `main` | the README checker's unit tests, then `python3 scripts/check_readme.py README.md` (structure, metadata and local links only; not a required check yet, D-067) |
 | `secret-scan` | push to `main`; pull requests; manual dispatch | gitleaks over the git history |
 

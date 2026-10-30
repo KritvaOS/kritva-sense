@@ -4,8 +4,8 @@ Task IDs use the prefix `KOS-SENSE` (proposed registry, program decision PD-004)
 
 | Task | Title | Status | Milestone | Acceptance |
 |---|---|---|---|---|
-| KOS-SENSE-001 | Sense architecture and data contract | IN_PROGRESS (draft contract 0.1.0; central baselining pending) | V2-M1-SENSE-001 | [ACCEPTANCE_CRITERIA.md](../ACCEPTANCE_CRITERIA.md) section 3; [task](../tasks/KOS-SENSE-001/TASK.md) |
-| KOS-SENSE-002 | Contract validation and synthetic-data tests | IN_PROGRESS (depends on KOS-SENSE-001; central baselining pending) | V2-M2-SENSE-001 | [ACCEPTANCE_CRITERIA.md](../ACCEPTANCE_CRITERIA.md) section 3A; [task](../tasks/KOS-SENSE-002/TASK.md) |
+| KOS-SENSE-001 | Sense architecture and data contract | IN_REVIEW (draft contract 0.1.0 submitted; owner and central approval pending) | V2-M1-SENSE-001 | [ACCEPTANCE_CRITERIA.md](../ACCEPTANCE_CRITERIA.md) section 3; [task](../tasks/KOS-SENSE-001/TASK.md) |
+| KOS-SENSE-002 | Contract validation and synthetic-data tests | IN_REVIEW (validator, fixtures and unit gate submitted; depends on KOS-SENSE-001; owner and central approval pending) | V2-M2-SENSE-001 | [ACCEPTANCE_CRITERIA.md](../ACCEPTANCE_CRITERIA.md) section 3A; [task](../tasks/KOS-SENSE-002/TASK.md) |
 
 Proposed planning weights (estimates only, not baselined, no credit; to be revised through the central amendment): KOS-SENSE-001 = 5 (4 to 5 effort days), KOS-SENSE-002 = 4 (3 to 4 effort days). Owner direction to proceed was recorded in chat on 2026-10-29; the formal baseline amendment, decision record and approval stay in kritva-program (`v2/planning/KOS_SENSE_001_BASELINING_PLAN.md`).
 
