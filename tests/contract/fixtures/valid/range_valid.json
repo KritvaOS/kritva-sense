@@ -1,0 +1,22 @@
+{
+  "description": "Valid range sample",
+  "sample": {
+    "contract_version": "0.1.0",
+    "frame_id": "sensor",
+    "kind": "range",
+    "measurements": {
+      "distance": {
+        "unit": "m",
+        "value": 0.5
+      }
+    },
+    "sensor_id": "range.front",
+    "sequence": 10,
+    "timestamp": {
+      "clock": "monotonic",
+      "unit": "ns",
+      "value": 1000000000
+    },
+    "validity": "VALID"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "description": "Valid encoder sample on utc clock",
+  "sample": {
+    "contract_version": "0.1.0",
+    "frame_id": "base",
+    "kind": "encoder",
+    "measurements": {
+      "position": {
+        "unit": "rad",
+        "value": 0.5
+      }
+    },
+    "sensor_id": "encoder.joint1",
+    "sequence": 10,
+    "timestamp": {
+      "clock": "utc",
+      "unit": "ns",
+      "value": 1793000000000000000
+    },
+    "validity": "VALID"
+  }
+}

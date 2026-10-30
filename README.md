@@ -29,7 +29,7 @@ Kritva Sense is the part of Kritva OS V2 that will own the Sense data contract. 
 
 **This repository does not own**: motion commands (kritva-motion), inference (kritva-mind), skill orchestration (kritva-skill), device drivers below the contract, and the platform foundation (kritva-core).
 
-**Implementation state.** IMPLEMENTED: the governance baseline only: the planning records under [planning/](planning/), the acceptance criteria, the pull-request workflows and their scripts, the commit-message checker with its tests, the `Makefile` structure check, and the Stage 1 status report `status/status.json` (empty task list). DRAFTED, under review and not accepted: the Sense data contract 0.1.0 ([contract/](contract/), task KOS-SENSE-001), "IN_PROGRESS" in [planning/TASKS.md](planning/TASKS.md), awaiting the central baseline amendment (proposed weights 5 and 4, not baselined, no credit). PLANNED: KOS-SENSE-002 (reference validator and synthetic-data tests), its task row and criteria are added. NOT YET IMPLEMENTED: any source code, tests of the contract, unit, integration and regression gates, a status generator and any release. Other source folders are added only when a real task needs them, so their absence is intended and is not a defect.
+**Implementation state.** IMPLEMENTED: the governance baseline only: the planning records under [planning/](planning/), the acceptance criteria, the pull-request workflows and their scripts, the commit-message checker with its tests, the `Makefile` structure check, and the Stage 1 status report `status/status.json` (empty task list). DRAFTED, under review and not accepted: the Sense data contract 0.1.0 ([contract/](contract/), task KOS-SENSE-001) and its reference validator, synthetic fixtures and unit tests (`src/`, `tests/contract/`, task KOS-SENSE-002), both "IN_PROGRESS" in [planning/TASKS.md](planning/TASKS.md) and awaiting the central baseline amendment (proposed weights 5 and 4, not baselined, no credit). NOT YET IMPLEMENTED: lint, integration and regression gates, a status generator and any release. Other source folders are added only when a real task needs them, so their absence is intended and is not a defect.
 
 ## 2. Position in the KritvaOS Ecosystem
 
@@ -65,14 +65,15 @@ Labels: INPUT is edited by hand and read by a tool or review; GENERATED is writt
 | [planning/](planning/) | Tasks, milestones, milestone status, review checklist, commit step, changelog | MIXED: planning records | Governs execution and acceptance |
 | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) | Criteria and test gates for KOS-SENSE-001 and KOS-SENSE-002 | AUTHORITATIVE; PROPOSED | Accepted criteria are never edited; a change is a new version |
 | [contract/](contract/) | `SENSE_CONTRACT.md` (contract 0.1.0) and `sense-sample.schema.json` | AUTHORITATIVE; PROPOSED (draft, KOS-SENSE-001) | A breaking change needs a new version, a changelog entry and an approved decision |
+| [src/kritva_sense/](src/kritva_sense/) | Reference validator (standard library only); `python3 -m kritva_sense FILE.json` | INPUT; DRAFT (KOS-SENSE-002) | Implements the contract and never changes it |
 | [tasks/](tasks/) | `KOS-SENSE-001/TASK.md` and `KOS-SENSE-002/TASK.md` | INPUT; IN_PROGRESS | Planning records; proposed weights are not baselined |
 | [scripts/](scripts/) | `docs_check.py` (link check), `pipeline/pr_gate.py` (PR gate), `security/` (commit checkers), `check_readme.py` (README check) | INPUT; IMPLEMENTED | `pipeline/` and `security/` are protected paths of the gate |
-| [tests/](tests/) | `commit_message_check/` (commit checker tests) and `readme_check/` (README checker tests) | EVIDENCE; IMPLEMENTED | Tests of the checkers only; no test of the contract exists yet |
+| [tests/](tests/) | `commit_message_check/`, `readme_check/` (checker tests) and `contract/` (validator, fixtures and CLI tests) | EVIDENCE; IMPLEMENTED | The contract tests use synthetic data only and are draft evidence until KOS-SENSE-002 is approved |
 | [.github/](.github/) | CODEOWNERS, pull request template, `kritva-gate.json` and four workflows | AUTHORITATIVE | `kritva-gate.json` configures the PR gate |
 | [Makefile](Makefile) | Check targets; unimplemented gates exit 3 | INPUT; IMPLEMENTED | See section 11 |
 | [AGENTS.md](AGENTS.md), [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [LICENSE](LICENSE) | Rules, contribution steps, security policy, licence | AUTHORITATIVE | |
 | [status/](status/) | `status.json`: the report the program ingests | INPUT; IMPLEMENTED (Stage 1) | Schema 2.0, `tasks: []`; reports facts only and earns no credit |
-| `src/`, `include/`, `docs/`, `examples/` | Source, interfaces, documentation, examples | NOT YET IMPLEMENTED (absent) | Added only when a real task needs them |
+| `include/`, `docs/`, `examples/` | Interfaces, documentation, examples | NOT YET IMPLEMENTED (absent) | Added only when a real task needs them |
 
 ## 6. Toolchain and Development Workflow
 
@@ -148,10 +149,11 @@ CI runs four workflows. `make check` is a local command and is not the same as C
 | `make check` | check | required planning files exist; the commit-message checker's unit tests run; it does not run `docs-check`, the PR gate or any contract test |
 | `make docs-check` | check | every relative Markdown link points to an existing file (not an anchor check) |
 | `make check-readme` | check | structural check of this README only (metadata, topics, relative links, placeholders); a PASS does not show the content is accurate; not part of `make check` or CI |
-| `make lint`, `make test-unit`, `make test-integration`, `make test-regression`, `make test`, `make acceptance` | placeholder | print NOT_IMPLEMENTED and exit 3: they check nothing and are never a pass |
+| `make test-unit` | gate | runs the contract validator, synthetic fixture and CLI tests (KOS-SENSE-002 draft); exits non-zero on failure; evidence only once the task is approved |
+| `make lint`, `make test-integration`, `make test-regression`, `make test`, `make acceptance` | placeholder | print NOT_IMPLEMENTED and exit 3: they check nothing and are never a pass |
 | `python3 scripts/security/check_commit_format.py --range origin/main..HEAD` | check | the commit format of the commits on a branch (the PR gate runs the same check as rule R01) |
 
-There is nothing to build and no test of the contract yet (KOS-SENSE-002 adds it). A passing `make check` shows only that the listed files exist and that the commit checker's own tests pass. It does not show that a design is right, that a gate is closed or that anything is safe. `.github/kritva-gate.json` declares three required checks (`secret-scan`, `commit-message-check` and `pr-acceptance-gate`); that list is the gate's own declaration, not the branch ruleset. [AGENTS.md](AGENTS.md) and [CONTRIBUTING.md](CONTRIBUTING.md) now name the same three. The owner decided that `pr-acceptance-gate` is a required check in the `main` ruleset (PD-018, D-061); the owner states that it has been added to the `main` ruleset (D-069); that is OWNER-ATTESTED and not independently verified from this README.
+There is nothing to build. `make test-unit` tests the draft contract 0.1.0 with synthetic data only; it is not hardware or safety validation. A passing `make check` shows only that the listed files exist and that the commit checker's own tests pass. It does not show that a design is right, that a gate is closed or that anything is safe. `.github/kritva-gate.json` declares three required checks (`secret-scan`, `commit-message-check` and `pr-acceptance-gate`); that list is the gate's own declaration, not the branch ruleset. [AGENTS.md](AGENTS.md) and [CONTRIBUTING.md](CONTRIBUTING.md) now name the same three. The owner decided that `pr-acceptance-gate` is a required check in the `main` ruleset (PD-018, D-061); the owner states that it has been added to the `main` ruleset (D-069); that is OWNER-ATTESTED and not independently verified from this README.
 
 ## 12. Git Workflow and Review
 
