@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-001 audit fixes: frame semantics and an IMU example, context-dependent checks (section 6.1), schema scoped as a structural subset, AC-005 aligned with the 0.x versioning rule, unit-gate table row repaired. Tasks: KOS-SENSE-001.
+
 - KOS-SENSE-001 draft: Sense data contract 0.1.0 (`contract/SENSE_CONTRACT.md`) and machine-readable schema. Proposed, not accepted or tagged. Tasks: KOS-SENSE-001.
 - KOS-SENSE-002 planned: task row, record and criteria AC-201 to AC-206 added; no implementation yet. Tasks: KOS-SENSE-001.
 

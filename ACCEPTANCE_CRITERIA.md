@@ -20,7 +20,7 @@ kritva-core (approved contract), kritvaos-community (public architecture descrip
 | AC-002 | Every sample carries a timestamp with a stated clock and unit; units use one stated system. | contract review, validation tests |
 | AC-003 | Frame and coordinate conventions are defined once and referenced, never implied. | contract review |
 | AC-004 | Validity, stale-data and missing-data behaviour is specified, with an error for each failure. | contract review, fault-path tests |
-| AC-005 | A breaking contract change needs a new MAJOR version, a changelog entry and an approved decision. | review, regression suite |
+| AC-005 | A breaking contract change needs a new MAJOR version (a new MINOR version while the MAJOR version is 0), a changelog entry and an approved decision. | review, regression suite |
 
 ## 3A. Functional criteria (KOS-SENSE-002)
 
@@ -43,7 +43,7 @@ The contract defines inputs, outputs, error handling, versioning and lifecycle, 
 
 | Gate | Command | Required result | State |
 |---|---|---|---|
-| Unit | `make test-unit` | all pass NOT_IMPLEMENTED until KOS-SENSE-002 (Contract validation and synthetic-data tests) |
+| Unit | `make test-unit` | all pass | NOT_IMPLEMENTED until KOS-SENSE-002 (Contract validation and synthetic-data tests) |
 | Integration | `make test-integration` | all pass, real dependency boundaries | NOT_IMPLEMENTED |
 | Regression | `make test-regression` | all pass, suite unchanged by the change | NOT_IMPLEMENTED |
 | Structure | `make check` | planning files present, commit checker self-test passes | implemented |
