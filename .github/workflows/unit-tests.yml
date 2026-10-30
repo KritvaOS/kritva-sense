@@ -1,0 +1,24 @@
+# unit-tests.yml: runs the Sense contract unit gate (make test-unit) and the structure checks (KOS-SENSE-002, AC-205).
+name: unit-tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Structure checks
+        run: make check docs-check
+      - name: Unit gate
+        run: make test-unit

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Status report lists KOS-SENSE-001 and KOS-SENSE-002 (execution COMPLETE = submitted for review, not accepted); `unit-tests` workflow runs `make check docs-check test-unit`; status consistency tests added; task statuses set to IN_REVIEW. Tasks: KOS-SENSE-002.
+
 - KOS-SENSE-001 audit fixes: frame semantics and an IMU example, context-dependent checks (section 6.1), schema scoped as a structural subset, AC-005 aligned with the 0.x versioning rule, unit-gate table row repaired. Tasks: KOS-SENSE-001.
 
 - KOS-SENSE-001 draft: Sense data contract 0.1.0 (`contract/SENSE_CONTRACT.md`) and machine-readable schema. Proposed, not accepted or tagged. Tasks: KOS-SENSE-001.

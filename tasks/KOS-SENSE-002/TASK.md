@@ -3,7 +3,7 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M2-SENSE-001 |
-| Status | IN_PROGRESS (reference validator and fixtures drafted against contract 0.1.0; central baselining and approval pending) |
+| Status | IN_REVIEW (validator, fixtures and unit gate submitted; baselined in v3, D-078; owner and central approval pending) |
 | Proposed weight | 4 (planning estimate, 3 to 4 effort days; not baselined, no credit) |
 | Depends on | KOS-SENSE-001 (the validator implements the approved contract and never changes it) |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](../../ACCEPTANCE_CRITERIA.md) section 3A (AC-201 to AC-206) |

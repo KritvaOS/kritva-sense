@@ -3,7 +3,7 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M1-SENSE-001 |
-| Status | IN_PROGRESS (draft contract 0.1.0 proposed; central baselining and approval pending) |
+| Status | IN_REVIEW (draft contract 0.1.0 submitted; baselined in v3, D-078; owner and central approval pending) |
 | Proposed weight | 5 (planning estimate, 4 to 5 effort days; not baselined, no credit) |
 | Depends on | none |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](../../ACCEPTANCE_CRITERIA.md) section 3 (AC-001 to AC-005) |
