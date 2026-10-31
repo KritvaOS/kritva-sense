@@ -70,7 +70,7 @@ Frames are defined once, here, and referenced by name; none is implied.
 
 All frames are right-handed with X forward, Y left, Z up. Rotation about an axis is positive counter-clockwise looking from the positive axis toward the origin. Transforms between frames are outside this version.
 
-Example: an `imu` sample with `frame_id` `base` reports `accel_x` as acceleration along the robot's forward axis in `m/s^2`. `accel` is specific force (what an accelerometer measures), so a robot at rest on level ground reports `accel_z` of about +9.81 `m/s^2`. `gyro_z` is positive for a counter-clockwise turn seen from above. This convention is part of the draft under review. A `frame_id` not in the table is `UNKNOWN_FRAME`.
+Example: an `imu` sample with `frame_id` `base` reports `accel_x` as acceleration along the robot's forward axis in `m/s^2`. `accel` is specific force (what an accelerometer measures), so a robot at rest on level ground reports `accel_z` of about +9.81 `m/s^2`. `gyro_z` is positive for a counter-clockwise turn seen from above. This convention is normative for contract version 0.1.0. A `frame_id` not in the table is `UNKNOWN_FRAME`.
 
 ## 6. Validity and stale data
 
@@ -115,7 +115,7 @@ Validation reports every violation, sorted by path then code, so results are det
 
 ## 8. Lifecycle
 
-This is contract 0.1.0. The owner approved it as v0.1.0 (relayed in chat, 2026-10-31; interim D-047 review) and KOS-SENSE-001 is ACCEPTED (central approval A076). It is tagged `v0.1.0` (annotated) by the owner after this status change is merged. Being 0.x, it may still change; each change needs a changelog entry and a decision (section 9).
+This is contract 0.1.0. The owner approved it as v0.1.0 (relayed in chat, 2026-10-31; interim D-047 review) and KOS-SENSE-001 is ACCEPTED (central approval A076). It is tagged `v0.1.0` (annotated tag, unsigned; created by the owner after the acceptance status change merged). Being 0.x, it may still change; each change needs a changelog entry and a decision (section 9).
 
 ## 9. Versioning and compatibility
 
