@@ -3,8 +3,8 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M1-SENSE-001 |
-| Status | IN_REVIEW (draft contract 0.1.0 submitted; baselined in v3, D-078; owner and central approval pending) |
-| Proposed weight | 5 (planning estimate, 4 to 5 effort days; not baselined, no credit) |
+| Status | ACCEPTED (contract 0.1.0 approved as v0.1.0; baselined in v3, D-078; central approval A076) |
+| Weight | 5 (initial planning weight, 4 to 5 effort days; baselined in v3, D-078) |
 | Depends on | none |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](../../ACCEPTANCE_CRITERIA.md) section 3 (AC-001 to AC-005) |
 | Deliverables | [contract/SENSE_CONTRACT.md](../../contract/SENSE_CONTRACT.md), [contract/sense-sample.schema.json](../../contract/sense-sample.schema.json) |

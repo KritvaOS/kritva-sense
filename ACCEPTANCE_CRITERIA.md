@@ -1,6 +1,6 @@
 # Acceptance Criteria: kritva-sense
 
-Standard: kritva-program `v2/planning/ACCEPTANCE_STANDARD.md` (proposed; approval pending PD-005, PD-006). Criteria in section 3 are for task KOS-SENSE-001 (Sense architecture and data contract) and criteria in section 3A for KOS-SENSE-002 (Contract validation and synthetic-data tests). Both are proposed until the owner approves the tasks. Nothing here is accepted, weighted or credited.
+Standard: kritva-program `v2/planning/ACCEPTANCE_STANDARD.md` (approved: PD-005 and PD-006 by program decision D-080). Criteria in section 3 are for task KOS-SENSE-001 (Sense architecture and data contract) and criteria in section 3A for KOS-SENSE-002 (Contract validation and synthetic-data tests). Both tasks are ACCEPTED: approved by Dinesh (relayed in chat 2026-10-31; interim D-047 review, not independent) and recorded centrally as A076 and A077 in kritva-program. The criteria text below is unchanged.
 
 ## 1. Purpose and scope
 
