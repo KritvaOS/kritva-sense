@@ -1,0 +1,60 @@
+{
+  "description": "a self link and a non-unit rotation are both reported",
+  "graph": {
+    "contract_version": "0.1.0",
+    "transforms": [
+      {
+        "parent": "base",
+        "child": "base",
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      {
+        "parent": "world",
+        "child": "base",
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": 2,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      {
+        "parent": "world",
+        "child": "base",
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ]
+  },
+  "expected_codes": [
+    "FG_NOT_UNIT_QUATERNION",
+    "FG_SELF_LINK"
+  ]
+}

@@ -64,11 +64,11 @@ Labels: INPUT is edited by hand and read by a tool or review; GENERATED is writt
 |---|---|---|---|
 | [planning/](planning/) | Tasks, milestones, milestone status, review checklist, commit step, changelog | MIXED: planning records | Governs execution and acceptance |
 | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) | Criteria and test gates for KOS-SENSE-001 and KOS-SENSE-002 | AUTHORITATIVE; ACCEPTED | Accepted criteria are never edited; a change is a new version |
-| [contract/](contract/) | `SENSE_CONTRACT.md` (contract 0.1.0) and `sense-sample.schema.json` | AUTHORITATIVE; APPROVED as v0.1.0 (KOS-SENSE-001) | A breaking change needs a new version, a changelog entry and an approved decision |
-| [src/kritva_sense/](src/kritva_sense/) | Reference validator (standard library only); `python3 -m kritva_sense FILE.json` | INPUT; ACCEPTED (KOS-SENSE-002) | Implements the contract and never changes it |
+| [contract/](contract/) | `SENSE_CONTRACT.md` (contract 0.1.0) and `sense-sample.schema.json`; `FRAME_GRAPH_CONTRACT.md` (frame graph contract 0.1.0, PROPOSED, KOS-SENSE-003) and `frame-transform.schema.json` | AUTHORITATIVE; APPROVED as v0.1.0 (KOS-SENSE-001) | A breaking change needs a new version, a changelog entry and an approved decision |
+| [src/kritva_sense/](src/kritva_sense/) | Reference validator (standard library only); `python3 -m kritva_sense FILE.json`; frame graph reference `frame_graph.py` (`python3 -m kritva_sense.frame_graph FILE.json [FROM TO]`) | INPUT; validator ACCEPTED (KOS-SENSE-002), frame graph IN_PROGRESS (KOS-SENSE-003) | Implements the contract and never changes it |
 | [tasks/](tasks/) | `KOS-SENSE-001/TASK.md`, `KOS-SENSE-002/TASK.md` and `KOS-SENSE-003/` (task and criteria) | INPUT; 001 and 002 ACCEPTED, 003 IN_PROGRESS | Planning records; weights are baselined in v3 (D-078) and v4 (D-082) |
 | [scripts/](scripts/) | `docs_check.py` (link check), `pipeline/pr_gate.py` (PR gate), `security/` (commit checkers), `check_readme.py` (README check) | INPUT; IMPLEMENTED | `pipeline/` and `security/` are protected paths of the gate |
-| [tests/](tests/) | `commit_message_check/`, `readme_check/` (checker tests) and `contract/` (validator, fixtures and CLI tests) | EVIDENCE; IMPLEMENTED | The contract tests use synthetic data only; their CI run is the approved evidence for KOS-SENSE-002 (A077) |
+| [tests/](tests/) | `commit_message_check/`, `readme_check/` (checker tests) and `contract/` (validator, fixtures and CLI tests) and `frame_graph/` (frame graph fixtures, known-answer and CLI tests) | EVIDENCE; IMPLEMENTED | The contract tests use synthetic data only; their CI run is the approved evidence for KOS-SENSE-002 (A077) |
 | [.github/](.github/) | CODEOWNERS, pull request template, `kritva-gate.json` and five workflows | AUTHORITATIVE | `kritva-gate.json` configures the PR gate |
 | [Makefile](Makefile) | Check targets; unimplemented gates exit 3 | INPUT; IMPLEMENTED | See section 11 |
 | [AGENTS.md](AGENTS.md), [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [LICENSE](LICENSE) | Rules, contribution steps, security policy, licence | AUTHORITATIVE | |
@@ -150,7 +150,7 @@ CI runs five workflows. `make check` is a local command and is not the same as C
 | `make check` | check | required planning files exist; the commit-message checker's unit tests run; it does not run `docs-check`, the PR gate or any contract test |
 | `make docs-check` | check | every relative Markdown link points to an existing file (not an anchor check) |
 | `make check-readme` | check | structural check of this README only (metadata, topics, relative links, placeholders); a PASS does not show the content is accurate; not part of `make check` or CI |
-| `make test-unit` | gate | runs the contract validator, synthetic fixture and CLI tests (KOS-SENSE-002); exits non-zero on failure; its CI run is the approved evidence |
+| `make test-unit` | gate | runs the contract validator, frame graph, synthetic fixture, status report and CLI tests (KOS-SENSE-002, KOS-SENSE-003); exits non-zero on failure; the `unit-tests` CI run on a closing commit is the evidence |
 | `make lint`, `make test-integration`, `make test-regression`, `make test`, `make acceptance` | placeholder | print NOT_IMPLEMENTED and exit 3: they check nothing and are never a pass |
 | `python3 scripts/security/check_commit_format.py --range origin/main..HEAD` | check | the commit format of the commits on a branch (the PR gate runs the same check as rule R01) |
 

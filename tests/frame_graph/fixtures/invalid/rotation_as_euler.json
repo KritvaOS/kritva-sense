@@ -1,0 +1,27 @@
+{
+  "description": "rotation as euler",
+  "graph": {
+    "contract_version": "0.1.0",
+    "transforms": [
+      {
+        "parent": "world",
+        "child": "base",
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "roll": 0,
+          "pitch": 0,
+          "yaw": 0
+        }
+      }
+    ]
+  },
+  "expected_codes": [
+    "FG_MISSING_FIELD",
+    "FG_UNKNOWN_FIELD"
+  ]
+}

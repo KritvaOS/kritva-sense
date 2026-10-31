@@ -1,0 +1,10 @@
+{
+  "description": "version not string",
+  "graph": {
+    "contract_version": 1,
+    "transforms": []
+  },
+  "expected_codes": [
+    "FG_MALFORMED"
+  ]
+}

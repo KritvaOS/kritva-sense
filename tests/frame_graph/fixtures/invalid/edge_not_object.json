@@ -1,0 +1,12 @@
+{
+  "description": "edge not object",
+  "graph": {
+    "contract_version": "0.1.0",
+    "transforms": [
+      5
+    ]
+  },
+  "expected_codes": [
+    "FG_MALFORMED"
+  ]
+}

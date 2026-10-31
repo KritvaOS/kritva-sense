@@ -1,0 +1,10 @@
+{
+  "description": "unsupported version",
+  "graph": {
+    "contract_version": "9.9.9",
+    "transforms": []
+  },
+  "expected_codes": [
+    "FG_UNSUPPORTED_VERSION"
+  ]
+}

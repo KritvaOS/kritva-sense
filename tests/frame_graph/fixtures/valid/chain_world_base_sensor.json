@@ -1,0 +1,127 @@
+{
+  "description": "Worked example of the contract: base turned 90 degrees about z, sensor offset on the base.",
+  "graph": {
+    "contract_version": "0.1.0",
+    "transforms": [
+      {
+        "parent": "world",
+        "child": "base",
+        "translation": {
+          "x": 1,
+          "y": 2,
+          "z": 0
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": 0.7071067811865476,
+          "x": 0,
+          "y": 0,
+          "z": 0.7071067811865476
+        }
+      },
+      {
+        "parent": "base",
+        "child": "sensor",
+        "translation": {
+          "x": 0.1,
+          "y": 0,
+          "z": 0.2
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ]
+  },
+  "resolve": [
+    {
+      "from": "sensor",
+      "to": "world",
+      "expected": {
+        "translation": {
+          "x": 1,
+          "y": 2.1,
+          "z": 0.2
+        },
+        "rotation": {
+          "w": 0.7071067811865476,
+          "x": 0,
+          "y": 0,
+          "z": 0.7071067811865476
+        }
+      }
+    },
+    {
+      "from": "sensor",
+      "to": "base",
+      "expected": {
+        "translation": {
+          "x": 0.1,
+          "y": 0,
+          "z": 0.2
+        },
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "from": "world",
+      "to": "sensor",
+      "expected": {
+        "translation": {
+          "x": -2.1,
+          "y": 1.0,
+          "z": -0.2
+        },
+        "rotation": {
+          "w": 0.7071067811865476,
+          "x": 0,
+          "y": 0,
+          "z": -0.7071067811865476
+        }
+      }
+    },
+    {
+      "from": "base",
+      "to": "world",
+      "expected": {
+        "translation": {
+          "x": 1,
+          "y": 2,
+          "z": 0
+        },
+        "rotation": {
+          "w": 0.7071067811865476,
+          "x": 0,
+          "y": 0,
+          "z": 0.7071067811865476
+        }
+      }
+    },
+    {
+      "from": "world",
+      "to": "base",
+      "expected": {
+        "translation": {
+          "x": -2,
+          "y": 1,
+          "z": 0
+        },
+        "rotation": {
+          "w": 0.7071067811865476,
+          "x": 0,
+          "y": 0,
+          "z": -0.7071067811865476
+        }
+      }
+    }
+  ]
+}

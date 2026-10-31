@@ -1,0 +1,77 @@
+{
+  "description": "One edge, identity rotation: a pure translation.",
+  "graph": {
+    "contract_version": "0.1.0",
+    "transforms": [
+      {
+        "parent": "world",
+        "child": "base",
+        "translation": {
+          "x": 1,
+          "y": 2,
+          "z": 3
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ]
+  },
+  "resolve": [
+    {
+      "from": "base",
+      "to": "world",
+      "expected": {
+        "translation": {
+          "x": 1,
+          "y": 2,
+          "z": 3
+        },
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "from": "world",
+      "to": "base",
+      "expected": {
+        "translation": {
+          "x": -1,
+          "y": -2,
+          "z": -3
+        },
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "from": "base",
+      "to": "base",
+      "expected": {
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    }
+  ]
+}

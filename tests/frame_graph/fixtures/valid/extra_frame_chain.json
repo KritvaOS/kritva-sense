@@ -1,0 +1,92 @@
+{
+  "description": "Graph-local frames beyond world, base and sensor; a three-edge chain.",
+  "graph": {
+    "contract_version": "0.1.0",
+    "transforms": [
+      {
+        "parent": "world",
+        "child": "base",
+        "translation": {
+          "x": 1,
+          "y": 0,
+          "z": 0
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      {
+        "parent": "base",
+        "child": "arm_link",
+        "translation": {
+          "x": 0,
+          "y": 1,
+          "z": 0
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      {
+        "parent": "arm_link",
+        "child": "tool_tip",
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 1
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ]
+  },
+  "resolve": [
+    {
+      "from": "tool_tip",
+      "to": "world",
+      "expected": {
+        "translation": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "from": "world",
+      "to": "tool_tip",
+      "expected": {
+        "translation": {
+          "x": -1,
+          "y": -1,
+          "z": -1
+        },
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    }
+  ]
+}
