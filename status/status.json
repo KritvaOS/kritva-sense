@@ -4,7 +4,7 @@
   "repo": "KritvaOS/kritva-sense",
   "source": {
     "branch": "main",
-    "commit": "b8148796fc2eb430fc0d2568289f1b476e3bfbd3"
+    "commit": "e949b9f9eeb3e67eb1278b5069f999aea4eb36af"
   },
   "tasks": [
     {
@@ -21,6 +21,15 @@
           "ci_run": null,
           "report_sha256": null,
           "result": null
+        },
+        {
+          "type": "software",
+          "uri": "https://github.com/KritvaOS/kritva-sense/actions/runs/40994325092",
+          "description": "unit-tests CI run 40994325092 PASS on e949b9f (make check, docs-check and test-unit; accepted as of that commit)",
+          "commit": "e949b9f9eeb3e67eb1278b5069f999aea4eb36af",
+          "ci_run": "40994325092",
+          "report_sha256": null,
+          "result": "PASS"
         }
       ]
     },
@@ -38,9 +47,18 @@
           "ci_run": null,
           "report_sha256": null,
           "result": null
+        },
+        {
+          "type": "software",
+          "uri": "https://github.com/KritvaOS/kritva-sense/actions/runs/40994325092",
+          "description": "unit-tests CI run 40994325092 PASS on e949b9f (make check, docs-check and test-unit; accepted as of that commit)",
+          "commit": "e949b9f9eeb3e67eb1278b5069f999aea4eb36af",
+          "ci_run": "40994325092",
+          "report_sha256": null,
+          "result": "PASS"
         }
       ]
     }
   ],
-  "updated_at": "2026-10-30T02:49:55Z"
+  "updated_at": "2026-10-30T03:01:21Z"
 }

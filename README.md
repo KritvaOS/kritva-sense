@@ -129,7 +129,7 @@ The target dates are in [planning/MILESTONE.md](planning/MILESTONE.md); they are
 | Dimension | Source record | Authority |
 |---|---|---|
 | Execution | the task status in [planning/TASKS.md](planning/TASKS.md); both tasks are IN_REVIEW; the report lists them as execution COMPLETE | The task owner records it |
-| Evidence | criteria-reference entries only; a CI run on a closing commit is added after the `unit-tests` workflow has run on `main` | Evidence is recorded at acceptance, by the author, and checked by another reviewer |
+| Evidence | per task: a criteria-reference entry and the `unit-tests` CI run 40994325092 (PASS on commit e949b9f, a later commit; accepted as of that commit). A CI run is a fact about a commit, not acceptance | Evidence is recorded at acceptance, by the author, and checked by another reviewer |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md), the review record and the central approvals in kritva-program | The independent reviewer and the owner, never a status report |
 | Release readiness | not defined: no release, tag or completion record exists | The owner, through the central gates |
 
