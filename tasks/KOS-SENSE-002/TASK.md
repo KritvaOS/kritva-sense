@@ -3,8 +3,8 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M2-SENSE-001 |
-| Status | IN_REVIEW (validator, fixtures and unit gate submitted; baselined in v3, D-078; owner and central approval pending) |
-| Proposed weight | 4 (planning estimate, 3 to 4 effort days; not baselined, no credit) |
+| Status | ACCEPTED (validator, fixtures and unit gate; baselined in v3, D-078; central approval A077) |
+| Weight | 4 (initial planning weight, 3 to 4 effort days; baselined in v3, D-078) |
 | Depends on | KOS-SENSE-001 (the validator implements the approved contract and never changes it) |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](../../ACCEPTANCE_CRITERIA.md) section 3A (AC-201 to AC-206) |
 | Deliverables | `src/kritva_sense/`, `tests/contract/`, `make test-unit` |

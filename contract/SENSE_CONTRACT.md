@@ -6,7 +6,7 @@
 | Repository | `KritvaOS/kritva-sense` |
 | Task | KOS-SENSE-001 (Sense architecture and data contract) |
 | Version | Contract version: 0.1.0 |
-| Status | PROPOSED: draft for review; not accepted, tagged or credited |
+| Status | APPROVED: contract 0.1.0 approved by the owner (Dinesh; interim D-047 review, not independent); KOS-SENSE-001 ACCEPTED (central approval A076). Release tag `v0.1.0` is created by the owner after merge. Still a 0.x contract: it may change with a changelog entry and a decision. |
 | Owner | Dinesh (interim architecture and safety reviewer, program decision D-047) |
 | Machine-readable form | [sense-sample.schema.json](sense-sample.schema.json) |
 | Reference validator | `src/kritva_sense/validator.py` (KOS-SENSE-002) |
@@ -115,7 +115,7 @@ Validation reports every violation, sorted by path then code, so results are det
 
 ## 8. Lifecycle
 
-This is contract 0.1.0, a draft. It becomes reviewable at the V2-M1-SENSE-001 milestone and is tagged `v0.1.0` (annotated) only after approved review and merge. Until then nothing here is accepted.
+This is contract 0.1.0. The owner approved it as v0.1.0 (relayed in chat, 2026-10-31; interim D-047 review) and KOS-SENSE-001 is ACCEPTED (central approval A076). It is tagged `v0.1.0` (annotated) by the owner after this status change is merged. Being 0.x, it may still change; each change needs a changelog entry and a decision (section 9).
 
 ## 9. Versioning and compatibility
 

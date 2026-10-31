@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-001 and KOS-SENSE-002 ACCEPTED: central approvals A076 and A077 (kritva-program, evidence run 40994325092 on e949b9f); contract 0.1.0 approved by the owner as v0.1.0 (interim D-047 review; relayed in chat 2026-10-31); the owner creates the annotated tag `v0.1.0` after merge. Tasks: None (status and wording after approval; no contract or code change).
+
 - Status report cites the `unit-tests` CI run 40994325092 (PASS on e949b9f) as evidence for KOS-SENSE-001 and KOS-SENSE-002; a CI run is a fact about a commit, not acceptance. Tasks: KOS-SENSE-002.
 
 - Status report lists KOS-SENSE-001 and KOS-SENSE-002 (execution COMPLETE = submitted for review, not accepted); `unit-tests` workflow runs `make check docs-check test-unit`; status consistency tests added; task statuses set to IN_REVIEW. Tasks: KOS-SENSE-002.
