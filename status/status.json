@@ -58,6 +58,13 @@
           "result": "PASS"
         }
       ]
+    },
+    {
+      "task_id": "KOS-SENSE-003",
+      "execution": "NOT_STARTED",
+      "git_sync": "SYNCED",
+      "readiness": "IMPLEMENTABLE",
+      "evidence": []
     }
   ],
   "updated_at": "2026-10-31T03:06:01Z"
