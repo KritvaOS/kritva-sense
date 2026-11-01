@@ -1,0 +1,27 @@
+{
+  "description": "self link",
+  "graph": {
+    "contract_version": "0.1.0",
+    "transforms": [
+      {
+        "parent": "base",
+        "child": "base",
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ]
+  },
+  "expected_codes": [
+    "FG_SELF_LINK"
+  ]
+}

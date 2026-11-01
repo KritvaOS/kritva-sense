@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/KritvaOS/kritva-sense/contract/frame-transform.schema.json",
+  "title": "Kritva Sense frame graph document",
+  "description": "Structural subset of contract/FRAME_GRAPH_CONTRACT.md. Unit norm of the rotation, self-links, duplicate edges, frames with more than one parent and cycles are checked by the reference implementation (src/kritva_sense/frame_graph.py) only. Where the two differ, the contract document and the reference implementation are normative.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_version", "transforms"],
+  "properties": {
+    "contract_version": { "const": "0.1.0" },
+    "transforms": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/transform" }
+    }
+  },
+  "$defs": {
+    "frame_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{0,31}$"
+    },
+    "transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parent", "child", "translation", "translation_unit", "rotation"],
+      "properties": {
+        "parent": { "$ref": "#/$defs/frame_id" },
+        "child": { "$ref": "#/$defs/frame_id" },
+        "translation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["x", "y", "z"],
+          "properties": {
+            "x": { "type": "number" },
+            "y": { "type": "number" },
+            "z": { "type": "number" }
+          }
+        },
+        "translation_unit": { "const": "m" },
+        "rotation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["w", "x", "y", "z"],
+          "properties": {
+            "w": { "type": "number" },
+            "x": { "type": "number" },
+            "y": { "type": "number" },
+            "z": { "type": "number" }
+          }
+        }
+      }
+    }
+  }
+}

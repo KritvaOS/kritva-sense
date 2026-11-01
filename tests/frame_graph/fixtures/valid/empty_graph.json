@@ -1,0 +1,8 @@
+{
+  "description": "A graph with no transforms is conformant; it resolves nothing.",
+  "graph": {
+    "contract_version": "0.1.0",
+    "transforms": []
+  },
+  "resolve": []
+}

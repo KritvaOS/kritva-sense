@@ -1,0 +1,28 @@
+{
+  "description": "quaternion extra component",
+  "graph": {
+    "contract_version": "0.1.0",
+    "transforms": [
+      {
+        "parent": "world",
+        "child": "base",
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0,
+          "extra": 0
+        }
+      }
+    ]
+  },
+  "expected_codes": [
+    "FG_UNKNOWN_FIELD"
+  ]
+}

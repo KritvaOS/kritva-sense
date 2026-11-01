@@ -1,0 +1,76 @@
+{
+  "description": "Two sensors under world: the path goes through the common parent.",
+  "graph": {
+    "contract_version": "0.1.0",
+    "transforms": [
+      {
+        "parent": "world",
+        "child": "base",
+        "translation": {
+          "x": 1,
+          "y": 0,
+          "z": 0
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      {
+        "parent": "world",
+        "child": "sensor",
+        "translation": {
+          "x": 0,
+          "y": 2,
+          "z": 0
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ]
+  },
+  "resolve": [
+    {
+      "from": "base",
+      "to": "sensor",
+      "expected": {
+        "translation": {
+          "x": 1,
+          "y": -2,
+          "z": 0
+        },
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "from": "sensor",
+      "to": "base",
+      "expected": {
+        "translation": {
+          "x": -1,
+          "y": 2,
+          "z": 0
+        },
+        "rotation": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      }
+    }
+  ]
+}

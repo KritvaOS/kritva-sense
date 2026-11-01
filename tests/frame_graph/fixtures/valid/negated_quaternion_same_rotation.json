@@ -1,0 +1,43 @@
+{
+  "description": "q and -q are the same rotation; the result is canonical (w >= 0).",
+  "graph": {
+    "contract_version": "0.1.0",
+    "transforms": [
+      {
+        "parent": "world",
+        "child": "base",
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 1
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": -0.7071067811865476,
+          "x": 0,
+          "y": 0,
+          "z": -0.7071067811865476
+        }
+      }
+    ]
+  },
+  "resolve": [
+    {
+      "from": "base",
+      "to": "world",
+      "expected": {
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 1
+        },
+        "rotation": {
+          "w": 0.7071067811865476,
+          "x": 0,
+          "y": 0,
+          "z": 0.7071067811865476
+        }
+      }
+    }
+  ]
+}

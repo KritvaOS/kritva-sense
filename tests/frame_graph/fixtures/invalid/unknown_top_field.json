@@ -1,0 +1,11 @@
+{
+  "description": "unknown top field",
+  "graph": {
+    "contract_version": "0.1.0",
+    "transforms": [],
+    "extra": 1
+  },
+  "expected_codes": [
+    "FG_UNKNOWN_FIELD"
+  ]
+}

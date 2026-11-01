@@ -1,0 +1,60 @@
+{
+  "description": "Half turn about x: the point (0,1,0) maps to (0,-1,0).",
+  "graph": {
+    "contract_version": "0.1.0",
+    "transforms": [
+      {
+        "parent": "world",
+        "child": "base",
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "translation_unit": "m",
+        "rotation": {
+          "w": 0,
+          "x": 1,
+          "y": 0,
+          "z": 0
+        }
+      }
+    ]
+  },
+  "resolve": [
+    {
+      "from": "base",
+      "to": "world",
+      "expected": {
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "w": 0,
+          "x": 1,
+          "y": 0,
+          "z": 0
+        }
+      }
+    },
+    {
+      "from": "world",
+      "to": "base",
+      "expected": {
+        "translation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "w": 0,
+          "x": 1,
+          "y": 0,
+          "z": 0
+        }
+      }
+    }
+  ]
+}

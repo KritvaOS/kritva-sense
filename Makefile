@@ -37,8 +37,9 @@ endef
 
 lint: ## Static analysis and lint (NOT_IMPLEMENTED: exits 3)
 	$(call not_implemented,lint)
-test-unit: ## Unit tests: contract validator, synthetic fixtures and status report consistency (KOS-SENSE-002)
+test-unit: ## Unit tests: contract validator, frame graph, synthetic fixtures and status report consistency (KOS-SENSE-002, KOS-SENSE-003)
 	@python3 -m unittest discover -s tests/contract
+	@python3 -m unittest discover -s tests/frame_graph
 	@python3 -m unittest discover -s tests/status
 test-integration: ## Integration tests (NOT_IMPLEMENTED: exits 3)
 	$(call not_implemented,test-integration)
