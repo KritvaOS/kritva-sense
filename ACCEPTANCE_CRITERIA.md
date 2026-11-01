@@ -43,7 +43,7 @@ The contract defines inputs, outputs, error handling, versioning and lifecycle, 
 
 | Gate | Command | Required result | State |
 |---|---|---|---|
-| Unit | `make test-unit` | all pass | implemented: contract validator, synthetic fixtures and status report consistency, run in CI by the `unit-tests` workflow; evidence only once the task is approved |
+| Unit | `make test-unit` | all pass | implemented: contract validator, synthetic fixtures and status report consistency, run in CI by the `unit-tests` workflow; its CI run is the approved evidence for KOS-SENSE-001 and KOS-SENSE-002 (A076, A077) |
 | Integration | `make test-integration` | all pass, real dependency boundaries | NOT_IMPLEMENTED |
 | Regression | `make test-regression` | all pass, suite unchanged by the change | NOT_IMPLEMENTED |
 | Structure | `make check` | planning files present, commit checker self-test passes | implemented |
