@@ -6,7 +6,7 @@
 | Repository | `KritvaOS/kritva-sense` |
 | Task | KOS-SENSE-005 (Telemetry stream contract and reference validator) |
 | Version | Stream contract version: 0.1.0 |
-| Status | PROPOSED: implemented for review under KOS-SENSE-005; not approved. A 0.x contract: it may change by the rules of section 14 |
+| Status | APPROVED as stream contract v0.1.0 by the owner (program decision D-088); KOS-SENSE-005 ACCEPTED. A 0.x contract: it may still change by the rules of section 14 |
 | Owner | Dinesh (interim architecture and safety reviewer, program decision D-047) |
 | Related contracts | [SENSE_CONTRACT.md](SENSE_CONTRACT.md) 0.1.0 (accepted, tag `v0.1.0`) and [FRAME_GRAPH_CONTRACT.md](FRAME_GRAPH_CONTRACT.md) 0.1.0; neither is changed by this document |
 | Machine-readable form | [stream.schema.json](stream.schema.json) (a structural subset: it describes only the three record kinds, so a record of another kind fails the schema, and the reference validator reports it as `STREAM_UNKNOWN_RECORD`) |
@@ -159,7 +159,7 @@ Remove the second sample (sequence 101) and renumber the indexes: the remaining 
 
 ## 14. Versioning and lifecycle
 
-This is stream contract 0.1.0, PROPOSED for approval by the owner through the central review of KOS-SENSE-005. While the major version is 0, a change may be breaking; every change needs a changelog entry in [planning/CHANGELOG.md](../planning/CHANGELOG.md) and a decision, and the supported versions are listed in section 3. Adding a record kind, a field, a diagnostic code or a rule is a change to this contract and updates the schema, the validator and its tests together; `make test-unit` fails if they disagree. A change to the sample, to the frame graph or to the frame vocabulary is a change to those contracts, with their own versions.
+This is stream contract 0.1.0. The owner approved it as stream contract v0.1.0 (program decision D-088) and KOS-SENSE-005 is ACCEPTED by the central approval recorded in kritva-program (review is the interim D-047 role, not independent). Whether and how to tag it is the owner's choice (D-080). While the major version is 0, a change may be breaking; every change needs a changelog entry in [planning/CHANGELOG.md](../planning/CHANGELOG.md) and a decision, and the supported versions are listed in section 3. Adding a record kind, a field, a diagnostic code or a rule is a change to this contract and updates the schema, the validator and its tests together; `make test-unit` fails if they disagree. A change to the sample, to the frame graph or to the frame vocabulary is a change to those contracts, with their own versions.
 
 ## 15. Verification
 
