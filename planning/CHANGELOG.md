@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-003 submitted for review: status IN_REVIEW with the `unit-tests` CI run 41267842700 PASS on closing commit c92e841 as evidence. No contract, schema or code change; not accepted. Tasks: KOS-SENSE-003.
+
 - KOS-SENSE-003: frame graph contract 0.1.0 (`contract/FRAME_GRAPH_CONTRACT.md`, `contract/frame-transform.schema.json`), reference implementation (`src/kritva_sense/frame_graph.py`: validation, deterministic composition and inversion, no assumed identity), 42 synthetic fixtures and `tests/frame_graph/`; `make test-unit` runs them. Proposed, not accepted. Sense contract 0.1.0 and its schema are unchanged (pinned by a test). Tasks: KOS-SENSE-003.
 
 - Documentation reconciliation after the baseline v4 freeze: KOS-SENSE-003 task and criteria moved from proposed to READY (D-082), the scope states that graph-local frame ids are allowed in a frame graph (samples cannot use them), AC-302 says invalid frame identifiers, and the stale README, TASKS, MILESTONE_STATUS and status wording (task registry approved by D-080, weights baselined centrally, V2-M0 and V2-M5 status, 001 evidence description) is corrected. No contract, schema or code change. Tasks: None (documentation reconciliation; no contract or code change).
