@@ -87,7 +87,7 @@ class Representation(unittest.TestCase):  # AC-501
         listed = set(re.findall(r"^\| `(STREAM_[A-Z_]+)` \|", doc, re.M))
         self.assertEqual(listed, set(S.STREAM_ERROR_CODES))
         for needle in ("additional to contract 0.1.0", "never drops, reorders or repairs", "mutually exclusive",
-                       "the last missing number", "fixed at `open`"):
+                       "the last missing number", "fixed at `open`", "Usable timestamp", "structural subset", "A `close` record is required"):
             self.assertIn(needle, doc)
 
     def test_stream_codes_do_not_collide_with_sample_codes(self):
@@ -381,6 +381,206 @@ class Samples(unittest.TestCase):  # AC-505
         self.assertFalse(r.conformant)
 
 
+class ExactDiagnostics(unittest.TestCase):  # AC-501 to AC-506: position, code, path and message of each class
+    def diag(self, doc):
+        return [tuple(d) for d in S.check_stream(doc).stream]
+
+    def seqs(self, values, **kw):
+        ss = B.samples(len(values))
+        for sample, v in zip(ss, values):
+            sample["sequence"] = v
+        return B.full(ss, **kw)
+
+    def test_sequence_diagnostics(self):
+        self.assertEqual(self.diag(self.seqs([4, 9])),
+                         [(2, "STREAM_SEQUENCE_GAP", "records[2].sample.sequence",
+                           "sequence 5 to 8 missing (previous 4, this 9)")])
+        self.assertEqual(self.diag(self.seqs([5, 5])),
+                         [(2, "STREAM_SEQUENCE_DUPLICATE", "records[2].sample.sequence",
+                           "5 equals the previous sequence")])
+        self.assertEqual(self.diag(self.seqs([5, 3])),
+                         [(2, "STREAM_SEQUENCE_REGRESSION", "records[2].sample.sequence",
+                           "3 is lower than the previous sequence 5")])
+
+    def test_bound_diagnostics(self):
+        self.assertEqual(self.diag(self.seqs([5, 6, 7], first=4)),
+                         [(1, "STREAM_FIRST_SEQUENCE_UNMET", "records[1].sample.sequence",
+                           "first sample has sequence 5, the open record states first_sequence 4")])
+        self.assertEqual(self.diag(self.seqs([5, 6, 7], last=8)),
+                         [(4, "STREAM_LAST_SEQUENCE_UNMET", "records[4].last_sequence",
+                           "last sample has sequence 7, the close record states last_sequence 8")])
+        self.assertEqual(self.diag(B.doc([B.opened(first=5), B.closed(last=6)])),
+                         [(1, "STREAM_FIRST_SEQUENCE_UNMET", "records[1]",
+                           "first_sequence 5 was stated but no sample followed the open record"),
+                          (1, "STREAM_LAST_SEQUENCE_UNMET", "records[1]",
+                           "last_sequence 6 was stated but no sample followed the open record")])
+        self.assertEqual(self.diag(B.doc([B.opened(first=5)])),
+                         [(-1, "STREAM_FIRST_SEQUENCE_UNMET", "records",
+                           "first_sequence 5 was stated but no sample followed the open record"),
+                          (-1, "STREAM_UNTERMINATED", "records", "the stream has no close record; it is not repaired")])
+
+    def test_lifecycle_diagnostics(self):
+        s = B.samples(2)
+        self.assertEqual(self.diag(B.doc([])),
+                         [(-1, "STREAM_OPEN_MISSING", "records", "the stream has no open record")])
+        self.assertEqual(self.diag(B.doc([B.smp(s[0]), B.opened(), B.closed(), B.smp(s[1]), B.closed(), B.opened()])),
+                         [(0, "STREAM_SAMPLE_BEFORE_OPEN", "records[0]", "no open record precedes this sample"),
+                          (1, "STREAM_OPEN_NOT_FIRST", "records[1]", "the open record must be the first record"),
+                          (3, "STREAM_SAMPLE_AFTER_CLOSE", "records[3]", "the stream is closed"),
+                          (4, "STREAM_CLOSE_REPEATED", "records[4]", "the stream is already closed"),
+                          (5, "STREAM_OPEN_REPEATED", "records[5]",
+                           "the stream is already open; this record changes nothing")])
+        self.assertEqual(self.diag(B.doc([B.closed(), B.opened(), B.closed()])),
+                         [(0, "STREAM_CLOSE_BEFORE_OPEN", "records[0]", "no open record precedes this close"),
+                          (1, "STREAM_OPEN_NOT_FIRST", "records[1]", "the open record must be the first record")])
+
+    def test_clock_identity_and_timestamp_diagnostics(self):
+        ss = B.samples(4)
+        ss[1]["timestamp"]["clock"] = "utc"
+        ss[2]["sensor_id"] = "imu.other"
+        ss[3]["kind"] = "range"
+        got = self.diag(B.full(ss))
+        self.assertEqual(got, [
+            (2, "STREAM_CLOCK_MISMATCH", "records[2].sample.timestamp.clock", "utc differs from the stream clock monotonic"),
+            (3, "STREAM_SENSOR_CHANGE", "records[3].sample.sensor_id", "'imu.other' differs from the stream sensor 'imu.main'"),
+            (4, "STREAM_KIND_CHANGE", "records[4].sample.kind", "'range' differs from the stream kind 'imu'")])
+        ss = B.samples(3)
+        before = ss[0]["timestamp"]["value"]
+        ss[1]["timestamp"]["value"] = before - 1
+        self.assertEqual(self.diag(B.full(ss)),
+                         [(2, "STREAM_TIMESTAMP_REGRESSION", "records[2].sample.timestamp.value",
+                           "%d is lower than the previous timestamp %d" % (before - 1, before))])
+
+    def test_envelope_and_index_diagnostics(self):
+        d = good()
+        d["stream_version"] = "9.9.9"
+        self.assertEqual(self.diag(d), [(-1, "STREAM_UNSUPPORTED_VERSION", "stream_version",
+                                         "9.9.9 is not supported (supported: 0.1.0)")])
+        d = good()
+        d["records"][2]["index"] = 5
+        self.assertEqual(self.diag(d), [(2, "STREAM_INDEX_MISMATCH", "records[2].index", "index 5 at position 2")])
+        self.assertEqual(self.diag({"stream_version": "0.1.0"}),
+                         [(-1, "STREAM_MISSING_FIELD", "records", "required field is absent")])
+        self.assertEqual(self.diag([]), [(-1, "STREAM_MALFORMED", "$", "the document must be an object")])
+
+    def test_sample_violation_format(self):
+        ss = B.samples(3)
+        ss[1]["measurements"]["accel_x"]["unit"] = "g"
+        (v,) = S.check_stream(B.full(ss)).samples
+        self.assertEqual(tuple(v), (2, "INVALID_UNIT", "measurements.accel_x.unit",
+                                    "must be 'm/s^2' for accel_x"))
+
+    def test_a_non_object_sample_is_also_given_to_the_sample_validator(self):
+        d = good()
+        d["records"][2]["sample"] = []
+        r = S.check_stream(d)
+        self.assertEqual([tuple(v) for v in r.samples], [(2, "MALFORMED_FIELD", "$", "sample must be an object")])
+        self.assertIn((2, "STREAM_MALFORMED", "records[2].sample", "must be an object"),
+                      [tuple(x) for x in r.stream])
+
+
+class UsableTimestamp(unittest.TestCase):  # AC-504
+    def test_a_timestamp_that_is_not_usable_is_not_compared_and_does_not_move_the_previous(self):
+        for mutate in (lambda t: t.pop("unit"), lambda t: t.update(unit="ms"), lambda t: t.update(unit=None),
+                       lambda t: t.pop("value"), lambda t: t.update(value=-1), lambda t: t.update(value=1.5),
+                       lambda t: t.update(value=True)):
+            ss = B.samples(4)
+            ss[2]["timestamp"]["value"] = 0               # lower than the previous, but made unusable below
+            mutate(ss[2]["timestamp"])
+            r = S.check_stream(B.full(ss))
+            self.assertNotIn("STREAM_TIMESTAMP_REGRESSION", [d.code for d in r.stream])
+            self.assertTrue(r.samples)                   # the sample validation reports it
+        # the next sample is still compared with the last usable timestamp
+        ss = B.samples(4)
+        ss[2]["timestamp"]["unit"] = "ms"
+        ss[3]["timestamp"]["value"] = ss[1]["timestamp"]["value"] - 1
+        self.assertEqual([d.code for d in S.check_stream(B.full(ss)).stream], ["STREAM_TIMESTAMP_REGRESSION"])
+
+    def test_the_clock_comparison_needs_only_a_recognised_clock(self):
+        ss = B.samples(3)
+        ss[1]["timestamp"]["clock"] = "utc"
+        ss[1]["timestamp"]["unit"] = "ms"
+        self.assertEqual([d.code for d in S.check_stream(B.full(ss)).stream], ["STREAM_CLOCK_MISMATCH"])
+        ss = B.samples(3)
+        ss[1]["timestamp"]["clock"] = "gps"
+        self.assertEqual([d.code for d in S.check_stream(B.full(ss)).stream], [])
+
+    def test_timestamp_comparison_outside_the_open_state(self):
+        s = B.samples(3)
+        s[1]["timestamp"]["value"] = s[0]["timestamp"]["value"] - 1
+        d = B.doc([B.smp(s[0]), B.smp(s[1]), B.opened(), B.smp(s[2]), B.closed()])
+        self.assertIn((1, "STREAM_TIMESTAMP_REGRESSION"), [(x.position, x.code) for x in S.check_stream(d).stream])
+
+
+class OddInputs(unittest.TestCase):  # AC-501 to AC-505: the checker returns diagnostics, it does not raise
+    def result(self, mutate):
+        d = good()
+        mutate(d)
+        return S.check_stream(d)
+
+    def test_odd_sequence_and_index_values(self):
+        for bad in (True, False, 1.0, 101.5, "101", None, [], {}, float("nan"), float("inf"), -1):
+            r = self.result(lambda d: d["records"][2]["sample"].__setitem__("sequence", bad))
+            self.assertTrue(r.samples, bad)             # reported by the sample validation, never raised
+            r = self.result(lambda d: d["records"][2].__setitem__("index", bad))
+            self.assertTrue(r.stream, bad)
+            r = self.result(lambda d: d["records"][0].__setitem__("first_sequence", bad))
+            self.assertIn("STREAM_MALFORMED", [x.code for x in r.stream], bad)
+
+    def test_huge_integers_are_ordinary_integers(self):
+        huge = 10 ** 400
+        self.assertEqual(codes(self.seq_doc([huge, huge + 1])), ([], []))
+        self.assertEqual(codes(self.seq_doc([huge, huge + 3]))[0], ["STREAM_SEQUENCE_GAP"])
+        r = self.result(lambda d: d["records"][2]["sample"]["timestamp"].__setitem__("value", huge))
+        self.assertEqual([x.code for x in r.stream], ["STREAM_TIMESTAMP_REGRESSION"])
+
+    def seq_doc(self, values):
+        ss = B.samples(len(values))
+        for s, v in zip(ss, values):
+            s["sequence"] = v
+        return B.full(ss)
+
+    def test_lists_and_objects_in_identity_and_kind_fields(self):
+        for bad in ([], ["imu"], {}, {"a": 1}, 5, None):
+            for f in ("kind", "clock", "sensor_id", "stream_id"):
+                r = self.result(lambda d: d["records"][0].__setitem__(f, bad))
+                self.assertIn("STREAM_MALFORMED", [x.code for x in r.stream], (f, bad))
+            r = self.result(lambda d: d["records"][2].__setitem__("record", bad))
+            self.assertTrue(r.stream, bad)
+            for f in ("kind", "sensor_id"):
+                self.result(lambda d: d["records"][3]["sample"].__setitem__(f, bad))
+            self.result(lambda d: d["records"][3]["sample"]["timestamp"].__setitem__("clock", bad))
+            self.result(lambda d: d["records"][3]["sample"].__setitem__("timestamp", bad))
+
+    def test_records_that_are_not_objects(self):
+        for bad in (None, 1, "x", [], [1], True):
+            r = self.result(lambda d: d["records"].__setitem__(2, bad))
+            self.assertIn([2, "STREAM_MALFORMED"], [[x.position, x.code] for x in r.stream])
+
+    def test_a_malformed_first_open_keeps_the_lifecycle_and_skips_what_it_cannot_judge(self):
+        d = good()
+        d["records"][0] = {"record": "open", "index": 0}
+        c = [(x.code) for x in S.check_stream(d).stream]
+        self.assertEqual(sorted(c), ["STREAM_MISSING_FIELD"] * 4)       # stream_id, sensor_id, kind, clock
+        d["records"][0] = {"record": "open", "index": 0, "stream_id": 1, "sensor_id": [], "kind": {}, "clock": None}
+        self.assertEqual([x.code for x in S.check_stream(d).stream], ["STREAM_MALFORMED"] * 4)
+
+    def test_close_before_open_then_a_later_open(self):
+        s = B.samples(2)
+        d = B.doc([B.closed(), B.opened(), B.smp(s[0]), B.smp(s[1]), B.closed()])
+        r = S.check_stream(d)
+        self.assertEqual([(x.position, x.code) for x in r.stream],
+                         [(0, "STREAM_CLOSE_BEFORE_OPEN"), (1, "STREAM_OPEN_NOT_FIRST")])
+
+    def test_unknown_record_kind_versus_the_schema(self):
+        schema = json.loads((ROOT / "contract" / "stream.schema.json").read_text(encoding="utf-8"))
+        kinds = [d["$ref"].rsplit("/", 1)[1] for d in schema["properties"]["records"]["items"]["oneOf"]]
+        self.assertEqual(sorted(kinds), ["close", "open", "sample"])    # the schema knows only three kinds
+        d = good()
+        d["records"][2]["record"] = "heartbeat"
+        self.assertIn("STREAM_UNKNOWN_RECORD", [x.code for x in S.check_stream(d).stream])
+
+
 class Determinism(unittest.TestCase):  # AC-506
     def big(self, n=10_000, seed=3):
         # generator faults: a gap at sample 10, a repeated sequence at sample 500 (a duplicate, and a gap at the next
@@ -431,6 +631,21 @@ class Determinism(unittest.TestCase):  # AC-506
             i = 0
             while i < len(d["records"]):
                 step = rng.choice((1, 2, 3, 17, 250, 999))
+                chk.feed(d["records"][i:i + step])
+                i += step
+            chk.finish()
+            self.assertEqual(chk.result().stream, want.stream)
+            self.assertEqual(chk.result().samples, want.samples)
+
+    def test_batching_invariance_for_random_splits_of_the_ten_thousand_record_stream(self):
+        d = self.big(10_000)
+        want = S.check_stream(d)
+        rng = random.Random(11)
+        for _ in range(5):
+            chk = S.StreamChecker()
+            i = 0
+            while i < len(d["records"]):
+                step = rng.choice((1, 7, 64, 333, 2500))
                 chk.feed(d["records"][i:i + step])
                 i += step
             chk.finish()

@@ -119,7 +119,7 @@ def build():
     invalid("close_last_sequence_malformed", d, [(6, "STREAM_MALFORMED")])
     d = full(s5)
     d["records"][2]["sample"] = [1]
-    invalid("sample_not_object", d, [(2, "STREAM_MALFORMED"), (3, "STREAM_SEQUENCE_GAP")])
+    invalid("sample_not_object", d, [(2, "STREAM_MALFORMED"), (3, "STREAM_SEQUENCE_GAP")], [(2, "MALFORMED_FIELD")])
     d = full(s5)
     del d["records"][2]["sample"]
     invalid("sample_missing", d, [(2, "STREAM_MISSING_FIELD"), (3, "STREAM_SEQUENCE_GAP")])   # the next sample follows a hole
@@ -162,7 +162,7 @@ def build():
         r["index"] = i
     invalid("worked_example_gap", w, [(2, "STREAM_SEQUENCE_GAP")])
     invalid("gap_from_generator", full(samples(6, faults={3: "gap"})), [(4, "STREAM_SEQUENCE_GAP")])
-    invalid("duplicate_from_generator", full(samples(6, faults={3: "regression"})),
+    invalid("duplicate_then_gap_from_generator", full(samples(6, faults={3: "regression"})),
             [(4, "STREAM_SEQUENCE_DUPLICATE"), (5, "STREAM_SEQUENCE_GAP")])   # the generator continues as if it had not repeated
     ss = copy.deepcopy(s5)
     ss[3]["sequence"] = 90
@@ -186,6 +186,10 @@ def build():
     ss = copy.deepcopy(s5)
     ss[2]["timestamp"]["clock"] = "utc"
     invalid("clock_mismatch", full(ss), [(3, "STREAM_CLOCK_MISMATCH")])
+    ss = copy.deepcopy(s5)
+    ss[2]["timestamp"]["unit"] = "ms"
+    ss[2]["timestamp"]["value"] = 0                   # lower, but its timestamp is not usable, so not compared
+    invalid("timestamp_unit_not_usable", full(ss), [], [(3, "INVALID_TIMESTAMP")])
     ss = copy.deepcopy(s5)
     ss[2]["sensor_id"] = "imu.other"
     invalid("sensor_change", full(ss), [(3, "STREAM_SENSOR_CHANGE")])

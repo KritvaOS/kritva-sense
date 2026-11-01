@@ -9,7 +9,7 @@
 | Status | PROPOSED: implemented for review under KOS-SENSE-005; not approved. A 0.x contract: it may change by the rules of section 13 |
 | Owner | Dinesh (interim architecture and safety reviewer, program decision D-047) |
 | Related contracts | [SENSE_CONTRACT.md](SENSE_CONTRACT.md) 0.1.0 (accepted, tag `v0.1.0`) and [FRAME_GRAPH_CONTRACT.md](FRAME_GRAPH_CONTRACT.md) 0.1.0; neither is changed by this document |
-| Machine-readable form | [stream.schema.json](stream.schema.json) |
+| Machine-readable form | [stream.schema.json](stream.schema.json) (a structural subset: it describes only the three record kinds, so a record of another kind fails the schema, and the reference validator reports it as `STREAM_UNKNOWN_RECORD`) |
 | Reference validator | `src/kritva_sense/stream.py` |
 | Criteria | [tasks/KOS-SENSE-005/ACCEPTANCE_CRITERIA.md](../tasks/KOS-SENSE-005/ACCEPTANCE_CRITERIA.md) |
 
@@ -49,14 +49,14 @@ Each kind has exactly these fields; an undefined field is `STREAM_UNKNOWN_FIELD`
 | Kind | Required | Optional | Rules |
 |---|---|---|---|
 | `open` | `record`, `index`, `stream_id`, `sensor_id`, `kind`, `clock` | `first_sequence` | `stream_id` and `sensor_id` match the sensor identity pattern of SENSE_CONTRACT section 3; `kind` is one of the sensor kinds of that contract; `clock` is `monotonic` or `utc` and is the stream clock, fixed at `open`; `first_sequence`, when present, is an integer >= 0 and states the sequence of the first sample. A value outside these rules is `STREAM_MALFORMED`. |
-| `sample` | `record`, `index`, `sample` | none | `sample` is one object that follows contract 0.1.0. A value that is not an object is `STREAM_MALFORMED`. |
+| `sample` | `record`, `index`, `sample` | none | `sample` is one object that follows contract 0.1.0. A value that is not an object is `STREAM_MALFORMED`, and it is also given to the contract 0.1.0 validator, which reports `MALFORMED_FIELD` at path `$` as a sample violation. |
 | `close` | `record`, `index` | `last_sequence` | `last_sequence`, when present, is an integer >= 0 and states the sequence of the last sample. A value that is not such an integer is `STREAM_MALFORMED`. |
 
 The stream identity (`stream_id`, `sensor_id`, `kind`, `clock`) is fixed by the first `open` record. A field of the open record that is malformed is reported and is not used for the checks that need it; those checks are skipped, never guessed.
 
 ## 5. Lifecycle
 
-A conformant stream has exactly one `open` record, first; zero or more `sample` records after it; and exactly one `close` record, last. The checker reads the records in order with three states: before open, open, closed.
+A conformant stream has exactly one `open` record, first; zero or more `sample` records after it; and exactly one `close` record, last. A `close` record is required: a stream without one is reported as unterminated and is never closed on the producer's behalf. The checker reads the records in order with three states: before open, open, closed.
 
 | Record | In state | Diagnostic | Effect on the state |
 |---|---|---|---|
@@ -95,6 +95,7 @@ The optional bounds are the only way a first or last sample is judged; the check
 ## 7. Timestamps and identity
 
 - Clock: a sample whose `timestamp.clock` differs from the stream clock is `STREAM_CLOCK_MISMATCH`. The sample itself stays conformant under contract 0.1.0.
+- Usable timestamp: a `timestamp` object with a recognised `clock` (`monotonic` or `utc`), the `unit` `ns` and an integer `value` >= 0, the form contract 0.1.0 requires. A sample whose timestamp is not usable does not take part in the timestamp comparison and does not move the previous timestamp; the sample validation reports it. The clock comparison below needs only a recognised `clock`.
 - Timestamp regression: a sample whose `timestamp.value` is lower than that of the previous sample record that has a usable timestamp is `STREAM_TIMESTAMP_REGRESSION`. An equal value is not a regression. Values are compared only when both samples use the same clock, because contract 0.1.0 does not define a comparison across clocks; a clock change is reported once, as `STREAM_CLOCK_MISMATCH`.
 - Identity: a sample whose `sensor_id` differs from the `sensor_id` of the open record is `STREAM_SENSOR_CHANGE`; a different `kind`, `STREAM_KIND_CHANGE`. Both compare with the identity fixed at open, not with the previous sample.
 
@@ -102,7 +103,7 @@ Independent defects of one record may each be reported: for example a sample wit
 
 ## 8. Samples
 
-Each sample is validated by the unchanged contract 0.1.0 validator (`validate_sample`), whatever the lifecycle state. Its violations are returned as sample violations with the record position and the path inside the sample, and keep their contract 0.1.0 codes (`MISSING_FIELD`, `INVALID_UNIT`, and so on). A stream is conformant only when it has no stream diagnostics and no sample violations. The validity states `STALE`, `MISSING` and `INVALID` of contract 0.1.0 are conformant samples and are not diagnostics of this contract; freshness is not evaluated here because it needs a consumer's clock and age limit (SENSE_CONTRACT section 6.1).
+Each `sample` value, an object or not, is validated by the unchanged contract 0.1.0 validator (`validate_sample`), whatever the lifecycle state. Its violations are returned as sample violations with the record position and the path inside the sample, and keep their contract 0.1.0 codes (`MISSING_FIELD`, `INVALID_UNIT`, and so on). A stream is conformant only when it has no stream diagnostics and no sample violations. The validity states `STALE`, `MISSING` and `INVALID` of contract 0.1.0 are conformant samples and are not diagnostics of this contract; freshness is not evaluated here because it needs a consumer's clock and age limit (SENSE_CONTRACT section 6.1).
 
 ## 9. Batching
 
@@ -162,4 +163,4 @@ This is stream contract 0.1.0, PROPOSED for approval by the owner through the ce
 
 ## 15. Verification
 
-`make test-unit` runs `tests/stream/`: valid and invalid fixtures (each defect class alone and in combination, the empty stream and generator-made streams), known-answer tests of every code, batching invariance for every split of small streams and for random splits of a 10,000-record stream, the schema and constants agreement, the pinned contract documents and the command line. The command line is `python3 -m kritva_sense.stream FILE.json`, reading a stream document; it exits 0 when conformant, 1 when not, 2 on a usage or read error (an unreadable file or input that is not JSON).
+`make test-unit` runs `tests/stream/`: valid and invalid fixtures (each defect class alone and in combination, the empty stream and generator-made streams), known-answer tests of every code with exact positions, paths and messages for each class, tests with odd types (booleans, floats, very large integers, lists and objects in identity fields), batching invariance for every split of small streams and for random splits of a 2,000-record and of a 10,000-record stream, the schema and constants agreement, the pinned contract documents and the command line. The command line is `python3 -m kritva_sense.stream FILE.json`, reading a stream document; it exits 0 when conformant, 1 when not, 2 on a usage or read error (an unreadable file or input that is not JSON).
