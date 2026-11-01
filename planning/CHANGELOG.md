@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-004 planning records: task and criteria AC-401 to AC-407 added (proposed; to be baselined in v5 after D-083; status NOT_STARTED). No contract, schema or code change. Tasks: None (planning records; task not started).
+
 - KOS-SENSE-003 submitted for review: status IN_REVIEW with the `unit-tests` CI run 41267842700 PASS on closing commit c92e841 as evidence. No contract, schema or code change; not accepted. Tasks: KOS-SENSE-003.
 
 - KOS-SENSE-003: frame graph contract 0.1.0 (`contract/FRAME_GRAPH_CONTRACT.md`, `contract/frame-transform.schema.json`), reference implementation (`src/kritva_sense/frame_graph.py`: validation, deterministic composition and inversion, no assumed identity), 42 synthetic fixtures and `tests/frame_graph/`; `make test-unit` runs them. Proposed, not accepted. Sense contract 0.1.0 and its schema are unchanged (pinned by a test). Tasks: KOS-SENSE-003.
