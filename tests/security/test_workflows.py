@@ -20,8 +20,7 @@ POLICY = {
     "secret-scan.yml": {"permissions": {"contents": "read"}, "actions": {"actions/checkout"}},
     "unit-tests.yml": {"permissions": {"contents": "read"}, "actions": {"actions/checkout", "actions/setup-python"}},
 }
-# First-party actions pinned by major-version tag; pinning to a commit SHA is open for the owner (finding F-005).
-TAG_PINNED = re.compile(r"^[\w.-]+/[\w.-]+@v\d+$")
+# Every action is pinned to a full commit SHA with the version tag in a comment (finding F-005, fixed).
 SHA_PINNED = re.compile(r"^[\w.-]+/[\w.-]+@[0-9a-f]{40}$")
 
 
@@ -88,9 +87,21 @@ class Workflows(unittest.TestCase):
                 found = uses(text(name))
                 self.assertEqual({u.split("@")[0] for u in found}, pol["actions"])
                 for u in found:
-                    self.assertTrue(TAG_PINNED.match(u) or SHA_PINNED.match(u), "%s is not pinned to a version" % u)
+                    self.assertTrue(SHA_PINNED.match(u), "%s is not pinned to a full commit SHA" % u)
                     self.assertTrue(u.startswith("actions/"), "third-party action %s needs review" % u)
                     self.assertNotRegex(u, r"@(main|master|latest|v\d+\.x)$")
+
+    def test_every_pin_names_its_version_tag_and_the_same_sha_is_used_everywhere(self):
+        shas = {}
+        for name in POLICY:
+            for line in text(name).splitlines():
+                m = re.search(r"uses:\s*([\w.-]+/[\w.-]+)@([0-9a-f]{40})\s+# (v\d+)\s*$", line)
+                if "uses:" in line:
+                    self.assertTrue(m, "%s: pin without a version comment: %s" % (name, line.strip()))
+                    shas.setdefault(m.group(1) + " " + m.group(3), set()).add(m.group(2))
+        self.assertTrue(shas)
+        for action, versions in shas.items():
+            self.assertEqual(len(versions), 1, "%s is pinned to different commits" % action)
 
     def test_secrets_are_only_the_workflow_token(self):
         for name in POLICY:
@@ -148,10 +159,10 @@ class GateConfiguration(unittest.TestCase):
             self.assertIn(needed, protected)
 
     def test_required_checks_are_the_reviewed_set(self):
-        """Recorded as reviewed: unit-tests is not a required check (finding F-004, owner decision pending or
-        recorded in SECURITY_REVIEW.md). Removing a check from this set must be a deliberate, reviewed change."""
+        """unit-tests is a required check (finding F-004, fixed). Removing a check from this set must be a deliberate,
+        reviewed change."""
         required = set(self.gate()["required_github_checks"])
-        self.assertTrue({"secret-scan", "commit-message-check", "pr-acceptance-gate"} <= required)
+        self.assertTrue({"secret-scan", "commit-message-check", "pr-acceptance-gate", "unit-tests"} <= required)
 
     def test_every_required_check_has_a_workflow(self):
         names = set()
