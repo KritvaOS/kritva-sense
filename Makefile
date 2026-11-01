@@ -37,7 +37,7 @@ endef
 
 lint: ## Static analysis and lint (NOT_IMPLEMENTED: exits 3)
 	$(call not_implemented,lint)
-test-unit: ## Unit tests: contract validator, frame graph, generator, stream, consumer conformance harness, synthetic fixtures, status report consistency and packaging, install and reproducible build (KOS-SENSE-002 to KOS-SENSE-007)
+test-unit: ## Unit tests: contract validator, frame graph, generator, stream, consumer conformance harness, synthetic fixtures, status report consistency, packaging, install and reproducible build and security regression tests (KOS-SENSE-002 to KOS-SENSE-008)
 	@python3 -m unittest discover -s tests/contract
 	@python3 -m unittest discover -s tests/frame_graph
 	@python3 -m unittest discover -s tests/generator
@@ -45,6 +45,7 @@ test-unit: ## Unit tests: contract validator, frame graph, generator, stream, co
 	@python3 -m unittest discover -s tests/conformance
 	@python3 -m unittest discover -s tests/status
 	@python3 -m unittest discover -s tests/packaging
+	@python3 -m unittest discover -s tests/security
 test-integration: ## Integration tests (NOT_IMPLEMENTED: exits 3)
 	$(call not_implemented,test-integration)
 test-regression: ## Regression tests (NOT_IMPLEMENTED: exits 3)

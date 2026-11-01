@@ -80,7 +80,9 @@ Filled from the `unit-tests` CI run 41292919590 on the artifact-input commit (me
 
 | Field | Value |
 |---|---|
-| Source commit | 5f1aa7a34c5aec9e0c12fc66add6d3bc6efaa7bc |
-| Wheel SHA-256 | 47ed3803b02aafb285cfee9aa620142676e30f5f0dc6fa67e383b283a24f2415 |
-| Source distribution SHA-256 | f6f8284b7eef220a65d40359a0ab013ced2ee64d0ae068cee8f8fe960ca6d192 |
-| Source distribution normalised-content hash | bd5e68f34eb028a2b786adf6a83286bfd8243335325b9865dee498c5c438ee32 |
+| Source commit | PENDING |
+| Wheel SHA-256 | PENDING |
+| Source distribution SHA-256 | PENDING |
+| Source distribution normalised-content hash | PENDING |
+
+Refresh by KOS-SENSE-008. KOS-SENSE-008 fixes three findings in packaged modules (`__main__.py`, `frame_graph.py`, `stream.py`, `conformance.py` and `generator.py`: F-001 to F-003 in `tasks/KOS-SENSE-008/SECURITY_REVIEW.md`), so the artifacts built from the closing commit of that task differ from those that KOS-SENSE-007 accepted. The package version stays 0.2.0 and no tag exists or was published. While KOS-SENSE-008 is in progress every field above is `PENDING` together; the status change that submits KOS-SENSE-008 for review fills them from the CI run of the closing commit, and from then on `tests/packaging/` fails a record that does not match the build. The values accepted by KOS-SENSE-007 (artifact-input commit 5f1aa7a34c5aec9e0c12fc66add6d3bc6efaa7bc, `unit-tests` run 41292919590) are: wheel 47ed3803b02aafb285cfee9aa620142676e30f5f0dc6fa67e383b283a24f2415, source distribution f6f8284b7eef220a65d40359a0ab013ced2ee64d0ae068cee8f8fe960ca6d192, normalised-content hash bd5e68f34eb028a2b786adf6a83286bfd8243335325b9865dee498c5c438ee32; they stay in the decision record D-091.

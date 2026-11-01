@@ -30,9 +30,9 @@ PINS = {
     "contract/frame-transform.schema.json": "ae644360dc5ba0e679a9e616022b4261b2e95fe967da8af1e4d440f718a099e2",
     "contract/stream.schema.json": "12f2003ab9144d820ea6f8aeb629e85fcbc888c6933c60060dd49162fee0ff51",
     "src/kritva_sense/validator.py": "cc758f474c21d1963ebbc3c8629a2f59584ce7f463935064f46e5b98061ccaa6",
-    "src/kritva_sense/generator.py": "9c2e2dcbaf0f2e643f0e7dc1ba27ab2585c29852f1f44c038596b52591c07c2a",
-    "src/kritva_sense/frame_graph.py": "4aef1f86a853bf66582b25471f568c421ed41b17f6f7148e5efdb9e5a2e49a6a",
-    "src/kritva_sense/stream.py": "2d8b3bb95f506baf17648c0f9ee5ed6367a57ce6d0e127e788062d0004439c47",
+    "src/kritva_sense/generator.py": "e2ad1a243b1c029739774a663a8d3927f413f310a35620355578800adec4a7e8",
+    "src/kritva_sense/frame_graph.py": "b955a656ba256c372a849c0e0512aac065b7bda66ab04cae8b0e462e0b7720ef",
+    "src/kritva_sense/stream.py": "7e66e66f6fb0ca7633cdcc118531baf91bc6c16829a419dea02a0302637ae6cd",
 }
 DOC = ROOT / "src" / "kritva_sense" / "CONFORMANCE.md"
 

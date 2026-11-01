@@ -720,11 +720,11 @@ def run_case(consumer, case):
     base = {"id": case["id"], "operation": case["operation"], "clause": case["clause"], "expected": case["expected"]}
     try:
         decision = _call(consumer, case)
-    except Exception as exc:                          # noqa: BLE001 - isolation is the point
+    except (Exception, SystemExit) as exc:            # noqa: BLE001 - isolation is the point; SystemExit must not end the run
         return dict(base, actual={"error": type(exc).__name__}, outcome="FAIL", reason="consumer raised")
     try:
         actual = _NORMALISE[case["operation"]](decision)
-    except Exception:                                 # noqa: BLE001 - a hostile decision object
+    except (Exception, SystemExit):                   # noqa: BLE001 - a hostile decision object
         actual = None
     if actual is None:
         return dict(base, actual={"undefined_decision": type(decision).__name__}, outcome="FAIL",
@@ -785,7 +785,7 @@ def load_consumer(spec):
             obj = getattr(obj, part)
         if isinstance(obj, type) or (callable(obj) and not all(hasattr(obj, m) for m in _METHODS)):
             obj = obj()                               # a class or a factory: make the consumer
-    except Exception as exc:                          # noqa: BLE001
+    except (Exception, SystemExit) as exc:            # noqa: BLE001 - a module that calls sys.exit() is a load error
         raise ValueError("cannot load %r: %s: %s" % (spec, type(exc).__name__, exc))
     missing = [m for m in _METHODS if not callable(getattr(obj, m, None))]
     if missing:
