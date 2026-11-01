@@ -1,0 +1,146 @@
+{
+  "records": [
+    {
+      "clock": "monotonic",
+      "index": 0,
+      "kind": "imu",
+      "record": "open",
+      "sensor_id": "imu.main",
+      "stream_id": "stream_one"
+    },
+    {
+      "index": 1,
+      "record": "sample",
+      "sample": {
+        "contract_version": "0.1.0",
+        "frame_id": "sensor",
+        "kind": "imu",
+        "measurements": {
+          "accel_x": {
+            "unit": "m/s^2",
+            "value": -0.440681
+          },
+          "accel_y": {
+            "unit": "m/s^2",
+            "value": -1.932847
+          },
+          "accel_z": {
+            "unit": "m/s^2",
+            "value": 9.970304
+          },
+          "gyro_x": {
+            "unit": "rad/s",
+            "value": 0.165861
+          },
+          "gyro_y": {
+            "unit": "rad/s",
+            "value": -0.095116
+          },
+          "gyro_z": {
+            "unit": "rad/s",
+            "value": -0.501137
+          }
+        },
+        "sensor_id": "imu.main",
+        "sequence": 7,
+        "timestamp": {
+          "clock": "monotonic",
+          "unit": "ns",
+          "value": 1000000000
+        },
+        "validity": "VALID"
+      }
+    },
+    {
+      "index": 2,
+      "record": "sample",
+      "sample": {
+        "contract_version": "0.1.0",
+        "frame_id": "sensor",
+        "kind": "imu",
+        "measurements": {
+          "accel_x": {
+            "unit": "m/s^2",
+            "value": -0.128188
+          },
+          "accel_y": {
+            "unit": "m/s^2",
+            "value": -0.687693
+          },
+          "accel_z": {
+            "unit": "m/s^2",
+            "value": 9.663703
+          },
+          "gyro_x": {
+            "unit": "rad/s",
+            "value": -0.173717
+          },
+          "gyro_y": {
+            "unit": "rad/s",
+            "value": -0.79288
+          },
+          "gyro_z": {
+            "unit": "rad/s",
+            "value": 0.919748
+          }
+        },
+        "sensor_id": "imu.main",
+        "sequence": 8,
+        "timestamp": {
+          "clock": "monotonic",
+          "unit": "ns",
+          "value": 1010000000
+        },
+        "validity": "VALID"
+      }
+    },
+    {
+      "index": 3,
+      "record": "sample",
+      "sample": {
+        "contract_version": "0.1.0",
+        "frame_id": "sensor",
+        "kind": "imu",
+        "measurements": {
+          "accel_x": {
+            "unit": "m/s^2",
+            "value": 1.672078
+          },
+          "accel_y": {
+            "unit": "m/s^2",
+            "value": 1.485327
+          },
+          "accel_z": {
+            "unit": "m/s^2",
+            "value": 9.955603
+          },
+          "gyro_x": {
+            "unit": "rad/s",
+            "value": 0.096575
+          },
+          "gyro_y": {
+            "unit": "rad/s",
+            "value": 0.759227
+          },
+          "gyro_z": {
+            "unit": "rad/s",
+            "value": -0.347277
+          }
+        },
+        "sensor_id": "imu.main",
+        "sequence": 9,
+        "timestamp": {
+          "clock": "monotonic",
+          "unit": "ns",
+          "value": 1020000000
+        },
+        "validity": "VALID"
+      }
+    },
+    {
+      "index": 4,
+      "record": "close"
+    }
+  ],
+  "stream_version": "0.1.0"
+}
