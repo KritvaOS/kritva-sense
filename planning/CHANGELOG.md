@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-006 started after the acceptance of KOS-SENSE-005 (D-088; baselined in v6, D-087): status IN_PROGRESS in TASKS.md, the task record, its criteria and the status report. No contract, schema or code change. Tasks: None (status change; implementation follows in its own pull request).
+
 - KOS-SENSE-005 ACCEPTED: central approval recorded in kritva-program (D-088) on closing commit 0bee5ed (`unit-tests` run 41278515695 PASS); stream contract 0.1.0 approved as v0.1.0. Status wording only: no contract rule, schema or code change. Tasks: None (status and approval wording; no contract or code change).
 
 - KOS-SENSE-005 submitted for review: status IN_REVIEW with the `unit-tests` CI run 41278515695 PASS on closing commit 0bee5ed as evidence. One cross-reference in the stream contract status row is corrected (section 14, not 13); no rule, schema or code change; not accepted, and the stream contract is not yet approved. Tasks: KOS-SENSE-005.

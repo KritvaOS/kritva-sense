@@ -3,7 +3,7 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M7-SENSE-001 |
-| Status | NOT_STARTED (baselined in v6, D-087; it cannot start before KOS-SENSE-005 is accepted) |
+| Status | IN_PROGRESS (baselined in v6, D-087; KOS-SENSE-005 accepted, D-088) |
 | Weight | 5 (initial planning weight, 5 effort days; baseline v6, D-087; effort risk: three interfaces, an independent oracle, mutants and failure isolation) |
 | Depends on | KOS-SENSE-001 to KOS-SENSE-004 and KOS-SENSE-005 |
 | Requires physical | No (software only, synthetic data) |
