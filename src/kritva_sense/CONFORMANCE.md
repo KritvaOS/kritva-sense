@@ -1,6 +1,6 @@
 # Consumer conformance harness (KOS-SENSE-006)
 
-Status: IN_PROGRESS, not accepted. Harness version 0.1.0. Criteria: [AC-601 to AC-607](../../tasks/KOS-SENSE-006/ACCEPTANCE_CRITERIA.md).
+Status: ACCEPTED (KOS-SENSE-006, central approval D-089; review is the interim D-047 role, not independent). Harness version 0.1.0. Criteria: [AC-601 to AC-607](../../tasks/KOS-SENSE-006/ACCEPTANCE_CRITERIA.md).
 
 A future consumer (Mind, Motion, Skill or another repository) can show with this harness that it handles Sense data as the contracts say. The harness feeds a consumer a deterministic set of synthetic samples, streams and frame graphs, compares its decisions with the outcomes written in the case set, and writes a machine-readable result. It tests the consumer rules of [SENSE_CONTRACT.md](../../contract/SENSE_CONTRACT.md), [STREAM_CONTRACT.md](../../contract/STREAM_CONTRACT.md) and [FRAME_GRAPH_CONTRACT.md](../../contract/FRAME_GRAPH_CONTRACT.md). It integrates with no real consumer, and it changes no contract, schema, validator, generator or stream checker.
 
