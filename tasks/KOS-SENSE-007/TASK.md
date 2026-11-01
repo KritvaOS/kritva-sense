@@ -3,8 +3,8 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M8-SENSE-001 |
-| Status | NOT_STARTED (proposed for baseline v7, D-090; all of KOS-SENSE-001 to KOS-SENSE-006 are accepted) |
-| Weight | 5 (initial planning weight, 5 effort days; proposed for baseline v7, D-090; effort risk: reproducibility across two builds and clean-environment install tests) |
+| Status | IN_PROGRESS (baselined in v7, D-090; all of KOS-SENSE-001 to KOS-SENSE-006 are accepted) |
+| Weight | 5 (initial planning weight, 5 effort days; baselined in v7, D-090; effort risk: reproducibility across two builds and clean-environment install tests) |
 | Depends on | KOS-SENSE-001 to KOS-SENSE-006 (all accepted) |
 | Requires physical | No (software only, synthetic data) |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) (AC-701 to AC-707) |
