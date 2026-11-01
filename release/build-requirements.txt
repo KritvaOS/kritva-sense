@@ -1,0 +1,8 @@
+# Pinned build environment for the kritva-sense wheel and source distribution (KOS-SENSE-007, AC-702).
+# These are build tools only. They are never runtime dependencies: the package declares none.
+# Every distribution that the build needs is listed with an exact version; tests/packaging checks that
+# the isolated build environment contains exactly these distributions (plus pip) and nothing else.
+build==1.2.2.post1
+packaging==25.0
+pyproject_hooks==1.2.0
+setuptools==80.9.0
