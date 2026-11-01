@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-006: synthetic consumer conformance harness (`src/kritva_sense/conformance.py`, documented in `src/kritva_sense/CONFORMANCE.md`): a consumer interface of three operations (sample decision with `now_ns`, `now_clock`, `max_age_ns` and the previous sample; stream decision; frame resolution), a case set of 85 cases with hand-written expected outcomes and contract clauses (freshness boundaries, declared state before freshness, sequence, stream lifecycle and gaps, frame identity and connection), a reference consumer, 14 mutants in the five rule classes, failure isolation, deterministic sorted-key JSON and the command line `python3 -m kritva_sense.conformance` (exit 0, 1, 2); `tests/conformance/` is run by `make test-unit`. In progress, not accepted. Every existing contract, schema, validator, frame graph reference, generator and stream document is unchanged and pinned by tests. Tasks: KOS-SENSE-006.
+
 - KOS-SENSE-006 started after the acceptance of KOS-SENSE-005 (D-088; baselined in v6, D-087): status IN_PROGRESS in TASKS.md, the task record, its criteria and the status report. No contract, schema or code change. Tasks: None (status change; implementation follows in its own pull request).
 
 - KOS-SENSE-005 ACCEPTED: central approval recorded in kritva-program (D-088) on closing commit 0bee5ed (`unit-tests` run 41278515695 PASS); stream contract 0.1.0 approved as v0.1.0. Status wording only: no contract rule, schema or code change. Tasks: None (status and approval wording; no contract or code change).
