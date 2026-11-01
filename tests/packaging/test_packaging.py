@@ -35,12 +35,12 @@ PENDING = "PENDING"
 # these files is a change to an accepted interface and must be a deliberate, reviewed change of this table.
 PINS = {
     "src/kritva_sense/__init__.py": "f0232671bf69983a2240359242f8af6d36739b32895fb53d0bab5c5c6ac95582",
-    "src/kritva_sense/__main__.py": "b588a17c13ecbb4e2305282351b340027f8f66e295bab0966d3cb98ef4c34739",
+    "src/kritva_sense/__main__.py": "14f9721f04349b3c644938d58d04f3e2dbe6cbf70465ebb4f613b70960d4d204",
     "src/kritva_sense/validator.py": "cc758f474c21d1963ebbc3c8629a2f59584ce7f463935064f46e5b98061ccaa6",
-    "src/kritva_sense/frame_graph.py": "4aef1f86a853bf66582b25471f568c421ed41b17f6f7148e5efdb9e5a2e49a6a",
-    "src/kritva_sense/generator.py": "9c2e2dcbaf0f2e643f0e7dc1ba27ab2585c29852f1f44c038596b52591c07c2a",
-    "src/kritva_sense/stream.py": "2d8b3bb95f506baf17648c0f9ee5ed6367a57ce6d0e127e788062d0004439c47",
-    "src/kritva_sense/conformance.py": "59933d7f1fcda94adfada75d7175d082fd87cb43437e89ff9c30c464bce7e6c1",
+    "src/kritva_sense/frame_graph.py": "b955a656ba256c372a849c0e0512aac065b7bda66ab04cae8b0e462e0b7720ef",
+    "src/kritva_sense/generator.py": "e2ad1a243b1c029739774a663a8d3927f413f310a35620355578800adec4a7e8",
+    "src/kritva_sense/stream.py": "7e66e66f6fb0ca7633cdcc118531baf91bc6c16829a419dea02a0302637ae6cd",
+    "src/kritva_sense/conformance.py": "9b43037a2d922c165965318e10a02f72f136323cf24078402e15a164aa9f6d17",
     "contract/FRAME_GRAPH_CONTRACT.md": "a3ded6d06222a7f554127c16265e718f350eef58f0550737be425561c6f10210",
     "contract/SENSE_CONTRACT.md": "f8935feb9efb10dd482e4b7386239295b2180412dbbcbc177aa7a6f86d75abcf",
     "contract/STREAM_CONTRACT.md": "ac6aafea196224509a673c6f4e71c6a983575a24b816cb794669b17e1ff62bf4",
@@ -485,12 +485,12 @@ class Release(Base):
     def record(self):
         return {r[0]: r[1] for r in self.table("Release record")}
 
-    def task_status(self):
+    def task_status(self, task="KOS-SENSE-007"):
         for line in (ROOT / "planning" / "TASKS.md").read_text(encoding="utf-8").splitlines():
-            m = re.match(r"^\| KOS-SENSE-007 \| [^|]+ \| ([A-Z_]+)", line)
+            m = re.match(r"^\| %s \| [^|]+ \| ([A-Z_]+)" % task, line)
             if m:
                 return m.group(1)
-        self.fail("KOS-SENSE-007 is not in planning/TASKS.md")
+        self.fail("%s is not in planning/TASKS.md" % task)
 
     @mandatory
     def test_ac707_release_record_format(self):
@@ -502,8 +502,16 @@ class Release(Base):
         self.assertRegex(rec["Source commit"], r"^(%s|[0-9a-f]{40})$" % PENDING)
         for key in list(rec)[1:]:
             self.assertRegex(rec[key], r"^(%s|[0-9a-f]{64})$" % PENDING, key)
-        if self.task_status() in ("IN_REVIEW", "ACCEPTED"):
+        # KOS-SENSE-008 fixes three packaged modules, so the record of the 007 build no longer matches the tree. While
+        # 008 is IN_PROGRESS the record may be refreshed: every field is then PENDING together, and the values are
+        # filled from the CI run of the closing commit when 008 is submitted for review.
+        refreshing = self.task_status("KOS-SENSE-008") == "IN_PROGRESS" and rec["Source commit"] == PENDING
+        if refreshing:
+            self.assertEqual(set(rec.values()), {PENDING}, "a record under refresh is pending in every field")
+        elif self.task_status() in ("IN_REVIEW", "ACCEPTED"):
             self.assertNotIn(PENDING, rec.values(), "the release record is complete once the task is submitted")
+        if self.task_status("KOS-SENSE-008") in ("IN_REVIEW", "ACCEPTED"):
+            self.assertNotIn(PENDING, rec.values(), "the release record is refreshed once KOS-SENSE-008 is submitted")
 
     @mandatory
     def test_ac707_release_record_matches_the_build(self):

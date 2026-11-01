@@ -68,8 +68,10 @@ python3 -m kritva_sense.generator samples --kind K --sensor-id ID --count N --se
 python3 -m kritva_sense.generator graph --seed S [--extra-frames N] [--defect NAME] [--out FILE]
 ```
 
-The output is JSON with sorted keys, two-space indent and a trailing newline, on standard output or in `--out`. Exit 0 on success; exit 2 for a usage error (unknown kind or option, negative count, missing argument), for a fault or defect that cannot be applied (index outside the sequence, a regression at index 0, a boundary fault before the last sample, two faults on one index), for an invalid sensor id, clock or frame, for data that fails the reference check and for an unwritable target, each with a message on standard error and nothing on standard output.
+The output is JSON with sorted keys, two-space indent and a trailing newline, on standard output or in `--out`. Exit 0 on success; exit 2 for a usage error (unknown kind or option, negative count, a count above 1000000, missing argument), for a fault or defect that cannot be applied (index outside the sequence, a regression at index 0, a boundary fault before the last sample, two faults on one index), for an invalid sensor id, clock or frame, for data that fails the reference check and for an unwritable target, each with a message on standard error and nothing on standard output.
 
 ## 6. Limitations
+
+Resource bound (KOS-SENSE-008, finding F-003). `--count` (and `generate_samples`) accepts at most 1000000 samples (`MAX_COUNT`); a larger value is a usage error at once, so a mistyped count cannot exhaust memory or run for hours. The cap is a guard against a typing error, not a security boundary: an operator who needs more splits the sequence with `--start-sequence` and `--start-ns`. `--out` writes the path it is given and truncates an existing file, also through a symbolic link (the operator is trusted; see THREAT_MODEL.md).
 
 Synthetic data only. No physical, noise or timing model, no real sensor driver, no transport, streaming or real-time behaviour, no ROS or external library, no freshness or health policy and no integration with Mind, Motion or Skill. Review is the interim D-047 role, not independent.

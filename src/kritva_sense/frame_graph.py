@@ -311,7 +311,7 @@ def main(argv):
     try:
         with open(argv[1], encoding="utf-8") as fh:
             doc = json.load(fh)
-    except (OSError, ValueError) as exc:
+    except (OSError, ValueError, RecursionError) as exc:  # RecursionError: JSON nested too deeply to decode
         print("cannot read frame graph: %s" % exc, file=sys.stderr)
         return 2
     if len(argv) == 2:

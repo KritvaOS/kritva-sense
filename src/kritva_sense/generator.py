@@ -23,6 +23,7 @@ from . import frame_graph as fg
 from . import validator as V
 
 GENERATOR_VERSION = "0.1.0"
+MAX_COUNT = 1_000_000  # largest sample count one call or command line accepts (KOS-SENSE-008, finding F-003)
 MASK64 = (1 << 64) - 1
 VALUE_DECIMALS = 6
 ROTATION_DECIMALS = 12
@@ -175,6 +176,8 @@ def generate_samples(kind, sensor_id, count, seed, start_sequence=0, start_ns=0,
     """
     if isinstance(count, bool) or not isinstance(count, int) or count < 0:
         raise ValueError("count must be an integer >= 0")
+    if count > MAX_COUNT:
+        raise ValueError("count must be at most %d" % MAX_COUNT)
     if isinstance(step_ns, bool) or not isinstance(step_ns, int) or step_ns <= 0:
         raise ValueError("step_ns must be an integer > 0")
     if isinstance(start_sequence, bool) or not isinstance(start_sequence, int) or start_sequence < 0:

@@ -4,7 +4,7 @@ Status: ACCEPTED (KOS-SENSE-006, central approval D-089; review is the interim D
 
 A future consumer (Mind, Motion, Skill or another repository) can show with this harness that it handles Sense data as the contracts say. The harness feeds a consumer a deterministic set of synthetic samples, streams and frame graphs, compares its decisions with the outcomes written in the case set, and writes a machine-readable result. It tests the consumer rules of [SENSE_CONTRACT.md](../../contract/SENSE_CONTRACT.md), [STREAM_CONTRACT.md](../../contract/STREAM_CONTRACT.md) and [FRAME_GRAPH_CONTRACT.md](../../contract/FRAME_GRAPH_CONTRACT.md). It integrates with no real consumer, and it changes no contract, schema, validator, generator or stream checker.
 
-Passing proves that a consumer decides the synthetic cases as the contracts say. It does not prove that any real consumer conforms in operation, and it is not a sensor, robot or safety conformance test. No timeout is applied to a consumer: a consumer that never returns blocks the run.
+Passing proves that a consumer decides the synthetic cases as the contracts say. It does not prove that any real consumer conforms in operation, and it is not a sensor, robot or safety conformance test. **This harness is not a sandbox.** A consumer given as `MODULE:ATTR` is imported into the harness process and runs with the privileges of the user who started it, with that user's files, environment and network; importing it runs its module code, from the current directory or `PYTHONPATH`. Only name a consumer you trust. No timeout is applied to a consumer: a consumer that never returns blocks the run, and a timeout, if an operator adds one around the command (for example `timeout 60 python3 -m kritva_sense.conformance ...` or a subprocess timeout), only ends the run: it does not make the consumer safe and is not a sandbox.
 
 ## 1. Consumer interface
 
@@ -64,7 +64,7 @@ Audit of the highest-risk expected outcomes (hand derivation from the contract t
 
 ## 4. Running a consumer and failure isolation
 
-`run_consumers({name: consumer}, seed)` runs every consumer on every case. A consumer that raises or returns an undefined decision fails that case; the other cases and the other consumers still run, and the verdict is `NOT_CONFORMANT`. Only `Exception` is caught. The exception message is not copied into the result, only its type name.
+`run_consumers({name: consumer}, seed)` runs every consumer on every case. A consumer that raises or returns an undefined decision fails that case; the other cases and the other consumers still run, and the verdict is `NOT_CONFORMANT`. `Exception` and `SystemExit` are caught (a consumer that calls `sys.exit()` fails its case; it cannot end the run with a pass). Other `BaseException`s such as `KeyboardInterrupt` are not caught. The exception message is not copied into the result, only its type name.
 
 ## 5. Result format
 
@@ -83,7 +83,7 @@ python3 -m kritva_sense.conformance [--consumer SPEC]... [--seed N] [--output FI
 python3 -m kritva_sense.conformance --list-cases
 ```
 
-`SPEC` is `reference` (the default), `mutant:NAME`, or `MODULE:ATTR`, a consumer object, class or zero-argument function returning one, importable from `PYTHONPATH`. The result goes to stdout or to `FILE`. Exit codes: exit 0 conformant; exit 1 not conformant; exit 2 usage or load error (unknown option, bad seed, a consumer that cannot be loaded or lacks an operation, unwritable output).
+`SPEC` is `reference` (the default), `mutant:NAME`, or `MODULE:ATTR`, a consumer object, class or zero-argument function returning one, importable from `PYTHONPATH`. The result goes to stdout or to `FILE`. A module that raises or calls `sys.exit()` at import, a missing or non-callable attribute and an invalid specification are load errors (exit 2, the message names the exception type). `--output FILE` writes the path it is given and truncates an existing file. Exit codes: exit 0 conformant; exit 1 not conformant; exit 2 usage or load error (unknown option, bad seed, a consumer that cannot be loaded or lacks an operation, unwritable output).
 
 ## 7. Tests
 

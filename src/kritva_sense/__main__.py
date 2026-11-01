@@ -12,7 +12,7 @@ def main(argv):
     try:
         with open(argv[1], encoding="utf-8") as fh:
             sample = json.load(fh)
-    except (OSError, ValueError) as exc:
+    except (OSError, ValueError, RecursionError) as exc:  # RecursionError: JSON nested too deeply to decode
         print("cannot read sample: %s" % exc, file=sys.stderr)
         return 2
     violations = validate_sample(sample)
