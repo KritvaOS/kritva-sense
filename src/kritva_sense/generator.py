@@ -6,7 +6,8 @@ checked with the reference validators. Standard library only. Software behaviour
 generated values are plausible in form, not physically meaningful, and model no real sensor.
 
 Determinism: the pseudo-random generator is SplitMix64 (implemented below), not Python's `random`
-module, so the same seed gives byte-identical output on every Python version and platform. Floats are
+module, so the same seed gives byte-identical output across runs and processes on platforms with IEEE 754 double
+arithmetic (only exactly rounded operations are used, no libm function). Floats are
 rounded to a fixed number of decimals before they enter a document.
 
     python3 -m kritva_sense.generator samples --kind imu --sensor-id imu.base --count 5 --seed 7
@@ -92,17 +93,27 @@ def _measurements(kind, rng):
         elif name == "distance":
             v = rng.uniform(0.05, 10.0)
         elif name == "position":
-            v = rng.uniform(-math.pi, math.pi)
+            v = rng.uniform(-3.14159, 3.14159)
         else:  # temperature
             v = rng.uniform(273.15, 323.15)
         out[name] = {"value": _r(v), "unit": spec[name]}
     return out
 
 
-def make_sample(kind, sensor_id, sequence, timestamp_ns, rng, clock="monotonic", frame="sensor", validity="VALID"):
-    """One sample object. VALID by default; STALE, MISSING and INVALID carry the error_code the contract requires."""
+def _check_config(kind, sensor_id, clock, frame):
     if kind not in V.KINDS:
         raise ValueError("unknown kind %r (one of %s)" % (kind, ", ".join(V.KINDS)))
+    if not isinstance(sensor_id, str) or not V.SENSOR_ID_RE.match(sensor_id):
+        raise ValueError("sensor_id %r does not match the contract pattern" % (sensor_id,))
+    if clock not in V.CLOCKS:
+        raise ValueError("clock %r is not one of %s" % (clock, ", ".join(V.CLOCKS)))
+    if frame not in V.FRAMES:
+        raise ValueError("frame %r is not one of %s" % (frame, ", ".join(V.FRAMES)))
+
+
+def make_sample(kind, sensor_id, sequence, timestamp_ns, rng, clock="monotonic", frame="sensor", validity="VALID"):
+    """One sample object. VALID by default; STALE, MISSING and INVALID carry the error_code the contract requires."""
+    _check_config(kind, sensor_id, clock, frame)
     s = {
         "contract_version": V.CONTRACT_VERSION,
         "sensor_id": sensor_id,
@@ -170,6 +181,7 @@ def generate_samples(kind, sensor_id, count, seed, start_sequence=0, start_ns=0,
         raise ValueError("start_sequence must be an integer >= 0")
     if isinstance(start_ns, bool) or not isinstance(start_ns, int) or start_ns < 0:
         raise ValueError("start_ns must be an integer >= 0")
+    _check_config(kind, sensor_id, clock, frame)
     faults = dict(faults or {})
     for idx, name in faults.items():
         if not isinstance(idx, int) or isinstance(idx, bool) or not 0 <= idx < count:
@@ -194,54 +206,51 @@ def generate_samples(kind, sensor_id, count, seed, start_sequence=0, start_ns=0,
     return {"generator_version": GENERATOR_VERSION, "seed": seed, "samples": samples, "expectations": expectations}
 
 
+VALIDITY_CODES = ("STALE_DATA", "MISSING_DATA", "INVALID_DATA")
+
+
 def check_samples(doc):
     """Verify a generated sample document with the reference validators. Returns a list of mismatch strings;
-    [] means every clean sample passed and every requested fault gives the code the generator stated."""
+    [] means that, compared as complete lists of codes (duplicates count), every sample has exactly the structural
+    violations its fault states (none for a clean sample, a conformant gap or boundary, or a validity state), every
+    adjacent pair has a sequence violation only where a regression was requested, and every validity state is
+    reported as not usable with its code."""
     problems = []
     samples, by_index = doc["samples"], {e["index"]: e for e in doc["expectations"]}
     for i, s in enumerate(samples):
         exp = by_index.get(i)
-        structural = V.validate_sample(s)
-        if exp is None:
-            if structural:
-                problems.append("sample %d: unexpected violations %s" % (i, [v.code for v in structural]))
-            if i > 0 and not V.check_sequence(samples[i - 1], s) == []:
-                problems.append("sample %d: unexpected sequence violation" % i)
-            continue
-        code = exp["expected_code"]
-        if code in ("STALE_DATA", "MISSING_DATA", "INVALID_DATA"):
+        code = exp["expected_code"] if exp else None
+        label = "sample %d%s" % (i, " (%s)" % exp["fault"] if exp else "")
+        structural = sorted(v.code for v in V.validate_sample(s))
+        want = [code] if code is not None and code not in VALIDITY_CODES and code != "SEQUENCE_REGRESSION" else []
+        if structural != want:
+            problems.append("%s: expected structural codes %s, got %s" % (label, want, structural))
+        if i > 0:
+            seq = sorted(v.code for v in V.check_sequence(samples[i - 1], s))
+            want_seq = ["SEQUENCE_REGRESSION"] if code == "SEQUENCE_REGRESSION" else []
+            if seq != want_seq:
+                problems.append("%s: expected sequence codes %s, got %s" % (label, want_seq, seq))
+        if code in VALIDITY_CODES and not structural:
             usable, v = V.usability(s, s["timestamp"]["value"], s["timestamp"]["clock"], 1)
-            got = [x.code for x in v] if not structural else [x.code for x in structural]
+            got = sorted(x.code for x in v)
             if usable or got != [code]:
-                problems.append("sample %d (%s): expected %s, got %s" % (i, exp["fault"], code, got))
-        elif code == "SEQUENCE_REGRESSION":
-            got = [x.code for x in structural] + [x.code for x in V.check_sequence(samples[i - 1], s)]
-            if got != [code]:
-                problems.append("sample %d (%s): expected %s, got %s" % (i, exp["fault"], code, got))
-        elif code is None:
-            if structural:
-                problems.append("sample %d (%s): expected conformant, got %s" % (i, exp["fault"], [v.code for v in structural]))
-        else:
-            got = sorted({v.code for v in structural})
-            if got != [code]:
-                problems.append("sample %d (%s): expected %s, got %s" % (i, exp["fault"], code, got))
+                problems.append("%s: expected not usable with %s, got usable=%s %s" % (label, code, usable, got))
     return problems
 
 
 def _rotation(rng):
-    """A unit quaternion {w, x, y, z} from a random axis and angle, rounded so |norm - 1| stays far below 1e-9."""
+    """A unit quaternion {w, x, y, z}: four uniform draws, normalized (only +, *, / and sqrt, which are exactly
+    rounded by IEEE 754, so no libm function enters the result), w not negative, rounded so |norm - 1| stays far
+    below 1e-9."""
     while True:
-        ax = [rng.uniform(-1.0, 1.0) for _ in range(3)]
-        n = math.sqrt(sum(a * a for a in ax))
-        if n > 1e-3:
+        q = [rng.uniform(-1.0, 1.0) for _ in range(4)]
+        n = math.sqrt(q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3])
+        if n > 0.1:
             break
-    angle = rng.uniform(-math.pi, math.pi)
-    s, w = math.sin(angle / 2), math.cos(angle / 2)
-    q = [w] + [s * a / n for a in ax]
+    q = [c / n for c in q]
     if q[0] < 0:
         q = [-c for c in q]
-    q = [_r(c, ROTATION_DECIMALS) for c in q]
-    return dict(zip("wxyz", q))
+    return dict(zip("wxyz", [_r(c, ROTATION_DECIMALS) for c in q]))
 
 
 def make_edge(parent, child, rng):
@@ -278,7 +287,7 @@ def check_graph(doc):
     """Verify a generated graph document: it must give exactly the expected codes; a conformant graph must
     also resolve from its first to its last frame."""
     g, exp = doc["graph"], doc["expectation"]
-    got = sorted({v.code for v in fg.validate_graph(g)})
+    got = sorted(v.code for v in fg.validate_graph(g))
     problems = []
     if got != sorted(exp["codes"]):
         problems.append("graph: expected codes %s, got %s" % (sorted(exp["codes"]), got))
@@ -336,6 +345,9 @@ def main(argv=None):
     args = _build_parser().parse_args(argv)  # argparse exits with 2 on a usage error
     try:
         if args.command == "samples":
+            idxs = [i for i, _ in args.fault]
+            if len(idxs) != len(set(idxs)):
+                raise ValueError("a sample index may carry one fault only (repeated --fault index)")
             doc = generate_samples(args.kind, args.sensor_id, args.count, args.seed, args.start_sequence, args.start_ns,
                                    args.step_ns, args.clock, args.frame, dict(args.fault))
             problems = check_samples(doc)

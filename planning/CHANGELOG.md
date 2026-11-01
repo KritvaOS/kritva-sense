@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-004 review fixes (independent review of fb4fdf6): generator checks compare complete lists of violation codes and check sequence continuity for every adjacent pair; the API refuses an invalid sensor id, clock or frame; rotations no longer use `sin` and `cos`, and the determinism claim is narrowed to exactly rounded operations on IEEE 754 platforms (separate-process test added); encoder range stays inside the angle range; duplicate `--fault` indices are refused; the two normative contract documents are pinned by SHA-256 in the tests. Generator output for graphs differs from fb4fdf6 (seed values are not stable across this fix, as the task has no accepted evidence yet). No contract, schema or accepted-code change. Tasks: KOS-SENSE-004.
+
 - KOS-SENSE-003 ACCEPTED: central approval recorded in kritva-program (D-085) on closing commit c92e841 (`unit-tests` run 41267842700 PASS); frame graph contract 0.1.0 approved as v0.1.0. Status wording only: no contract rule, schema or code change. Tasks: None (status and approval wording; no contract or code change).
 
 - KOS-SENSE-004: deterministic synthetic sample and frame graph generator (`src/kritva_sense/generator.py`, documented in `src/kritva_sense/GENERATOR.md`): SplitMix64 PRNG implemented in the repository, valid samples for every sensor kind, explicitly requested faults with the stated contract code, conformant and defective frame graphs, Python API and command line; `tests/generator/` is run by `make test-unit`. Proposed, not accepted. Sense contract 0.1.0, frame graph contract 0.1.0 and their schemas are unchanged (pinned by tests). Tasks: KOS-SENSE-004.
