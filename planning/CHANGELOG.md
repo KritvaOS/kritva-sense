@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-003 planning records: task and criteria AC-301 to AC-307 added (proposed; baselined in v4, D-082; status NOT_STARTED). No contract, schema or code change. Tasks: None (planning records; task not started).
+
 - Documentation reconciliation after the external audit: README implementation state, milestone status, task evidence wording, the contract section 5 and 8 wording and a status evidence note. No contract, schema or code change. Tasks: None (documentation reconciliation; no contract or code change).
 
 - KOS-SENSE-001 and KOS-SENSE-002 ACCEPTED: central approvals A076 and A077 (kritva-program, evidence run 40994325092 on e949b9f); contract 0.1.0 approved by the owner as v0.1.0 (interim D-047 review; relayed in chat 2026-10-31); the owner creates the annotated tag `v0.1.0` after merge. Tasks: None (status and wording after approval; no contract or code change).
