@@ -3,13 +3,13 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M8-SENSE-001 |
-| Status | IN_PROGRESS (baselined in v7, D-090; all of KOS-SENSE-001 to KOS-SENSE-006 are accepted) |
+| Status | IN_REVIEW (implemented in pull requests #44 and #45; baselined in v7, D-090; all of KOS-SENSE-001 to KOS-SENSE-006 are accepted) |
 | Weight | 5 (initial planning weight, 5 effort days; baselined in v7, D-090; effort risk: reproducibility across two builds and clean-environment install tests) |
 | Depends on | KOS-SENSE-001 to KOS-SENSE-006 (all accepted) |
 | Requires physical | No (software only, synthetic data) |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) (AC-701 to AC-707) |
 | Deliverables | `pyproject.toml`, `RELEASE.md` (release notes template and release procedure), `tests/packaging/`, `make test-unit` |
-| Acceptance evidence | Not yet: immutable closing SHA, `unit-tests` CI run on that SHA, review record and central approval are recorded when the task closes |
+| Acceptance evidence | Closing commit 5f1aa7a (merge of pull request #45, after the independent review fixes); `unit-tests` CI run 41292919590 PASS on it, with 27 of 27 mandatory packaging tests executed; release record in `RELEASE.md`. Not yet: review record and central approval (recorded in kritva-program) |
 
 ## Purpose
 

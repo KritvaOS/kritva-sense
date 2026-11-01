@@ -165,10 +165,29 @@
     },
     {
       "task_id": "KOS-SENSE-007",
-      "execution": "IN_PROGRESS",
+      "execution": "COMPLETE",
       "git_sync": "SYNCED",
       "readiness": "IMPLEMENTABLE",
-      "evidence": []
+      "evidence": [
+        {
+          "type": "software",
+          "uri": "tests/packaging/test_packaging.py",
+          "description": "Package metadata, version information, pinned isolated build, double-build reproducibility, install and command line tests, release notes; criteria AC-701 to AC-707 (reference only; not completion proof)",
+          "commit": null,
+          "ci_run": null,
+          "report_sha256": null,
+          "result": null
+        },
+        {
+          "type": "software",
+          "uri": "https://github.com/KritvaOS/kritva-sense/actions/runs/41292919590",
+          "description": "unit-tests CI run 41292919590 PASS on 5f1aa7a (make check, docs-check and test-unit; 27 of 27 mandatory packaging tests executed; closing commit, merge of pull request #45); later commits change wording only, not the package, tests or contract files",
+          "commit": "5f1aa7a34c5aec9e0c12fc66add6d3bc6efaa7bc",
+          "ci_run": "41292919590",
+          "report_sha256": null,
+          "result": "PASS"
+        }
+      ]
     },
     {
       "task_id": "KOS-SENSE-008",
@@ -178,5 +197,5 @@
       "evidence": []
     }
   ],
-  "updated_at": "2026-11-01T22:00:00Z"
+  "updated_at": "2026-11-01T23:00:00Z"
 }

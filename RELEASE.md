@@ -4,7 +4,7 @@
 |---|---|
 | Task | KOS-SENSE-007 (Python package and reproducible release) |
 | Package | `kritva-sense`, built from `pyproject.toml` (standard library only at runtime; no runtime dependency) |
-| Status | IN_PROGRESS: the release record is filled when the task closes. This file is checked against the real build by `tests/packaging/` |
+| Status | IN_REVIEW: the release record is filled from the CI run of the artifact-input commit. This file is checked against the real build by `tests/packaging/` |
 | Scope | software only, synthetic data; not hardware or safety validation |
 
 This file is the release note of the repository. It keeps five version numbers apart, states what the package does and does not do, describes how a release is built and checked, and records the hashes of the closing build. It does not publish anything.
@@ -76,11 +76,11 @@ Missing build tools. A developer run without git, the venv module or the build t
 
 ## Release record
 
-Filled from the CI run of the artifact-input commit (the `unit-tests` log prints a `PACKAGING-HASH` line). A value is `PENDING` until the task is submitted for review; the test refuses a pending value once the task is IN_REVIEW or ACCEPTED. The source commit is the artifact-input commit: the commit whose tree the recorded artifacts were built from. The commit that records the values is a later commit that changes only files outside both distributions; it builds identical artifacts, and `tests/packaging/` rebuilds and compares all three hashes on every run, so a record that no longer matches the tree fails.
+Filled from the `unit-tests` CI run 41292919590 on the artifact-input commit (merge of pull request #45; the log prints a `PACKAGING-HASH` line and a `PACKAGING-EVIDENCE` line showing that all 27 mandatory packaging tests ran). A value is `PENDING` until the task is submitted for review; the test refuses a pending value once the task is IN_REVIEW or ACCEPTED. The source commit is the artifact-input commit: the commit whose tree the recorded artifacts were built from. The commit that records the values is a later commit that changes only files outside both distributions; it builds identical artifacts, and `tests/packaging/` rebuilds and compares all three hashes on every run, so a record that no longer matches the tree fails.
 
 | Field | Value |
 |---|---|
-| Source commit | PENDING |
-| Wheel SHA-256 | PENDING |
-| Source distribution SHA-256 | PENDING |
-| Source distribution normalised-content hash | PENDING |
+| Source commit | 5f1aa7a34c5aec9e0c12fc66add6d3bc6efaa7bc |
+| Wheel SHA-256 | 47ed3803b02aafb285cfee9aa620142676e30f5f0dc6fa67e383b283a24f2415 |
+| Source distribution SHA-256 | f6f8284b7eef220a65d40359a0ab013ced2ee64d0ae068cee8f8fe960ca6d192 |
+| Source distribution normalised-content hash | bd5e68f34eb028a2b786adf6a83286bfd8243335325b9865dee498c5c438ee32 |
