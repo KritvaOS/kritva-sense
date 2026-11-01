@@ -3,13 +3,13 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M7-SENSE-001 |
-| Status | IN_PROGRESS (baselined in v6, D-087; KOS-SENSE-005 accepted, D-088) |
+| Status | IN_REVIEW (implemented in pull requests #38 and #39; baselined in v6, D-087; KOS-SENSE-005 accepted, D-088) |
 | Weight | 5 (initial planning weight, 5 effort days; baseline v6, D-087; effort risk: three interfaces, an independent oracle, mutants and failure isolation) |
 | Depends on | KOS-SENSE-001 to KOS-SENSE-004 and KOS-SENSE-005 |
 | Requires physical | No (software only, synthetic data) |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) (AC-601 to AC-607) |
 | Deliverables | `src/kritva_sense/conformance.py`, `tests/conformance/`, `make test-unit` |
-| Acceptance evidence | Not yet: immutable closing SHA, `unit-tests` CI run on that SHA, review record and central approval are recorded when the task closes |
+| Acceptance evidence | Closing commit 67590bc (merge of pull request #39, after the independent review fixes); `unit-tests` CI run 41289421496 PASS on it. Not yet: review record and central approval (recorded in kritva-program) |
 
 ## Purpose
 
