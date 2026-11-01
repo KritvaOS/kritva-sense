@@ -23,4 +23,6 @@ jobs:
       - name: Test the commit message checker
         run: python3 -m unittest discover -s tests/commit_message_check -v
       - name: Check commits in this pull request
-        run: python3 scripts/security/check_commit_messages.py --range "origin/${{ github.base_ref }}..HEAD"
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: python3 scripts/security/check_commit_messages.py --range "origin/${BASE_REF}..HEAD"

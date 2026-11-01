@@ -134,13 +134,7 @@ class Workflows(unittest.TestCase):
         self.assertRegex(src, r"gitleaks")
 
 
-ALLOWED_INTERPOLATIONS = {
-    "github.base_ref",
-    "github.event.pull_request.head.sha",
-    "github.repository",
-    "github.event.pull_request.number",
-    "steps.gate.outputs.rc",
-}
+ALLOWED_INTERPOLATIONS = set()          # every ${{ }} value reaches a script through env: (finding F-006)
 
 
 class GateConfiguration(unittest.TestCase):

@@ -23,12 +23,15 @@ jobs:
           python-version: "3.12"
       - name: Evaluate the pull request
         id: gate
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set +e
           python3 scripts/pipeline/pr_gate.py static \
             --gate .github/kritva-gate.json \
-            --base "origin/${{ github.base_ref }}" \
-            --head "${{ github.event.pull_request.head.sha }}" \
+            --base "origin/${BASE_REF}" \
+            --head "${HEAD_SHA}" \
             --markdown gate-report.md --json gate-report.json
           echo "rc=$?" >> "$GITHUB_OUTPUT"
           cat gate-report.md >> "$GITHUB_STEP_SUMMARY"
@@ -36,13 +39,17 @@ jobs:
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          id=$(gh api "repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
+          id=$(gh api "repos/${REPO}/issues/${PR_NUMBER}/comments" \
             --jq '[.[] | select(.body | contains("<!-- pr-acceptance-gate -->"))][0].id // empty')
           if [ -n "$id" ]; then
-            gh api -X PATCH "repos/${{ github.repository }}/issues/comments/$id" -F body=@gate-report.md
+            gh api -X PATCH "repos/${REPO}/issues/comments/$id" -F body=@gate-report.md
           else
-            gh pr comment "${{ github.event.pull_request.number }}" --body-file gate-report.md
+            gh pr comment "${PR_NUMBER}" --body-file gate-report.md
           fi
       - name: Fail only on REJECT
-        run: exit ${{ steps.gate.outputs.rc }}
+        env:
+          GATE_RC: ${{ steps.gate.outputs.rc }}
+        run: exit "${GATE_RC}"
