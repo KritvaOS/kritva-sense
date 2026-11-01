@@ -1,4 +1,6 @@
-# The source distribution carries the package, the contract files and the pinned build list only. README.md is
-# excluded and RELEASE.md is not included, so a documentation change never changes a distribution hash.
+# The source distribution carries the package, the contract files, the pinned build list and the script that
+# normalises the archive. README.md is excluded and RELEASE.md is not included, so a documentation change never
+# changes a distribution hash.
 include release/build-requirements.txt
+include release/normalise_sdist.py
 exclude README.md

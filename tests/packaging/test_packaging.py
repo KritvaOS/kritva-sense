@@ -2,8 +2,9 @@
 
 The tests build the wheel and the source distribution in a pinned, isolated build environment, install them into
 clean environments and run the documented command lines from a temporary directory. They need git, the venv module
-and, once per run, a network to fetch the pinned build tools named in release/build-requirements.txt. When any of
-that is missing, a developer run reports an explicit SKIP with the reason; a run in CI (the CI environment variable
+and the pinned build tools named in release/build-requirements.txt, whose wheels pip checks against the SHA-256 in that
+file. The tools are fetched once per run unless KRITVA_WHEELHOUSE names a directory that already holds them; with it
+the whole suite needs no network. When any of that is missing, a developer run reports an explicit SKIP with the reason; a run in CI (the CI environment variable
 is "true") fails instead, a skip is never counted as a pass, and tearDownModule fails the run if a mandatory test
 did not execute. Every run prints one PACKAGING-EVIDENCE line that lists the mandatory tests that ran.
 """
@@ -49,7 +50,9 @@ PINS = {
 }
 DIST_INFO = {"licenses/LICENSE", "METADATA", "WHEEL", "entry_points.txt", "top_level.txt", "RECORD"}
 EGG_INFO = {"PKG-INFO", "SOURCES.txt", "dependency_links.txt", "entry_points.txt", "top_level.txt"}
-SDIST_ROOT_FILES = {"LICENSE", "MANIFEST.in", "PKG-INFO", "pyproject.toml", "setup.cfg", "release/build-requirements.txt"}
+SDIST_ROOT_FILES = {"LICENSE", "MANIFEST.in", "PKG-INFO", "pyproject.toml", "setup.cfg", "release/build-requirements.txt",
+                    "release/normalise_sdist.py"}
+TIME_KEYS = ("mtime", "atime", "ctime")
 
 ENV = {}
 MANDATORY = []
@@ -105,16 +108,21 @@ def make_venv(path):
     return Path(path)
 
 
-def pinned_requirements():
-    """name -> version from release/build-requirements.txt; every line must be an exact pin."""
-    pins = {}
+def requirement_lines():
     for line in REQUIREMENTS.read_text(encoding="utf-8").splitlines():
         line = line.split("#")[0].strip()
         if line:
-            m = re.fullmatch(r"([A-Za-z0-9_.\-]+)==([A-Za-z0-9_.!+\-]+)", line)
-            if not m:
-                raise AssertionError("not an exact pin: %r" % line)
-            pins[re.sub(r"[-_.]+", "-", m.group(1)).lower()] = m.group(2)
+            yield line
+
+
+def pinned_requirements():
+    """name -> version from release/build-requirements.txt; every line must be an exact pin with a SHA-256."""
+    pins = {}
+    for line in requirement_lines():
+        m = re.fullmatch(r"([A-Za-z0-9_.\-]+)==([A-Za-z0-9_.!+\-]+) --hash=sha256:[0-9a-f]{64}", line)
+        if not m:
+            raise AssertionError("not an exact pin with a SHA-256 hash: %r" % line)
+        pins[re.sub(r"[-_.]+", "-", m.group(1)).lower()] = m.group(2)
     return pins
 
 
@@ -147,18 +155,27 @@ def build(checkout, outdir):
     sdists = sorted(Path(outdir).glob("*.tar.gz"))
     if len(wheels) != 1 or len(sdists) != 1:
         raise AssertionError("expected one wheel and one sdist, found %s %s" % (wheels, sdists))
-    return {"wheel": wheels[0], "sdist": sdists[0], "log": log}
+    raw = Path(outdir) / "raw" / sdists[0].name
+    raw.parent.mkdir()
+    shutil.copyfile(sdists[0], raw)
+    r = run([venv_python(ENV["build_venv"]), checkout / "release" / "normalise_sdist.py", sdists[0]], cwd=checkout,
+            env=clean_env(SOURCE_DATE_EPOCH=SOURCE_DATE_EPOCH))
+    if r.returncode != 0:
+        raise AssertionError("normalise_sdist failed: %s" % r.stderr)
+    return {"wheel": wheels[0], "sdist": sdists[0], "raw_sdist": raw, "log": log}
 
 
 def sdist_listing(path):
-    """The normalised content of an sdist: member name, type, mode, size and SHA-256 of the content, sorted by name.
-    It leaves out exactly the fields that setuptools fills from the build time or the build user: the modification
-    time of every member, the owner and group, and the gzip header time (RELEASE.md, Build and reproducibility)."""
+    """The normalised content of an sdist: member name, type, mode, size, link target, extended (PAX) headers and
+    SHA-256 of the content, sorted by name. It leaves out exactly the fields that setuptools fills from the build
+    time or the build user: the modification, access and change time of every member (also as extended headers),
+    the owner and group (numeric and names) and the gzip header time (RELEASE.md, Build and reproducibility)."""
     rows = []
     with tarfile.open(path, "r:gz") as tar:
         for m in tar.getmembers():
             digest = sha256_bytes(tar.extractfile(m).read()) if m.isfile() else None
-            rows.append([m.name, m.type.decode(), m.mode & 0o7777, m.size, digest, m.linkname])
+            pax = sorted((k, v) for k, v in m.pax_headers.items() if k not in TIME_KEYS)
+            rows.append([m.name, m.type.decode(), m.mode & 0o7777, m.size, digest, m.linkname, pax])
     return sorted(rows)
 
 
@@ -215,11 +232,18 @@ def prepare():
     ENV["tmp"] = tmp
     tracked_files()
     bootstrap = make_venv(tmp / "bootstrap")
-    wheelhouse = tmp / "wheelhouse"
-    r = run([venv_python(bootstrap), "-m", "pip", "download", "--no-deps", "--dest", wheelhouse,
-             "-r", REQUIREMENTS], cwd=tmp)
-    if r.returncode != 0:
-        raise Unavailable("cannot fetch the pinned build tools: %s" % (r.stderr.strip() or r.stdout.strip())[-800:])
+    prepared = os.environ.get("KRITVA_WHEELHOUSE")
+    if prepared:
+        wheelhouse = Path(prepared)
+        ENV["offline"] = True
+        if not wheelhouse.is_dir():
+            raise Unavailable("KRITVA_WHEELHOUSE is not a directory: %s" % prepared)
+    else:
+        wheelhouse = tmp / "wheelhouse"
+        r = run([venv_python(bootstrap), "-m", "pip", "download", "--no-deps", "--only-binary", ":all:",
+                 "--dest", wheelhouse, "-r", REQUIREMENTS], cwd=tmp)
+        if r.returncode != 0:
+            raise Unavailable("cannot fetch the pinned build tools: %s" % (r.stderr.strip() or r.stdout.strip())[-800:])
     build_venv = make_venv(tmp / "build-env")
     r = run([venv_python(build_venv), "-m", "pip", "install", "--no-index", "--find-links", wheelhouse,
              "-r", REQUIREMENTS], cwd=tmp)
@@ -393,6 +417,17 @@ class Versions(Base):
                          ["%s is missing" % n for k in self.v.FILES for n in self.v.FILES[k]])
 
     @mandatory
+    def test_ac705_malformed_schema_is_a_problem_not_an_exception(self):
+        """AC-705: invalid JSON, a non-object schema and an undecodable file give a diagnostic and --check exits 1."""
+        for label, payload in (("invalid JSON", b"{ not json"), ("a JSON list", b"[1, 2]"), ("not UTF-8", b"\xff\xfe\x00")):
+            with self.subTest(case=label):
+                tmp = self.mutated_copy("stream.schema.json", '"stream_version"', '"stream_version"')
+                (tmp / "stream.schema.json").write_bytes(payload)
+                problems = self.v.check_shipped_contracts(tmp)
+                self.assertTrue(problems and all("stream.schema.json" in p for p in problems), problems)
+                self.assertIsInstance(self.v.shipped_versions(tmp), dict)
+
+    @mandatory
     def test_ac705_different_contract_versions_and_other_versions_are_independent(self):
         """AC-705: two contracts at different versions, a package and a harness version of their own."""
         declared = dict(self.v.declared_versions(), package_version="9.9.9", harness_version="7.7.7",
@@ -450,30 +485,43 @@ class Release(Base):
     def record(self):
         return {r[0]: r[1] for r in self.table("Release record")}
 
+    def task_status(self):
+        for line in (ROOT / "planning" / "TASKS.md").read_text(encoding="utf-8").splitlines():
+            m = re.match(r"^\| KOS-SENSE-007 \| [^|]+ \| ([A-Z_]+)", line)
+            if m:
+                return m.group(1)
+        self.fail("KOS-SENSE-007 is not in planning/TASKS.md")
+
     @mandatory
     def test_ac707_release_record_format(self):
-        """AC-707: the release record names the source commit and three hashes, each pending or well formed."""
+        """AC-707: the release record names the source commit and three hashes, each pending or well formed; once
+        the task is IN_REVIEW or ACCEPTED no field may still be PENDING."""
         rec = self.record()
         self.assertEqual(set(rec), {"Source commit", "Wheel SHA-256", "Source distribution SHA-256",
                                     "Source distribution normalised-content hash"})
         self.assertRegex(rec["Source commit"], r"^(%s|[0-9a-f]{40})$" % PENDING)
         for key in list(rec)[1:]:
             self.assertRegex(rec[key], r"^(%s|[0-9a-f]{64})$" % PENDING, key)
+        if self.task_status() in ("IN_REVIEW", "ACCEPTED"):
+            self.assertNotIn(PENDING, rec.values(), "the release record is complete once the task is submitted")
 
     @mandatory
     def test_ac707_release_record_matches_the_build(self):
-        """AC-707: a recorded wheel hash and normalised hash equal those of the build from this tree (CI platform)."""
+        """AC-707: every recorded hash equals that of the build from this tree (CI platform): the wheel, the source
+        distribution file and its normalised-content hash."""
         self.need_env()
         rec = self.record()
         built = ENV["builds"][0]
         actual = {"Wheel SHA-256": sha256_file(built["wheel"]),
+                  "Source distribution SHA-256": sha256_file(built["sdist"]),
                   "Source distribution normalised-content hash": sdist_normalised_hash(built["sdist"])}
         print("\nPACKAGING-HASH wheel_sha256=%s sdist_sha256=%s sdist_normalised=%s" % (
-            actual["Wheel SHA-256"], sha256_file(built["sdist"]), actual["Source distribution normalised-content hash"]))
+            actual["Wheel SHA-256"], actual["Source distribution SHA-256"],
+            actual["Source distribution normalised-content hash"]))
         for key, value in actual.items():
             if rec[key] == PENDING:
                 continue
-            if rec[key] != value and not IN_CI:
+            if rec[key] != value and not IN_CI and key != "Source distribution normalised-content hash":
                 self.skipTest("%s recorded for the CI platform differs on this machine (zlib or tool version)" % key)
             self.assertEqual(rec[key], value, key)
 
@@ -515,38 +563,73 @@ class Build(Base):
     @mandatory
     def test_ac706_double_build_is_reproducible(self):
         """AC-706: two builds of one revision (different paths and file times, fixed SOURCE_DATE_EPOCH): the wheels
-        are byte-identical with equal SHA-256; the source distributions agree in every normalised field."""
+        and the normalised source distributions are byte-identical with equal SHA-256."""
         self.need_env()
         one, two = ENV["builds"]
-        self.assertEqual(one["wheel"].read_bytes(), two["wheel"].read_bytes())
-        self.assertEqual(sha256_file(one["wheel"]), sha256_file(two["wheel"]))
+        for kind in ("wheel", "sdist"):
+            self.assertEqual(one[kind].read_bytes(), two[kind].read_bytes(), kind)
+            self.assertEqual(sha256_file(one[kind]), sha256_file(two[kind]), kind)
         self.assertEqual(sdist_listing(one["sdist"]), sdist_listing(two["sdist"]))
         self.assertEqual(sdist_normalised_hash(one["sdist"]), sdist_normalised_hash(two["sdist"]))
 
     @mandatory
     def test_ac706_only_documented_sdist_fields_differ(self):
-        """AC-706: the raw sdists may differ only in the documented fields: member times, owner and group, gzip time."""
+        """AC-706: the raw setuptools sdists may differ only in the documented fields: member times, owner and
+        group, gzip time. Names, types, modes, sizes, link targets, extended headers and contents are equal."""
         self.need_env()
         one, two = ENV["builds"]
 
-        def raw_members(path):
+        def members(path):
             with tarfile.open(path, "r:gz") as tar:
-                out = []
-                for m in tar.getmembers():
-                    data = tar.extractfile(m).read() if m.isfile() else b""
-                    out.append((m.name, m.type, m.mode, m.size, m.linkname, sha256_bytes(data)))
-                return sorted(out)
-        self.assertEqual(raw_members(one["sdist"]), raw_members(two["sdist"]))
+                return sorted((m.name, m.type, m.mode, m.size, m.linkname,
+                               sorted((k, v) for k, v in m.pax_headers.items() if k not in TIME_KEYS),
+                               sha256_bytes(tar.extractfile(m).read() if m.isfile() else b"")) for m in tar.getmembers())
+        self.assertEqual(members(one["raw_sdist"]), members(two["raw_sdist"]))
+        self.assertEqual(sdist_listing(one["raw_sdist"]), sdist_listing(one["sdist"]))
+
+    @mandatory
+    def test_ac706_shipped_sdist_carries_the_fixed_fields(self):
+        """AC-706: after normalisation every member has modification time SOURCE_DATE_EPOCH, owner 0/root, group
+        0/root and no time in its extended headers, and the gzip header time is 0."""
+        self.need_env()
+        path = ENV["builds"][0]["sdist"]
+        self.assertEqual(path.read_bytes()[4:8], b"\0\0\0\0")
+        with tarfile.open(path, "r:gz") as tar:
+            names = [m.name for m in tar.getmembers()]
+            self.assertEqual(names, sorted(names))
+            for m in tar.getmembers():
+                self.assertEqual((m.mtime, m.uid, m.gid, m.uname, m.gname), (int(SOURCE_DATE_EPOCH), 0, 0, "root", "root"), m.name)
+                self.assertFalse(set(m.pax_headers) & set(TIME_KEYS), m.name)
+
+    @mandatory
+    def test_ac706_normalise_script_is_idempotent_and_keeps_content(self):
+        """AC-706: running release/normalise_sdist.py again changes nothing; a raw sdist keeps its content."""
+        self.need_env()
+        built = ENV["builds"][0]
+        copy = Path(tempfile.mkdtemp(prefix="kritva-norm-")) / built["sdist"].name
+        self.addCleanup(shutil.rmtree, copy.parent, True)
+        shutil.copyfile(built["sdist"], copy)
+        r = run([sys.executable, ROOT / "release" / "normalise_sdist.py", copy], env=clean_env(SOURCE_DATE_EPOCH=SOURCE_DATE_EPOCH))
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertEqual(copy.read_bytes(), built["sdist"].read_bytes())
+        self.assertEqual(run([sys.executable, ROOT / "release" / "normalise_sdist.py", copy],
+                             env=clean_env()).returncode, 2)
 
     @mandatory
     def test_ac706_normaliser_detects_real_differences(self):
-        """AC-706: the comparison ignores times and gzip header but not content, names or modes."""
-        def make(content=b"x", name="p/a.txt", mode=0o644, mtime=1, gz_mtime=1):
+        """AC-706: the content comparison ignores times, owners and the gzip header, but not content, names, modes,
+        link targets or extended headers."""
+        def make(content=b"x", name="p/a.txt", mode=0o644, mtime=1, gz_mtime=1, uid=0, uname="", pax=None, link=""):
             raw = io.BytesIO()
-            with tarfile.open(fileobj=raw, mode="w") as tar:
+            with tarfile.open(fileobj=raw, mode="w", format=tarfile.PAX_FORMAT) as tar:
                 info = tarfile.TarInfo(name)
-                info.size, info.mode, info.mtime = len(content), mode, mtime
-                tar.addfile(info, io.BytesIO(content))
+                info.size, info.mode, info.mtime, info.uid, info.uname = len(content), mode, mtime, uid, uname
+                info.pax_headers = dict(pax or {})
+                if link:
+                    info.type, info.linkname, info.size = tarfile.SYMTYPE, link, 0
+                    tar.addfile(info)
+                else:
+                    tar.addfile(info, io.BytesIO(content))
             out = Path(tempfile.mkdtemp(prefix="kritva-tar-")) / "x.tar.gz"
             self.addCleanup(shutil.rmtree, out.parent, True)
             with open(out, "wb") as fh:
@@ -554,10 +637,14 @@ class Build(Base):
                     gz.write(raw.getvalue())
             return out
         base = sdist_normalised_hash(make())
-        self.assertEqual(base, sdist_normalised_hash(make(mtime=999, gz_mtime=555)))
-        self.assertNotEqual(base, sdist_normalised_hash(make(content=b"y")))
-        self.assertNotEqual(base, sdist_normalised_hash(make(name="p/b.txt")))
-        self.assertNotEqual(base, sdist_normalised_hash(make(mode=0o755)))
+        same = [make(mtime=999, gz_mtime=555), make(uid=1001, uname="runner"),
+                make(pax={"mtime": "5.5", "atime": "6", "ctime": "7"})]
+        for path in same:
+            self.assertEqual(base, sdist_normalised_hash(path))
+        different = [make(content=b"y"), make(name="p/b.txt"), make(mode=0o755), make(link="p/target"),
+                     make(pax={"comment": "extra metadata"}), make(pax={"path": "p/c.txt"})]
+        for path in different:
+            self.assertNotEqual(base, sdist_normalised_hash(path))
 
 
 class Install(Base):
