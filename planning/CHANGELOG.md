@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-004 started after the baseline v5 freeze (D-083): status IN_PROGRESS in TASKS.md, the task record, its criteria and the status report. No contract, schema or code change. Tasks: None (status change; implementation follows in its own pull request).
+
 - KOS-SENSE-004 planning records: task and criteria AC-401 to AC-407 added (proposed; to be baselined in v5 after D-083; status NOT_STARTED). No contract, schema or code change. Tasks: None (planning records; task not started).
 
 - KOS-SENSE-003 submitted for review: status IN_REVIEW with the `unit-tests` CI run 41267842700 PASS on closing commit c92e841 as evidence. No contract, schema or code change; not accepted. Tasks: KOS-SENSE-003.
