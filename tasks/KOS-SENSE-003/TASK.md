@@ -3,7 +3,7 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M5-SENSE-001 |
-| Status | READY (baselined in v4, D-082; the freeze is done; implementation starts in its own pull requests) |
+| Status | IN_PROGRESS (baselined in v4, D-082) |
 | Weight | 5 (initial planning weight, 4 to 5 effort days; baseline v4, D-082) |
 | Depends on | KOS-SENSE-001 and KOS-SENSE-002 (Sense contract 0.1.0, tag `v0.1.0`) |
 | Requires physical | No (software only, synthetic data) |
