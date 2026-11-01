@@ -3,7 +3,7 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M8-SENSE-001 |
-| Status | NOT_STARTED (baselined in v7, D-090; all of KOS-SENSE-001 to KOS-SENSE-006 are accepted) |
+| Status | IN_PROGRESS (baselined in v7, D-090; all of KOS-SENSE-001 to KOS-SENSE-007 are accepted; KOS-SENSE-007 accepted by D-091) |
 | Weight | 6 (initial planning weight, 6 effort days; baselined in v7, D-090; effort risk: scope creep into general infrastructure, findings that need fixes) |
 | Depends on | KOS-SENSE-001 to KOS-SENSE-006 (all accepted). Acceptance prerequisite, not an implementation dependency (the baseline has no dependency field): implementation and review work on KOS-SENSE-008 may proceed independently of KOS-SENSE-007, but KOS-SENSE-008 cannot become ACCEPTED until KOS-SENSE-007 has been accepted under the program approval process, and the final review must cover the actual release artifacts produced and verified under KOS-SENSE-007 |
 | Requires physical | No (software only, synthetic data) |

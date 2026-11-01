@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-008 started after the acceptance of KOS-SENSE-007 (D-091; baselined in v7, D-090): status IN_PROGRESS in TASKS.md, the task record, its criteria, the milestone and status reports. No contract, schema or code change. Tasks: None (status change; implementation follows in its own pull request).
+
 - KOS-SENSE-007 ACCEPTED: central approval recorded in kritva-program (D-091) on closing commit 5f1aa7a (`unit-tests` run 41292919590 PASS, 27 of 27 mandatory packaging tests executed). Status wording only: no package, test, contract or code change. Acceptance proves that the packaged software installs and runs from a clean environment and that the build is reproducible on the CI platform; nothing is published and the release tag is created by the owner only. Tasks: None (status and approval wording; no package or code change).
 
 - KOS-SENSE-007 submitted for review: status IN_REVIEW with the `unit-tests` CI run 41292919590 PASS on closing commit 5f1aa7a (merge of pull request #45, after the independent review fixes; 27 of 27 mandatory packaging tests executed) as evidence, and the release record of `RELEASE.md` filled with the hashes of that build (wheel, source distribution and normalised content). No rule, schema or code change; not accepted; nothing is published and no tag is created. Tasks: KOS-SENSE-007.
