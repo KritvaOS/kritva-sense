@@ -191,11 +191,30 @@
     },
     {
       "task_id": "KOS-SENSE-008",
-      "execution": "IN_PROGRESS",
+      "execution": "COMPLETE",
       "git_sync": "SYNCED",
       "readiness": "IMPLEMENTABLE",
-      "evidence": []
+      "evidence": [
+        {
+          "type": "software",
+          "uri": "tests/security/",
+          "description": "Security regression tests (input handling, consumer loading, workflow policy, build and dependencies, offline runs including a real network namespace, register and report checks); criteria AC-801 to AC-807 (reference only; not completion proof)",
+          "commit": null,
+          "ci_run": null,
+          "report_sha256": null,
+          "result": null
+        },
+        {
+          "type": "software",
+          "uri": "https://github.com/KritvaOS/kritva-sense/actions/runs/41298259048",
+          "description": "unit-tests CI run 41298259048 PASS on a8dfb5a (make check, docs-check and test-unit including the security suite; 27 of 27 mandatory packaging tests executed; closing commit, merge of pull request #52); later commits change status wording only, not the code, tests or release files",
+          "commit": "a8dfb5a7827e9888a5bfae0bbcea1598727bd400",
+          "ci_run": "41298259048",
+          "report_sha256": null,
+          "result": "PASS"
+        }
+      ]
     }
   ],
-  "updated_at": "2026-11-02T01:00:00Z"
+  "updated_at": "2026-11-02T03:00:00Z"
 }
