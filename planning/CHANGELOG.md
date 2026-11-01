@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pre-tag corrections after the external audit by ChatGPT (2026-11-01): README status, task, release and required-check wording brought up to the accepted state (eight accepted tasks, V2-M8-SENSE-001 closed, four required checks, tests/security listed, unit-tests described fully); the completion-record sentence about the changes since a8dfb5a corrected and the approval mechanism of pull request #55 recorded (owner ruleset bypass); the tag target is the merge commit of this correction. Tasks: None (documentation and status wording; no package or code change)
+
 - Milestone V2-M8-SENSE-001 completion record: `COMPLETION_RECORD.md` added at the repository root (scope KOS-SENSE-007 and KOS-SENSE-008, merge commits, `unit-tests` runs 41292919590 and 41298259048, criteria AC-701 to AC-807 PASS, deferred work and the owner's approval by merge); status wording updated. The tag `v0.2.0` is created by the owner after the merge; nothing is published. Tasks: None (milestone closure record and status wording; no package or code change)
 
 - KOS-SENSE-008 ACCEPTED: central approval recorded in kritva-program (D-092, pull request #33) on closing commit a8dfb5a (`unit-tests` run 41298259048 PASS); status and approval wording only, with the five risk-owner dispositions (F-004, F-005, F-007, F-008, F-011) now cited to D-092. The milestone V2-M8-SENSE-001 stays open: no completion record exists and no tag is created. Tasks: None (status and approval wording; no package or code change)
