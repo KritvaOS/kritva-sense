@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-006 ACCEPTED: central approval recorded in kritva-program (D-089) on closing commit 67590bc (`unit-tests` run 41289421496 PASS). Status wording only: no contract, schema or code change. Acceptance proves the harness separates conforming from non-conforming consumers on synthetic cases; it makes no claim about any real consumer. Tasks: None (status and approval wording; no contract or code change).
+
 - KOS-SENSE-006 submitted for review: status IN_REVIEW with the `unit-tests` CI run 41289421496 PASS on closing commit 67590bc (merge of pull request #39, after the independent review fixes) as evidence. No rule, schema or code change; not accepted. Tasks: KOS-SENSE-006.
 
 - KOS-SENSE-006 review fixes (independent review of 2990138): the order of sequence continuity relative to the declared state and freshness is fixed as an explicit interface convention of the harness (not a contract change; three cases state it as a convention and the mutant `sequence_before_freshness` breaks it); `previous` is the most recent earlier sample of the same `sensor_id`; a successful frame decision must be canonical (unit quaternion, sign rule, no negative zero) or it is undefined; every mutant has a control case it still passes; the comparison with the accepted code is labelled a consistency check and an audit table of the hand derivations is added; `--list-cases` rejects `--consumer` and `--output`. The case set now has 88 cases and the mutants 15. No contract, schema, validator, generator, frame graph reference or stream document changed. Tasks: KOS-SENSE-006.
