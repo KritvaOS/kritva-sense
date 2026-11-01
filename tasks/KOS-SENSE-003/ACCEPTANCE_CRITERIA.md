@@ -1,13 +1,13 @@
 # Acceptance Criteria: KOS-SENSE-003
 
-Standard: kritva-program `v2/planning/ACCEPTANCE_STANDARD.md` (approved by D-080). Task: [KOS-SENSE-003](TASK.md), baselined in v4 (D-082). Status of these criteria: PROPOSED until the task is approved centrally; the accepted criteria of KOS-SENSE-001 and KOS-SENSE-002 in [../../ACCEPTANCE_CRITERIA.md](../../ACCEPTANCE_CRITERIA.md) are not edited. All criteria are software-only and use synthetic data. No physical sensor, hardware-in-loop or safety validation is required or claimed.
+Standard: kritva-program `v2/planning/ACCEPTANCE_STANDARD.md` (approved by D-080). Task: [KOS-SENSE-003](TASK.md), baselined in v4 (D-082). Status of these criteria: the implementation target for KOS-SENSE-003 since the baseline v4 freeze (D-082); they are not yet demonstrated, and the task is accepted only by a separate central approval; the accepted criteria of KOS-SENSE-001 and KOS-SENSE-002 in [../../ACCEPTANCE_CRITERIA.md](../../ACCEPTANCE_CRITERIA.md) are not edited. All criteria are software-only and use synthetic data. No physical sensor, hardware-in-loop or safety validation is required or claimed.
 
 ## Functional criteria
 
 | ID | Criterion (testable) | Verified by |
 |---|---|---|
 | AC-301 | A versioned transform representation defines parent frame, child frame, translation (metres), a single rotation representation (unit quaternion with named components) and the transform direction, unambiguously. | contract review, schema tests |
-| AC-302 | The validator accepts valid synthetic transforms in the documented convention and rejects malformed or missing fields, unsupported versions, unknown frame identifiers, non-finite values and non-unit rotations, with documented error codes. | `make test-unit` |
+| AC-302 | The validator accepts valid synthetic transforms in the documented convention and rejects malformed or missing fields, unsupported versions, invalid frame identifiers (a frame id that does not match the documented pattern; a frame that is merely absent from a graph is an AC-305 case), non-finite values and non-unit rotations, with documented error codes. | `make test-unit` |
 | AC-303 | A frame graph rejects duplicate parent-child relationships, self-links, frames with more than one parent and cycles, with deterministic documented error codes. | `make test-unit` |
 | AC-304 | Resolution between connected frames returns the documented deterministic composition; the reverse lookup returns the inverse transform within the declared tolerance. | known-answer tests |
 | AC-305 | Disconnected frames and unknown frames are reported explicitly; the implementation never invents an identity or default transform for an unknown relationship. | `make test-unit` |

@@ -3,7 +3,7 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M5-SENSE-001 |
-| Status | NOT_STARTED (proposed; baselined in v4, D-082; implementation starts after this record is merged) |
+| Status | READY (baselined in v4, D-082; the freeze is done; implementation starts in its own pull requests) |
 | Weight | 5 (initial planning weight, 4 to 5 effort days; baseline v4, D-082) |
 | Depends on | KOS-SENSE-001 and KOS-SENSE-002 (Sense contract 0.1.0, tag `v0.1.0`) |
 | Requires physical | No (software only, synthetic data) |
@@ -18,7 +18,7 @@ Sense contract 0.1.0 names the frames `world`, `base` and `sensor` but defines n
 ## Scope
 
 - A versioned, machine-readable transform record: parent frame, child frame, translation in metres, rotation as one unit quaternion form, with the direction stated.
-- Frame graph rules: each frame has at most one parent; no self-links, duplicates or cycles; frame names are those of contract 0.1.0.
+- Frame graph rules: each frame has at most one parent; no self-links, duplicates or cycles; the three frames of contract 0.1.0 (`world`, `base`, `sensor`) keep their meaning, and other graph-local frame ids (lowercase identifiers) are allowed in a graph; samples cannot refer to them, and the sample contract is unchanged.
 - Validation with deterministic, documented error codes.
 - Deterministic resolution between two connected frames (composition) and its inverse; an unknown or disconnected relationship is an error, never an assumed identity.
 - Synthetic fixtures (valid and invalid graphs), known-answer tests and a repeatable `make test-unit`.

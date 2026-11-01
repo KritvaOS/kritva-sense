@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Documentation reconciliation after the baseline v4 freeze: KOS-SENSE-003 task and criteria moved from proposed to READY (D-082), the scope states that graph-local frame ids are allowed in a frame graph (samples cannot use them), AC-302 says invalid frame identifiers, and the stale README, TASKS, MILESTONE_STATUS and status wording (task registry approved by D-080, weights baselined centrally, V2-M0 and V2-M5 status, 001 evidence description) is corrected. No contract, schema or code change. Tasks: None (documentation reconciliation; no contract or code change).
+
 - KOS-SENSE-003 planning records: task and criteria AC-301 to AC-307 added (proposed; baselined in v4, D-082; status NOT_STARTED). No contract, schema or code change. Tasks: None (planning records; task not started).
 
 - Documentation reconciliation after the external audit: README implementation state, milestone status, task evidence wording, the contract section 5 and 8 wording and a status evidence note. No contract, schema or code change. Tasks: None (documentation reconciliation; no contract or code change).
