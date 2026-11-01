@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-005 started after the baseline v6 freeze (D-087): status IN_PROGRESS in TASKS.md, the task record, its criteria and the status report; KOS-SENSE-006 is baselined and stays NOT_STARTED until KOS-SENSE-005 is accepted. No contract, schema or code change. Tasks: None (status change; implementation follows in its own pull request).
+
 - KOS-SENSE-005 and KOS-SENSE-006 planning records: task and criteria added (005 AC-501 to AC-507, telemetry stream contract and reference validator, proposed weight 4; 006 AC-601 to AC-607, consumer conformance harness, proposed weight 5, cannot start before 005 is accepted), both under milestone V2-M7-SENSE-001; to be baselined in v6 after D-087; status NOT_STARTED. No contract, schema or code change. Tasks: None (planning records; tasks not started).
 - KOS-SENSE-004 ACCEPTED: central approval recorded in kritva-program (D-086) on closing commit 82b3174 (`unit-tests` run 41275942226 PASS). Status wording only: no contract, schema or code change. Tasks: None (status and approval wording; no contract or code change).
 

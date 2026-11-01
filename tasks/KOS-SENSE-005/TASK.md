@@ -3,8 +3,8 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M7-SENSE-001 |
-| Status | NOT_STARTED (proposed; to be baselined in v6 by the owner-run freeze after decision D-087) |
-| Weight | 4 (initial planning weight, 4 to 5 effort days; proposed for baseline v6, D-087) |
+| Status | IN_PROGRESS (baselined in v6, D-087) |
+| Weight | 4 (initial planning weight, 4 to 5 effort days; baseline v6, D-087) |
 | Depends on | KOS-SENSE-001, KOS-SENSE-002 (Sense contract 0.1.0) and KOS-SENSE-004 (generator, used for fixtures) |
 | Requires physical | No (software only, synthetic data) |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) (AC-501 to AC-507) |
