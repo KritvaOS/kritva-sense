@@ -140,6 +140,14 @@ def _sample_cases(cases, seed):
             ("sample.sequence.equal", 5, _no("SEQUENCE_REGRESSION"), "a sequence that does not increase is SEQUENCE_REGRESSION"),
             ("sample.sequence.lower", 4, _no("SEQUENCE_REGRESSION"), "a lower sequence is SEQUENCE_REGRESSION")):
         _case(cases, cid, "sample", c61 + ": " + why, _sctx(_one(seed, sequence=seq), previous=prev), expected)
+    conv = ("CONFORMANCE 1 (interface convention, not a contract clause: the contracts do not fix where sequence "
+            "continuity falls; this harness evaluates it last)")
+    _case(cases, "sample.sequence.after_freshness", "sample", conv + ": stale and regressing is STALE_DATA",
+          _sctx(_one(seed, sequence=5, ts=NOW - MAX_AGE - 1), previous=prev), _no("STALE_DATA"))
+    _case(cases, "sample.sequence.after_declared_state", "sample", conv + ": declared STALE and regressing is STALE_DATA",
+          _sctx(_one(seed, sequence=5, validity="STALE"), previous=prev), _no("STALE_DATA"))
+    _case(cases, "sample.sequence.after_structure", "sample", conv + ": a non-conformant regressing sample gets its structural error",
+          _sctx(_faulty(seed, "bad_unit"), previous=_one(seed, sequence=7, ts=NOW - 20_000_000)), _no("INVALID_UNIT"))
     _case(cases, "sample.sequence.no_previous", "sample", c61 + ": without a previous sample continuity is not evaluated",
           _sctx(_one(seed, sequence=0), previous=None), _ok())
     _case(cases, "sample.sequence.other_sensor_independent", "sample",
@@ -522,6 +530,13 @@ class _SequenceIgnoresSensor(_M):             # compares sequences of different 
         return []
 
 
+class _SequenceBeforeFreshness(_M):           # sequence continuity decided before freshness
+    def decide_sample(self, sample, now_ns, now_clock, max_age_ns, previous=None):
+        return self._decide(sample, (
+            lambda: self._structural(sample), lambda: self._declared(sample),
+            lambda: self._sequence(previous, sample), lambda: self._freshness(sample, now_ns, now_clock, max_age_ns)))
+
+
 class _SequenceGapRejected(_M):               # a jump ahead is wrongly rejected
     def _sequence(self, previous, sample):
         if isinstance(previous, dict) and previous.get("sensor_id") == sample["sensor_id"] \
@@ -579,6 +594,7 @@ MUTANTS = {
     "precedence_declared_stale_ignored": ("validity_precedence", _DeclaredStaleIgnored, "declared STALE sample used when fresh"),
     "sequence_equal_accepted": ("sequence", _SequenceEqualAccepted, "repeated sequence number accepted"),
     "sequence_sensors_mixed": ("sequence", _SequenceIgnoresSensor, "sequences of different sensors compared"),
+    "sequence_before_freshness": ("sequence", _SequenceBeforeFreshness, "sequence decided before freshness (interface convention)"),
     "sequence_gap_rejected": ("sequence", _SequenceGapRejected, "gap in the sequence rejected as a regression"),
     "stream_gap_ignored": ("stream_gap_handling", _StreamGapIgnored, "sequence gaps never reported"),
     "stream_gap_as_regression": ("stream_gap_handling", _StreamGapAsRegression, "sequence gap reported as a regression"),
@@ -647,6 +663,14 @@ def _norm_transform(t):
         if not isinstance(part, dict) or set(part) != set(names) or not all(_finite(part[n]) for n in names):
             return None
         out[key] = {n: float(part[n]) for n in names}
+        if any(v == 0 and math.copysign(1.0, v) < 0 for v in out[key].values()):
+            return None                                   # negative zero: not canonical (section 7)
+    q = out["rotation"]
+    if abs(math.sqrt(sum(q[n] ** 2 for n in "wxyz")) - 1.0) > FG.QUAT_TOLERANCE:
+        return None                                       # not a unit quaternion (section 5)
+    first = next((q[n] for n in "wxyz" if abs(q[n]) >= FG.SIGN_EPSILON), None)
+    if first is not None and first < 0:
+        return None                                       # sign not canonical (section 7)
     return out
 
 
@@ -736,7 +760,7 @@ def dumps(result):
 # Command line
 # ---------------------------------------------------------------------------------------------------------
 
-USAGE = ("usage: python3 -m kritva_sense.conformance [--consumer SPEC]... [--seed N] [--output FILE] | --list-cases\n"
+USAGE = ("usage: python3 -m kritva_sense.conformance [--consumer SPEC]... [--seed N] [--output FILE] | [--seed N] --list-cases\n"
          "  SPEC: reference | mutant:NAME | MODULE:ATTR (a consumer object, or a function returning one)\n"
          "  mutants: %s" % ", ".join(sorted(MUTANTS)))
 
@@ -788,6 +812,8 @@ def main(argv):
                 list_cases = True
             else:
                 raise ValueError("unknown argument %r" % a)
+        if list_cases and (specs or output):
+            raise ValueError("--list-cases cannot be combined with --consumer or --output")
         if list_cases:
             for c in build_cases(seed):
                 print("%s\t%s\t%s" % (c["id"], c["operation"], c["clause"]))

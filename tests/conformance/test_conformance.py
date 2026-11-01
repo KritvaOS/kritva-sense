@@ -46,12 +46,34 @@ MUTANT_MUST_FAIL = {
     "precedence_declared_stale_ignored": "sample.declared.stale_fresh_age",
     "sequence_equal_accepted": "sample.sequence.equal",
     "sequence_sensors_mixed": "sample.sequence.other_sensor_independent",
+    "sequence_before_freshness": "sample.sequence.after_freshness",
     "sequence_gap_rejected": "sample.sequence.gap_is_conformant",
     "stream_gap_ignored": "stream.sequence.gap",
     "stream_gap_as_regression": "stream.sequence.gap",
     "frame_unknown_gets_identity": "frame.connection.missing_frame",
     "frame_no_path_gets_identity": "frame.connection.disconnected",
     "frame_self_identity_unchecked": "frame.identity.frame_not_in_graph",
+}
+
+
+# a control case per mutant: same operation, different rule detail; the mutant must still pass it, which shows it
+# fails because of its declared rule and not because it is broken more widely
+MUTANT_CONTROL = {
+    "freshness_limit_exclusive": "sample.fresh.within_limit",
+    "freshness_clock_ignored": "sample.clock.utc_fresh",
+    "freshness_future_accepted": "sample.stale.one_over_limit",
+    "precedence_freshness_first": "sample.declared.stale_fresh_age",
+    "precedence_structure_unchecked": "sample.declared.invalid",
+    "precedence_declared_stale_ignored": "sample.declared.missing",
+    "sequence_equal_accepted": "sample.sequence.lower",
+    "sequence_before_freshness": "sample.sequence.equal",
+    "sequence_sensors_mixed": "sample.sequence.next",
+    "sequence_gap_rejected": "sample.sequence.next",
+    "stream_gap_ignored": "stream.sequence.regression",
+    "stream_gap_as_regression": "stream.sequence.duplicate",
+    "frame_unknown_gets_identity": "frame.connection.disconnected",
+    "frame_no_path_gets_identity": "frame.connection.missing_frame",
+    "frame_self_identity_unchecked": "frame.identity.frame_in_graph",
 }
 
 
@@ -84,7 +106,7 @@ class Interface(unittest.TestCase):
     def test_documented(self):
         text = DOC.read_text(encoding="utf-8")
         for needle in ("decide_sample", "decide_stream", "decide_frame", "now_ns", "now_clock", "max_age_ns",
-                       "previous", "AC-601", "AC-607", "python3 -m kritva_sense.conformance", "make test-unit",
+                       "previous", "same `sensor_id`", "interface convention", "not a contract clause", "AC-601", "AC-607", "python3 -m kritva_sense.conformance", "make test-unit",
                        "undefined decision", "mutant", "exit 0", "exit 1", "exit 2"):
             self.assertIn(needle, text)
 
@@ -125,7 +147,9 @@ class CaseSet(unittest.TestCase):
         for c in cases:
             self.assertEqual(set(c), {"id", "operation", "clause", "input", "expected"})
             self.assertIn(c["operation"], C.OPERATIONS)
-            self.assertRegex(c["clause"], r"^(SENSE_CONTRACT|STREAM_CONTRACT|FRAME_GRAPH_CONTRACT) \d")
+            self.assertRegex(c["clause"], r"^(SENSE_CONTRACT|STREAM_CONTRACT|FRAME_GRAPH_CONTRACT|CONFORMANCE) \d")
+            if c["clause"].startswith("CONFORMANCE"):
+                self.assertIn("not a contract clause", c["clause"])    # a convention is never passed off as a contract clause
             self.assertTrue(c["id"].startswith(c["operation"] + "."))
 
     def test_expected_values_are_literals_of_the_documented_shape(self):
@@ -186,7 +210,9 @@ class CaseSet(unittest.TestCase):
             self.assertEqual(len(C.build_cases()), len(C.build_cases(3)))
 
     def test_expected_outcomes_agree_with_the_accepted_implementations(self):
-        """A cross-check in the other direction: the hand-written literals match the accepted reference code."""
+        """A consistency check only, not the oracle: the hand-written literals (derived from the contract text,
+        see the audit table in CONFORMANCE.md) agree with the accepted reference code. A shared misreading of a
+        contract clause would not show here; the literals stay the authority."""
         for c in C.build_cases():
             i, e = copy.deepcopy(c["input"]), c["expected"]
             with self.subTest(case=c["id"]):
@@ -251,6 +277,15 @@ class Mutants(unittest.TestCase):
 
     def test_every_mutant_is_listed_with_a_case(self):
         self.assertEqual(set(MUTANT_MUST_FAIL), set(C.MUTANTS))
+
+    def test_every_mutant_has_a_control_case_it_still_passes(self):
+        self.assertEqual(set(MUTANT_CONTROL), set(C.MUTANTS))
+        for name, (_, cls, _) in sorted(C.MUTANTS.items()):
+            with self.subTest(mutant=name):
+                failed = failed_ids(cls())
+                self.assertIn(MUTANT_CONTROL[name], {c["id"] for c in C.build_cases()})
+                self.assertNotIn(MUTANT_CONTROL[name], failed)
+                self.assertIn(MUTANT_MUST_FAIL[name], failed)
 
     def test_each_mutant_fails_its_named_case_and_not_everything(self):
         total = len(C.build_cases())
@@ -459,6 +494,31 @@ class Isolation(unittest.TestCase):
         self.assertTrue(all(i.startswith("frame.") for i in failed_ids(Far())))
         self.assertTrue(failed_ids(Far()))
 
+    def test_non_canonical_frame_results_are_undefined(self):
+        case = next(c for c in C.build_cases() if c["id"] == "frame.resolve.rotation_down_is_inverse")
+        for label, edit in (
+                ("non-unit", lambda t: t["rotation"].update(w=1.0, z=-1.0)),
+                ("negative sign", lambda t: t["rotation"].update(w=-C.H, z=C.H)),
+                ("negative zero", lambda t: t["translation"].update(y=-0.0)),
+                ("negative zero rotation", lambda t: t["rotation"].update(x=-0.0)),
+                ("unit in the wrong unit", lambda t: t.update(translation_unit="mm"))):
+            class K(C.ReferenceConsumer):
+                def decide_frame(self, graph, source, target, _edit=edit):
+                    d = super().decide_frame(graph, source, target)
+                    _edit(d["transform"])
+                    return d
+            with self.subTest(label=label):
+                res = C.run_case(K(), case)
+                self.assertEqual((res["outcome"], res["reason"]), ("FAIL", "undefined decision"))
+
+    def test_canonical_form_edge_cases_are_accepted(self):
+        # first non-zero component positive, magnitudes below 1e-12 count as zero (FRAME_GRAPH_CONTRACT 7)
+        t = {"translation": {"x": 0.0, "y": 0.0, "z": 0.0}, "translation_unit": "m",
+             "rotation": {"w": -1e-13, "x": 1.0, "y": 0.0, "z": 0.0}}
+        self.assertIsNotNone(C._norm_transform(t))
+        t["rotation"] = {"w": 0.0, "x": -1.0, "y": 0.0, "z": 0.0}
+        self.assertIsNone(C._norm_transform(t))
+
     def test_unsorted_but_equal_decisions_pass(self):
         class Shuffled(C.ReferenceConsumer):
             def decide_stream(self, document):
@@ -488,7 +548,8 @@ class CommandLine(unittest.TestCase):
         self.assertEqual([c["name"] for c in doc["consumers"]], ["mutant:sequence_gap_rejected", "reference"])
 
     def test_usage_and_load_errors_exit_2(self):
-        for args in (["--bogus"], ["--seed"], ["--seed", "x"], ["--seed", "-1"], ["--consumer"],
+        for args in (["--list-cases", "--consumer", "reference"], ["--list-cases", "--output", "x.json"],
+                     ["--bogus"], ["--seed"], ["--seed", "x"], ["--seed", "-1"], ["--consumer"],
                      ["--consumer", "nonsense"], ["--consumer", "mutant:nope"],
                      ["--consumer", "no_such_module_xyz:thing"], ["--consumer", "kritva_sense.conformance:NOPE"],
                      ["--consumer", "kritva_sense.conformance:HARNESS_VERSION"],
@@ -534,6 +595,9 @@ class CommandLine(unittest.TestCase):
         lines = p.stdout.splitlines()
         self.assertEqual(len(lines), len(C.build_cases()))
         self.assertTrue(all(len(l.split("\t")) == 3 for l in lines))
+
+    def test_list_cases_accepts_a_seed(self):
+        self.assertEqual(run_cli("--list-cases", "--seed", "4").returncode, 0)
 
     def test_a_broken_consumer_module_does_not_exit_0(self):
         with tempfile.TemporaryDirectory() as d:
