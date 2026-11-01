@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-007 and KOS-SENSE-008 planning records: task and criteria added (007 AC-701 to AC-707, Python package and reproducible release, proposed weight 5; 008 AC-801 to AC-807, repository security and CI assurance review, proposed weight 6, acceptance prerequisite: 007 accepted), both under milestone V2-M8-SENSE-001, to be baselined in v7 after D-090; owner decisions recorded: sequence order stays a harness convention, one repository release tag per release created by the owner, internal security review with Dinesh as risk owner; status NOT_STARTED. No contract, schema or code change. Tasks: None (planning records; tasks not started).
+
 - KOS-SENSE-006 ACCEPTED: central approval recorded in kritva-program (D-089) on closing commit 67590bc (`unit-tests` run 41289421496 PASS). Status wording only: no contract, schema or code change. Acceptance proves the harness separates conforming from non-conforming consumers on synthetic cases; it makes no claim about any real consumer. Tasks: None (status and approval wording; no contract or code change).
 
 - KOS-SENSE-006 submitted for review: status IN_REVIEW with the `unit-tests` CI run 41289421496 PASS on closing commit 67590bc (merge of pull request #39, after the independent review fixes) as evidence. No rule, schema or code change; not accepted. Tasks: KOS-SENSE-006.
