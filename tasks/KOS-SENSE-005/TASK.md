@@ -3,13 +3,13 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M7-SENSE-001 |
-| Status | IN_PROGRESS (baselined in v6, D-087) |
+| Status | IN_REVIEW (implemented in pull requests #33 and #34; baselined in v6, D-087) |
 | Weight | 4 (initial planning weight, 4 to 5 effort days; baseline v6, D-087) |
 | Depends on | KOS-SENSE-001, KOS-SENSE-002 (Sense contract 0.1.0) and KOS-SENSE-004 (generator, used for fixtures) |
 | Requires physical | No (software only, synthetic data) |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) (AC-501 to AC-507) |
 | Deliverables | `contract/STREAM_CONTRACT.md`, `contract/stream.schema.json`, `src/kritva_sense/stream.py`, `tests/stream/`, `make test-unit` |
-| Acceptance evidence | Not yet: immutable closing SHA, `unit-tests` CI run on that SHA, review record and central approval are recorded when the task closes |
+| Acceptance evidence | Closing commit 0bee5ed (merge of pull request #34, after the independent review fixes); `unit-tests` CI run 41278515695 PASS on it. Not yet: review record and central approval (recorded in kritva-program) |
 
 ## Purpose
 

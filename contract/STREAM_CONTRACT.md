@@ -6,7 +6,7 @@
 | Repository | `KritvaOS/kritva-sense` |
 | Task | KOS-SENSE-005 (Telemetry stream contract and reference validator) |
 | Version | Stream contract version: 0.1.0 |
-| Status | PROPOSED: implemented for review under KOS-SENSE-005; not approved. A 0.x contract: it may change by the rules of section 13 |
+| Status | PROPOSED: implemented for review under KOS-SENSE-005; not approved. A 0.x contract: it may change by the rules of section 14 |
 | Owner | Dinesh (interim architecture and safety reviewer, program decision D-047) |
 | Related contracts | [SENSE_CONTRACT.md](SENSE_CONTRACT.md) 0.1.0 (accepted, tag `v0.1.0`) and [FRAME_GRAPH_CONTRACT.md](FRAME_GRAPH_CONTRACT.md) 0.1.0; neither is changed by this document |
 | Machine-readable form | [stream.schema.json](stream.schema.json) (a structural subset: it describes only the three record kinds, so a record of another kind fails the schema, and the reference validator reports it as `STREAM_UNKNOWN_RECORD`) |
