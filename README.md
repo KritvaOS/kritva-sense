@@ -114,7 +114,7 @@ Proposed milestones, from [planning/MILESTONE.md](planning/MILESTONE.md) (genera
 | V2-M2-SENSE-001 | V2-M2 BUILD & ARTIFACT | TASKS ACCEPTED (KOS-SENSE-002, KOS-SENSE-004); milestone not formally closed: integration and regression gates are not implemented | Contract validation and synthetic-data tests pass; unit, integration and regression gates implemented. |
 | V2-M5-SENSE-001 | V2-M5 EXECUTION | TASK ACCEPTED (KOS-SENSE-003, D-085), NOT CLOSED | Sense frames validated in simulated execution. |
 | V2-M7-SENSE-001 | V2-M7 LIVE & RESULTS | TASKS ACCEPTED (KOS-SENSE-005, KOS-SENSE-006; baselined in v6, D-087); milestone not formally closed | Telemetry stream contract validated end to end (software scope). |
-| V2-M8-SENSE-001 | V2-M8 PRODUCTION | IN PROGRESS (KOS-SENSE-007 and KOS-SENSE-008 baselined in v7, D-090; KOS-SENSE-007 accepted, D-091; KOS-SENSE-008 accepted, D-092) | Release and security review complete. |
+| V2-M8-SENSE-001 | V2-M8 PRODUCTION | CLOSED by the approved [COMPLETION_RECORD.md](COMPLETION_RECORD.md) (KOS-SENSE-007 accepted, D-091; KOS-SENSE-008 accepted, D-092; baselined in v7, D-090); tag `v0.2.0` is an owner action after the merge | Release and security review complete. |
 
 The target dates are in [planning/MILESTONE.md](planning/MILESTONE.md); they are proposed targets, not approved dates and not delivery commitments (program decision PD-001). The status table is "as of the governance baseline commit" and may lag the repository (it showed the governance baseline as IN_REVIEW; the table now records that the baseline change was merged and that the milestone is not closed). A milestone closes only through an approved `COMPLETION_RECORD.md`; a tag or a merge does not close it, and no completion record exists.
 
