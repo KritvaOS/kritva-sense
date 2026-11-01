@@ -14,7 +14,7 @@ import json
 import sys
 from collections import namedtuple
 
-from .validator import CLOCKS, KINDS, SENSOR_ID_RE, validate_sample
+from .validator import CLOCKS, KINDS, SENSOR_ID_RE, TIMESTAMP_UNIT, validate_sample
 
 STREAM_VERSION = "0.1.0"
 SUPPORTED_VERSIONS = (STREAM_VERSION,)
@@ -219,15 +219,18 @@ class StreamChecker:
         if "sample" not in rec:
             return
         s = rec["sample"]
+        # every embedded value goes to the unchanged validator, objects or not
+        for v in validate_sample(s):
+            self._samples.append(SampleViolation(pos, v.code, v.path, v.message))
         if not isinstance(s, dict):
             self._add(pos, "STREAM_MALFORMED", path + ".sample", "must be an object")
             return
-        for v in validate_sample(s):
-            self._samples.append(SampleViolation(pos, v.code, v.path, v.message))
         seq = s.get("sequence") if _is_seq(s.get("sequence")) else None
         ts = s.get("timestamp")
-        ts_ok = (isinstance(ts, dict) and ts.get("clock") in CLOCKS and isinstance(ts.get("clock"), str)
-                 and _is_seq(ts.get("value")))
+        # a recognised clock is enough to compare with the stream clock; a usable timestamp (for the regression
+        # check) also needs the unit ns and an integer value >= 0, as the sample contract requires
+        clock_ok = isinstance(ts, dict) and isinstance(ts.get("clock"), str) and ts["clock"] in CLOCKS
+        ts_ok = clock_ok and ts.get("unit") == TIMESTAMP_UNIT and _is_seq(ts.get("value"))
         # identity and clock, against the values fixed by the open record
         if "sensor_id" in self._ident and isinstance(s.get("sensor_id"), str) \
                 and s["sensor_id"] != self._ident["sensor_id"]:
@@ -236,7 +239,7 @@ class StreamChecker:
         if "kind" in self._ident and isinstance(s.get("kind"), str) and s["kind"] != self._ident["kind"]:
             self._add(pos, "STREAM_KIND_CHANGE", path + ".sample.kind",
                       "%r differs from the stream kind %r" % (s["kind"], self._ident["kind"]))
-        if "clock" in self._ident and ts_ok and ts["clock"] != self._ident["clock"]:
+        if "clock" in self._ident and clock_ok and ts["clock"] != self._ident["clock"]:
             self._add(pos, "STREAM_CLOCK_MISMATCH", path + ".sample.timestamp.clock",
                       "%s differs from the stream clock %s" % (ts["clock"], self._ident["clock"]))
         # sequence continuity against the previous sample record with a usable sequence

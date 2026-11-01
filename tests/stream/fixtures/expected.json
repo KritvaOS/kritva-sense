@@ -70,19 +70,6 @@
       ]
     ]
   },
-  "duplicate_from_generator": {
-    "samples": [],
-    "stream": [
-      [
-        4,
-        "STREAM_SEQUENCE_DUPLICATE"
-      ],
-      [
-        5,
-        "STREAM_SEQUENCE_GAP"
-      ]
-    ]
-  },
   "duplicate_regression_gap_together": {
     "samples": [],
     "stream": [
@@ -96,6 +83,19 @@
       ],
       [
         4,
+        "STREAM_SEQUENCE_GAP"
+      ]
+    ]
+  },
+  "duplicate_then_gap_from_generator": {
+    "samples": [],
+    "stream": [
+      [
+        4,
+        "STREAM_SEQUENCE_DUPLICATE"
+      ],
+      [
+        5,
         "STREAM_SEQUENCE_GAP"
       ]
     ]
@@ -433,7 +433,12 @@
     ]
   },
   "sample_not_object": {
-    "samples": [],
+    "samples": [
+      [
+        2,
+        "MALFORMED_FIELD"
+      ]
+    ],
     "stream": [
       [
         2,
@@ -471,6 +476,15 @@
         "STREAM_TIMESTAMP_REGRESSION"
       ]
     ]
+  },
+  "timestamp_unit_not_usable": {
+    "samples": [
+      [
+        3,
+        "INVALID_TIMESTAMP"
+      ]
+    ],
+    "stream": []
   },
   "unknown_document_field": {
     "samples": [],
