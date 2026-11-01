@@ -1,6 +1,8 @@
 """KOS-SENSE-008 AC-804: automated policy check of every CI workflow under .github/workflows (token permissions,
 secrets, third-party actions and their pinning, untrusted pull request input). The workflow files are read as text
-(no YAML library is needed or used). A new or changed workflow must be reviewed and added to POLICY below."""
+(no YAML library is needed or used), so this is a constrained pattern check, not proof of the effective workflow: it can
+miss YAML anchors and aliases, job-level permission overrides, reusable workflows and composite actions. A person reads
+the effective YAML after every workflow change. A new or changed workflow must be reviewed and added to POLICY below."""
 import json
 import re
 import sys

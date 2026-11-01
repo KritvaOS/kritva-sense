@@ -34,10 +34,12 @@ REQUIRED = {
         "test_offline.py": [
         "test_the_block_stops_connections_and_name_resolution", "test_non_packaging_suites_pass_offline",
         "test_packaging_suite_passes_offline_with_a_prepared_wheelhouse", "test_in_ci_a_missing_build_tool_fails_the_run",
-        "test_every_network_test_is_listed_and_excluded_from_the_offline_suite"]},
+        "test_every_network_test_is_listed_and_excluded_from_the_offline_suite",
+        "test_every_mandatory_suite_passes_in_a_network_namespace",
+        "test_in_ci_detected_only_by_github_actions_a_missing_build_tool_still_fails"]},
     "AC-806": {"test_register.py": [
         "test_unique_ids_and_complete_fields", "test_no_critical_or_high_finding_is_open_without_an_owner_disposition",
-        "test_no_open_finding_once_the_task_is_submitted", "test_fixed_findings_name_a_remediation_commit_once_submitted"]},
+        "test_no_open_finding_once_the_task_is_submitted", "test_owner_dispositions_have_an_explicit_authority_trace", "test_fixed_findings_name_a_remediation_commit_once_submitted"]},
     "AC-807": {"test_register.py": ["test_report_states_scope_method_limits_and_non_claims"]},
 }
 

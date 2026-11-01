@@ -35,7 +35,7 @@ class ThreatModel(unittest.TestCase):
         for heading in ("2. Assets", "3. Actors and trust boundaries", "4. Entry points", "5. Assumptions",
                         "6. Threats considered", "7. Out of scope"):
             self.assertIn("## " + heading, MODEL)
-        self.assertEqual(len(table(MODEL, "2. Assets")), 6)
+        self.assertEqual(len(table(MODEL, "2. Assets")), 7)
         self.assertGreaterEqual(len(table(MODEL, "4. Entry points")), 16)
 
     def test_every_entry_point_names_existing_code_or_workflow(self):
@@ -116,6 +116,30 @@ class Register(unittest.TestCase):
                 self.assertNotIn(r["status"], OPEN, "%s is still open; the task cannot be submitted" % r["id"])
                 self.assertNotIn("PENDING", r["commit"] if r["status"] == "FIXED" else "")
                 self.assertNotRegex(r["owner"], r"^PENDING")
+
+    def test_owner_dispositions_have_an_explicit_authority_trace(self):
+        """Approver, date, channel and durable record are named separately, so the chat approval, the relay and the
+        owner-run script are not mixed up."""
+        for r in self.rows:
+            if r["status"] == "ACCEPTED_BY_OWNER":
+                for needle in ("Approver: Dinesh", "Approval date: 2026-", "Channel:", "Durable record:"):
+                    self.assertIn(needle, r["owner"], "%s: %s" % (r["id"], needle))
+                self.assertNotIn("is the approval", r["owner"])
+
+    def test_a_fixed_finding_with_an_unverified_part_says_so(self):
+        f4 = [r for r in self.rows if r["id"] == "F-004"][0]
+        self.assertIn("NOT verified", f4["owner"])
+        self.assertIn("ruleset", f4["owner"])
+        self.assertIn("**Not verified:**", REVIEW)
+
+    def test_the_report_matches_the_final_workflow_and_gate_configuration(self):
+        import json
+        gate = json.loads((ROOT / ".github" / "kritva-gate.json").read_text(encoding="utf-8"))
+        section = REVIEW[REVIEW.index("Gate configuration"):REVIEW.index("### Build and dependencies")]
+        for check in gate["required_github_checks"]:
+            self.assertIn("`%s`" % check, section)
+        self.assertNotIn("tag-pinned", REVIEW.replace("not by tag", ""))
+        self.assertNotIn("is not a required check", MODEL)
 
     def test_dispositions_are_never_invented(self):
         """A finding is marked ACCEPTED_BY_OWNER only with the owner's own words recorded; the register of the

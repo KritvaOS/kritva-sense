@@ -23,6 +23,7 @@ A software-only reference implementation of three data contracts (Sense sample, 
 | AS-4 | The operator's files and environment when a command runs | The commands read and write files the operator names; the harness can import code the operator names. |
 | AS-5 | The CI token and the repository secrets | The workflows use only the automatic `github.token`; no other secret is configured in the workflows. |
 | AS-6 | Availability of the commands and of CI (memory, time) | A command that hangs or exhausts memory blocks the operator or CI. |
+| AS-7 | The pinned build tools and their hash list (`release/build-requirements.txt`), and any locally prepared wheelhouse of them (`KRITVA_WHEELHOUSE`) | The release build and the offline test runs install exactly these files; pip refuses a file whose SHA-256 differs, so the hash list, not the wheelhouse directory, is the trusted part. |
 
 Not assets here: any customer or personal data (none is held), any hardware, any safety-relevant system.
 
@@ -32,7 +33,7 @@ Not assets here: any customer or personal data (none is held), any hardware, any
 |---|---|---|---|
 | TB-1 | The operator running a command line | the operator, who chooses every path and every argument | the content of the files named (JSON documents) |
 | TB-2 | The harness process and a consumer module named as `MODULE:ATTR` | the harness code | the consumer module: it is imported into the harness process and is **not** isolated. The boundary is a statement about trust in the operator's choice, not a technical barrier |
-| TB-3 | A pull request and the CI that runs on it | the base branch, the owner who merges, protected paths and CODEOWNERS | the pull request branch: its files, scripts, tests, commit messages and workflow changes (a pull request can change what runs, but a `pull_request` run has a read-only token for forks and no repository secret) |
+| TB-3 | A pull request and the CI that runs on it | the base branch, the owner who merges, protected paths and CODEOWNERS | the pull request branch: its files, scripts, tests, commit messages and workflow changes (a pull request can change what runs, but a `pull_request` run has a read-only token for forks and no repository secret). Everything a run produces in the job workspace (temporary directories, test output, `gate-report.md`, built distributions) is data derived from the pull request and is untrusted as well; the gate report becomes a pull request comment. Only `pr-acceptance-gate` holds a token that can write (`pull-requests: write`, for that comment); the other four workflows hold `contents: read` only |
 | TB-4 | The build and release path | the pinned tool list with hashes, the build script, the owner who creates a tag | the package index at the one moment the pinned build tools are fetched (hash-checked), the downloaded gitleaks release |
 | TB-5 | The package consumer (someone who installs the wheel) | the content of the wheel | the contents of the JSON documents they validate |
 
@@ -52,13 +53,13 @@ Every entry point names the code or workflow it refers to. The review of each is
 | EP-6 | `kritva-sense-version [--check]` | `src/kritva_sense/version.py` `main` | reads the packaged contract files, no outside input | none beyond local file reads |
 | EP-7 | Python API of the modules (`import kritva_sense...`) | `src/kritva_sense/*.py` | Python objects supplied by the caller | not declared stable (RELEASE.md); callers pass trusted objects |
 | EP-8 | Console script wrappers | `src/kritva_sense/_entry.py`, `[project.scripts]` in `pyproject.toml` | as the commands above | none beyond the commands |
-| EP-9 | Workflow `commit-message-check` | `.github/workflows/commit-message-check.yml`, `scripts/security/check_commit_messages.py` | pull request commit messages, base branch name, TB-3 | untrusted text in the shell, token permissions |
-| EP-10 | Workflow `pr-acceptance-gate` | `.github/workflows/pr-acceptance-gate.yml`, `scripts/pipeline/pr_gate.py`, `.github/kritva-gate.json` | the pull request diff and commits, TB-3; the only workflow with `pull-requests: write` | the gate code comes from the pull request itself; interpolated fields; the comment step |
+| EP-9 | Workflow `commit-message-check` | `.github/workflows/commit-message-check.yml`, `scripts/security/check_commit_messages.py` | pull request commit messages, base branch name (passed to the script through `env:`), TB-3 | untrusted text in the shell, token permissions |
+| EP-10 | Workflow `pr-acceptance-gate` | `.github/workflows/pr-acceptance-gate.yml`, `scripts/pipeline/pr_gate.py`, `.github/kritva-gate.json` | the pull request diff and commits, TB-3; the only workflow with `pull-requests: write` | the gate code comes from the pull request itself (accepted, F-007); the comment step and its token; values reach the shell through `env:` |
 | EP-11 | Workflow `secret-scan` | `.github/workflows/secret-scan.yml` | full git history, downloaded gitleaks release, TB-3 and TB-4 | integrity of the downloaded scanner |
-| EP-12 | Workflow `unit-tests` | `.github/workflows/unit-tests.yml`, `Makefile` target `test-unit` | pull request code executed in CI, TB-3 | runs the pull request's own tests with a read-only token; it is not a required check |
+| EP-12 | Workflow `unit-tests` | `.github/workflows/unit-tests.yml`, `Makefile` target `test-unit` | pull request code executed in CI, TB-3 | runs the pull request's own tests with a read-only token and no secret; it is a required check in `.github/kritva-gate.json` (F-004) |
 | EP-13 | Workflow `readme-check` | `.github/workflows/readme-check.yml`, `scripts/check_readme.py` | README text | none beyond reading files |
-| EP-14 | Build and release path | `pyproject.toml`, `MANIFEST.in`, `release/build-requirements.txt`, `release/normalise_sdist.py`, `tests/packaging/`, `RELEASE.md` | one fetch of the pinned build tools, TB-4 | hash pinning, reproducibility, content of the artifacts |
-| EP-15 | Repository governance files | `.github/kritva-gate.json` (protected paths, required checks), `.github/CODEOWNERS`, `SECURITY.md` | contributors, TB-3 | which checks block a merge; accuracy of the security policy |
+| EP-14 | Build and release path | `pyproject.toml`, `MANIFEST.in`, `release/build-requirements.txt`, `release/normalise_sdist.py`, `tests/packaging/`, `RELEASE.md` | one fetch of the pinned build tools, TB-4, or a prepared wheelhouse (AS-7) | hash pinning, reproducibility, content of the artifacts |
+| EP-15 | Repository governance files | `.github/kritva-gate.json` (protected paths, required checks), `.github/CODEOWNERS`, `SECURITY.md` | contributors, TB-3 | which checks block a merge; accuracy of the security policy. `kritva-gate.json` is a repository-side declaration read by the gate: it does not prove that the GitHub ruleset enforces the same checks (A-8) |
 | EP-16 | Local helper scripts | `scripts/docs_check.py`, `scripts/check_readme.py` | repository files | read-only checks |
 
 ## 5. Assumptions
@@ -72,6 +73,7 @@ Every entry point names the code or workflow it refers to. The review of each is
 | A-5 | The owner reviews and merges changes to protected paths and workflows (CODEOWNERS `*` and `/.github/`), and a merge needs the owner's route. | A malicious change to a workflow or gate script could be merged. |
 | A-6 | The package index and the GitHub release host serve the pinned content; hash checks detect a substitution of the build tools; the gitleaks checksum is fetched from the same release (an integrity check against corruption, not against a compromised release). | A compromised scanner could hide a secret; a substituted build tool is refused by pip. |
 | A-7 | The software is a synthetic-data reference implementation. No safety, hardware or operational claim is made about any robot, sensor or consumer. | Out of scope. |
+| A-8 | The GitHub-hosted settings (rulesets, branch protection, required status checks, Actions permissions, private vulnerability reporting) are outside the repository files and are not verified by this review; `.github/kritva-gate.json` and `CODEOWNERS` state intent, they do not prove enforcement. | A check listed in the files may not block a merge. The owner verifies the ruleset. |
 
 ## 6. Threats considered
 
@@ -83,9 +85,9 @@ Every entry point names the code or workflow it refers to. The review of each is
 | T-4 | Arbitrary code execution through the consumer specification | EP-5 | By design (A-2); documented as not a sandbox (F-010); load errors are exit 2 |
 | T-5 | A consumer ends the run with a false pass (`sys.exit(0)`) or hides a failure | EP-5 | Found (F-002) and fixed; `SystemExit` is caught at load, at invocation and in the decision normaliser |
 | T-6 | A consumer hangs the harness | EP-5 | Not mitigated; documented limitation (F-011). Tests use a subprocess timeout only to end their own child |
-| T-7 | Untrusted pull request text reaches a shell or a privileged step | EP-9, EP-10 | Only the base branch name and the head SHA are interpolated into scripts (F-006); no title, body or head ref; no `pull_request_target` |
-| T-8 | A pull request weakens the checks that guard it | EP-10, EP-12, EP-15 | The gate runs the pull request's own gate script and `unit-tests` is not a required check (F-004, F-007); protected paths and CODEOWNERS route such changes to the owner |
-| T-9 | A supply-chain compromise of a CI action or the scanner | EP-11 to EP-13 | Actions pinned by version tag, first-party only (F-005); gitleaks checksum from the same origin (F-008) |
+| T-7 | Untrusted pull request text reaches a shell or a privileged step | EP-9, EP-10 | No `${{ }}` expression appears inside a `run:` script: the base ref, head SHA, repository, pull request number and gate result reach scripts through `env:` (F-006, fixed); no title, body or head ref is used; no `pull_request_target` (policy test) |
+| T-8 | A pull request weakens the checks that guard it | EP-10, EP-12, EP-15 | The gate runs the pull request's own gate script (F-007, accepted by the owner: protected paths and CODEOWNERS route such changes to the owner). `unit-tests` is now a required check in `kritva-gate.json` (F-004); that the GitHub ruleset requires it too is an owner action that this review does not verify (A-8) |
+| T-9 | A supply-chain compromise of a CI action or the scanner | EP-11 to EP-13 | First-party actions only, each pinned to a full commit SHA with the tag in a comment (F-005, fixed); gitleaks checksum from the same release origin (F-008, accepted by the owner) |
 | T-10 | A tampered or non-reproducible release artifact | EP-14 | Hash-pinned build tools, double reproducible build, exact artifact listing, release record (KOS-SENSE-007); re-checked here |
 | T-11 | An outdated security policy misleads a reporter | EP-15 | `SECURITY.md` described the repository as holding no implementation (F-009) |
 

@@ -6,10 +6,15 @@ connection and name resolution raise; the probe test proves the block works. The
 variables on purpose, so for it the package index is pointed at a dead address instead (see offline_env). On a Linux machine with `unshare -n` an operator can repeat the run with a real network
 namespace (SECURITY_REVIEW.md, section Offline run).
 
+The strongest evidence is RealNetworkNamespace: every suite runs inside a Linux network namespace with no interface
+and no route (probe: a connection attempt fails with ENETUNREACH). The two Python-level methods remain as diagnostics
+and are not, alone, the proof.
+
 Network-needing tests (NETWORK_TESTS) are identified, excluded from the offline suite (KRITVA_OFFLINE_SUITE=1) and
 justified here: the only network use of the repository tests is the one fetch of the hash-pinned build tools, which
 exists to prove the packaging suite can be prepared; the offline run of that suite uses a prepared wheelhouse."""
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -21,7 +26,8 @@ from secutil import IN_CI, ROOT, TempDir, env, unavailable  # noqa: E402
 
 SUITES = ["contract", "frame_graph", "generator", "stream", "conformance", "status", "security"]
 # Justification: fetching the pinned build tools needs the package index. This is the single network need.
-NETWORK_TESTS = {"test_packaging_suite_passes_offline_with_a_prepared_wheelhouse"}
+NETWORK_TESTS = {"test_packaging_suite_passes_offline_with_a_prepared_wheelhouse",
+                 "test_every_mandatory_suite_passes_in_a_network_namespace"}
 OFFLINE_SUITE = os.environ.get("KRITVA_OFFLINE_SUITE") == "1"
 BLOCK = '''import socket
 
@@ -61,6 +67,37 @@ def offline_env(blockdir, **extra):
 def discover(suite, e, timeout=900):
     return subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests/" + suite], cwd=ROOT, env=e,
                           capture_output=True, text=True, timeout=timeout)
+
+
+NETNS_PROBE = (
+    "import errno, socket, sys\n"
+    "try:\n"
+    "    socket.create_connection(('1.1.1.1', 443), 3)\n"
+    "except OSError as e:\n"
+    "    sys.exit(0 if e.errno == errno.ENETUNREACH else 3)\n"
+    "sys.exit(4)\n")
+
+
+def netns_prefix():
+    """The argv prefix that runs a command in a Linux network namespace with no interface and no route (a real
+    network-disabled environment, not a Python-level block), or None when this machine cannot create one. Tried in
+    order: an unprivileged user namespace, then passwordless sudo (GitHub-hosted runners), then root."""
+    if not shutil.which("unshare"):
+        return None
+    candidates = [["unshare", "-rn"]]
+    if os.getuid() != 0 and shutil.which("sudo") and shutil.which("setpriv"):
+        candidates.append(["sudo", "-n", "-E", "unshare", "-n", "setpriv", "--reuid=%d" % os.getuid(),
+                           "--regid=%d" % os.getgid(), "--clear-groups"])
+    if os.getuid() == 0:
+        candidates.append(["unshare", "-n"])
+    for c in candidates:
+        try:
+            r = subprocess.run(c + [sys.executable, "-c", NETNS_PROBE], capture_output=True, text=True, timeout=60)
+        except (OSError, subprocess.SubprocessError):
+            continue
+        if r.returncode == 0:
+            return c
+    return None
 
 
 class Base(unittest.TestCase):
@@ -127,16 +164,71 @@ class OfflineBlock(Base):
                 prepared.cleanup()
 
 
+class RealNetworkNamespace(unittest.TestCase):
+    """AC-805, AC-807: the complete mandatory suite runs in a real network namespace (no interface, no route; the
+    probe proves a connection attempt fails with ENETUNREACH), with the pinned build tools taken from a prepared
+    wheelhouse. The Python-level block above stays as an additional diagnostic. In CI a machine that cannot create the
+    namespace fails the test (an incomplete security check never passes); on a developer machine it is a skip with
+    the reason."""
+
+    @unittest.skipIf(OFFLINE_SUITE, "nested offline run")
+    def test_every_mandatory_suite_passes_in_a_network_namespace(self):
+        """NETWORK TEST (prepares the wheelhouse online once; every suite then runs with no network at all)."""
+        prefix = netns_prefix()
+        if prefix is None:
+            unavailable(self, "cannot create a network namespace here (needs unshare with user namespaces, or "
+                              "passwordless sudo with setpriv)")
+        prepared = None
+        if os.environ.get("KRITVA_WHEELHOUSE"):
+            wheelhouse = Path(os.environ["KRITVA_WHEELHOUSE"])
+        else:
+            prepared = tempfile.TemporaryDirectory(prefix="kritva-wheelhouse-")
+            wheelhouse = Path(prepared.name)
+            r = subprocess.run([sys.executable, "-m", "pip", "download", "--no-deps", "--only-binary", ":all:",
+                                "--dest", str(wheelhouse), "-r", str(ROOT / "release" / "build-requirements.txt")],
+                               capture_output=True, text=True, timeout=300)
+            if r.returncode != 0:
+                prepared.cleanup()
+                unavailable(self, "cannot prepare a wheelhouse of the pinned build tools: %s" % r.stderr.strip()[-300:])
+        try:
+            if prefix[0] == "sudo":
+                os.chmod(wheelhouse, 0o755)
+            e = env(KRITVA_WHEELHOUSE=str(wheelhouse), KRITVA_OFFLINE_SUITE="1", PIP_NO_CACHE_DIR="1")
+            if IN_CI:
+                e["CI"] = "true"
+            ran = {}
+            for suite in SUITES + ["packaging"]:
+                with self.subTest(suite=suite):
+                    r = subprocess.run(prefix + [sys.executable, "-m", "unittest", "discover", "-s", "tests/" + suite],
+                                       cwd=ROOT, env=e, capture_output=True, text=True, timeout=900)
+                    out = r.stdout + r.stderr
+                    self.assertEqual(r.returncode, 0, "%s\n%s" % (suite, out[-1500:]))
+                    import re
+                    m = re.search(r"Ran (\d+) tests?", out)
+                    self.assertTrue(m, out[-300:])
+                    ran[suite] = int(m.group(1))
+                    if suite == "packaging":
+                        ev = re.search(r"PACKAGING-EVIDENCE mandatory=(\d+) executed=(\d+)", out)
+                        self.assertTrue(ev, out[-500:])
+                        self.assertEqual(ev.group(1), ev.group(2), "every mandatory packaging test must run offline")
+            print("\nNETNS-EVIDENCE %s" % " ".join("%s=%d" % kv for kv in sorted(ran.items())))
+        finally:
+            if prepared:
+                prepared.cleanup()
+
+
 class MissingBuildTools(Base):
     """Packaging without a wheelhouse and without network cannot get the build tools."""
 
-    def run_packaging(self, ci, wheelhouse=None):
+    def run_packaging(self, ci, wheelhouse=None, flag="CI"):
+        """One canonical CI flag per run: the CI path sets exactly `flag` (CI or GITHUB_ACTIONS) and clears the
+        other; the developer path clears both."""
         extra = {"KRITVA_WHEELHOUSE": wheelhouse} if wheelhouse else {}
         e = offline_env(self.blockdir, **extra)
         for k in ("CI", "GITHUB_ACTIONS"):
             e.pop(k, None)
         if ci:
-            e["CI"] = "true"
+            e[flag] = "true"
         return discover("packaging", e)
 
     @unittest.skipIf(OFFLINE_SUITE, "nested offline run")
@@ -146,6 +238,13 @@ class MissingBuildTools(Base):
         self.assertNotEqual(r.returncode, 0, out[-800:])
         self.assertIn("UNAVAILABLE", out)
         self.assertRegex(out, r"packaging prerequisite missing in CI|mandatory packaging tests did not run in CI")
+
+    @unittest.skipIf(OFFLINE_SUITE, "nested offline run")
+    def test_in_ci_detected_only_by_github_actions_a_missing_build_tool_still_fails(self):
+        r = self.run_packaging(ci=True, flag="GITHUB_ACTIONS")
+        out = r.stdout + r.stderr
+        self.assertNotEqual(r.returncode, 0, out[-800:])
+        self.assertIn("UNAVAILABLE", out)
 
     @unittest.skipIf(OFFLINE_SUITE, "nested offline run")
     def test_in_ci_an_unusable_wheelhouse_fails_the_run(self):
@@ -166,7 +265,8 @@ class MissingBuildTools(Base):
 
 class NetworkTestsAreIdentified(unittest.TestCase):
     def test_every_network_test_is_listed_and_excluded_from_the_offline_suite(self):
-        marked = {n for n in dir(OfflineBlock) if n.startswith("test_") and "wheelhouse" in n}
+        marked = {n for cls in (OfflineBlock, RealNetworkNamespace) for n in dir(cls)
+                  if n.startswith("test_") and ("wheelhouse" in n or "network_namespace" in n)}
         self.assertEqual(marked, NETWORK_TESTS)
         src = Path(__file__).read_text(encoding="utf-8")
         self.assertIn("Justification", src)
