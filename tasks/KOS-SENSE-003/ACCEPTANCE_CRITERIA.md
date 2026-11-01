@@ -1,6 +1,6 @@
 # Acceptance Criteria: KOS-SENSE-003
 
-Standard: kritva-program `v2/planning/ACCEPTANCE_STANDARD.md` (approved by D-080). Task: [KOS-SENSE-003](TASK.md), baselined in v4 (D-082). Status of these criteria: the implementation target for KOS-SENSE-003 since the baseline v4 freeze (D-082); they are not yet demonstrated, and the task is accepted only by a separate central approval; the accepted criteria of KOS-SENSE-001 and KOS-SENSE-002 in [../../ACCEPTANCE_CRITERIA.md](../../ACCEPTANCE_CRITERIA.md) are not edited. All criteria are software-only and use synthetic data. No physical sensor, hardware-in-loop or safety validation is required or claimed.
+Standard: kritva-program `v2/planning/ACCEPTANCE_STANDARD.md` (approved by D-080). Task: [KOS-SENSE-003](TASK.md), baselined in v4 (D-082). Status of these criteria: the criteria of KOS-SENSE-003, baselined in v4 (D-082) and accepted by the central approval recorded in kritva-program (D-085) on the closing commit c92e841; the accepted criteria of KOS-SENSE-001 and KOS-SENSE-002 in [../../ACCEPTANCE_CRITERIA.md](../../ACCEPTANCE_CRITERIA.md) are not edited. All criteria are software-only and use synthetic data. No physical sensor, hardware-in-loop or safety validation is required or claimed.
 
 ## Functional criteria
 
