@@ -8,5 +8,5 @@ As of 2026-11-01 (KOS-SENSE-001 and KOS-SENSE-002 accepted, KOS-SENSE-003 accept
 | V2-M1-SENSE-001 | TASK ACCEPTED, NOT CLOSED (no completion record) | KOS-SENSE-001: central approval A076; tag `v0.1.0` (kritva-sense) |
 | V2-M2-SENSE-001 | TASK ACCEPTED, NOT CLOSED (no completion record; integration and regression gates not implemented) | KOS-SENSE-002: central approval A077; `unit-tests` run 40994325092 PASS on e949b9f; KOS-SENSE-004: central approval (D-086); `unit-tests` run 41275942226 PASS on 82b3174 |
 | V2-M5-SENSE-001 | TASK ACCEPTED, NOT CLOSED (no completion record) | KOS-SENSE-003: central approval (D-085); `unit-tests` run 41267842700 PASS on c92e841 |
-| V2-M7-SENSE-001 | PROPOSED | none |
+| V2-M7-SENSE-001 | PROPOSED (tasks KOS-SENSE-005 and KOS-SENSE-006 planned, not started; to be added centrally in baseline v6) | none |
 | V2-M8-SENSE-001 | PROPOSED | none |
