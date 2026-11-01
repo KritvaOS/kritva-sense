@@ -5,7 +5,7 @@
 
 ## 1. Scope
 
-Reproducible security vulnerabilities in this repository's code, tooling, documentation and CI configuration. The repository currently holds planning files and no implementation.
+Reproducible security vulnerabilities in this repository's code, tooling, documentation and CI configuration. The repository holds the Sense contracts, a reference implementation in Python (the validator, frame graph, stream checker, synthetic data generator and consumer conformance harness, standard library only), the CI workflows and the release files. The consumer conformance harness imports the consumer module it is given into its own process and is not a sandbox: do not run it on code you do not trust (see `src/kritva_sense/CONFORMANCE.md` and `tasks/KOS-SENSE-008/THREAT_MODEL.md`).
 
 ## 2. Do not disclose unfixed vulnerabilities publicly
 
