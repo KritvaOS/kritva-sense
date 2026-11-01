@@ -16,7 +16,7 @@
         {
           "type": "software",
           "uri": "contract/SENSE_CONTRACT.md",
-          "description": "Contract 0.1.0 draft and schema; criteria AC-001 to AC-005 (reference only; not completion proof)",
+          "description": "Contract 0.1.0 (approved as v0.1.0) and schema; criteria AC-001 to AC-005 (reference only; not completion proof)",
           "commit": null,
           "ci_run": null,
           "report_sha256": null,
@@ -67,5 +67,5 @@
       "evidence": []
     }
   ],
-  "updated_at": "2026-10-31T03:06:01Z"
+  "updated_at": "2026-11-01T04:00:00Z"
 }

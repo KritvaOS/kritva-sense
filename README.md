@@ -47,7 +47,7 @@ Role first, then the status the document declares. A label is a role, not an app
 |---|---|---|---|
 | 1 | [AGENTS.md](AGENTS.md) | AUTHORITATIVE for the rules for agents and contributors in this repository; in force | Scope, boundaries, commits, tests, tags |
 | 2 | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) | AUTHORITATIVE for the acceptance criteria of KOS-SENSE-001 and KOS-SENSE-002; ACCEPTED | What the first task must satisfy |
-| 3 | [planning/TASKS.md](planning/TASKS.md) | AUTHORITATIVE for this repository's task inventory (proposed registry, PD-004) | Which tasks exist and their status |
+| 3 | [planning/TASKS.md](planning/TASKS.md) | AUTHORITATIVE for this repository's task inventory (task registry, approved by D-080) | Which tasks exist and their status |
 | 4 | [planning/MILESTONE.md](planning/MILESTONE.md) | REFERENCE: generated from kritva-program; dates are proposed targets, not approved | Proposed milestones |
 | 5 | [planning/MILESTONE_STATUS.md](planning/MILESTONE_STATUS.md) | REFERENCE: the repository's own record, as of the governance baseline commit | Milestone status and evidence |
 | 6 | [planning/REVIEW_CHECKLIST.md](planning/REVIEW_CHECKLIST.md) | AUTHORITATIVE for the pull-request review list | What a reviewer checks |
@@ -66,13 +66,13 @@ Labels: INPUT is edited by hand and read by a tool or review; GENERATED is writt
 | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) | Criteria and test gates for KOS-SENSE-001 and KOS-SENSE-002 | AUTHORITATIVE; ACCEPTED | Accepted criteria are never edited; a change is a new version |
 | [contract/](contract/) | `SENSE_CONTRACT.md` (contract 0.1.0) and `sense-sample.schema.json` | AUTHORITATIVE; APPROVED as v0.1.0 (KOS-SENSE-001) | A breaking change needs a new version, a changelog entry and an approved decision |
 | [src/kritva_sense/](src/kritva_sense/) | Reference validator (standard library only); `python3 -m kritva_sense FILE.json` | INPUT; ACCEPTED (KOS-SENSE-002) | Implements the contract and never changes it |
-| [tasks/](tasks/) | `KOS-SENSE-001/TASK.md`, `KOS-SENSE-002/TASK.md` and `KOS-SENSE-003/` (task and criteria) | INPUT; 001 and 002 ACCEPTED, 003 NOT_STARTED | Planning records; weights are baselined in v3 (D-078) and v4 (D-082) |
+| [tasks/](tasks/) | `KOS-SENSE-001/TASK.md`, `KOS-SENSE-002/TASK.md` and `KOS-SENSE-003/` (task and criteria) | INPUT; 001 and 002 ACCEPTED, 003 READY | Planning records; weights are baselined in v3 (D-078) and v4 (D-082) |
 | [scripts/](scripts/) | `docs_check.py` (link check), `pipeline/pr_gate.py` (PR gate), `security/` (commit checkers), `check_readme.py` (README check) | INPUT; IMPLEMENTED | `pipeline/` and `security/` are protected paths of the gate |
 | [tests/](tests/) | `commit_message_check/`, `readme_check/` (checker tests) and `contract/` (validator, fixtures and CLI tests) | EVIDENCE; IMPLEMENTED | The contract tests use synthetic data only; their CI run is the approved evidence for KOS-SENSE-002 (A077) |
 | [.github/](.github/) | CODEOWNERS, pull request template, `kritva-gate.json` and five workflows | AUTHORITATIVE | `kritva-gate.json` configures the PR gate |
 | [Makefile](Makefile) | Check targets; unimplemented gates exit 3 | INPUT; IMPLEMENTED | See section 11 |
 | [AGENTS.md](AGENTS.md), [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [LICENSE](LICENSE) | Rules, contribution steps, security policy, licence | AUTHORITATIVE | |
-| [status/](status/) | `status.json`: the report the program ingests | INPUT; IMPLEMENTED (Stage 1) | Schema 2.0, `tasks: []`; reports facts only and earns no credit |
+| [status/](status/) | `status.json`: the report the program ingests | INPUT; IMPLEMENTED (Stage 1) | Schema 2.0, one row per task; reports facts only and earns no credit |
 | `include/`, `docs/`, `examples/` | Interfaces, documentation, examples | NOT YET IMPLEMENTED (absent) | Added only when a real task needs them |
 
 ## 6. Toolchain and Development Workflow
@@ -107,10 +107,10 @@ Proposed milestones, from [planning/MILESTONE.md](planning/MILESTONE.md) (genera
 
 | ID | Program milestone | Status recorded here | Outcome (proposed) |
 |---|---|---|---|
-| V2-M0-SENSE-001 | V2-M0 FOUNDATION | IN_REVIEW (this change) | Repository governance baseline merged: acceptance criteria, CI checks, CODEOWNERS, AGENTS.md. |
+| V2-M0-SENSE-001 | V2-M0 FOUNDATION | BASELINE MERGED, NOT CLOSED | Repository governance baseline merged: acceptance criteria, CI checks, CODEOWNERS, AGENTS.md. |
 | V2-M1-SENSE-001 | V2-M1 STUDIO | TASK ACCEPTED (KOS-SENSE-001; tag v0.1.0); milestone not formally closed | Sense architecture and data contract (task 001) reviewed and tagged v0.1.0. |
 | V2-M2-SENSE-001 | V2-M2 BUILD & ARTIFACT | TASK ACCEPTED (KOS-SENSE-002); milestone not formally closed: integration and regression gates are not implemented | Contract validation and synthetic-data tests pass; unit, integration and regression gates implemented. |
-| V2-M5-SENSE-001 | V2-M5 EXECUTION | PROPOSED | Sense frames validated in simulated execution. |
+| V2-M5-SENSE-001 | V2-M5 EXECUTION | BASELINED (kritva-program baseline v4, D-082), NOT CLOSED | Sense frames validated in simulated execution. |
 | V2-M7-SENSE-001 | V2-M7 LIVE & RESULTS | PROPOSED | Telemetry stream contract validated end to end (software scope). |
 | V2-M8-SENSE-001 | V2-M8 PRODUCTION | PROPOSED | Release and security review complete. |
 
@@ -118,13 +118,13 @@ The target dates are in [planning/MILESTONE.md](planning/MILESTONE.md); they are
 
 ## 9. Tasks and Acceptance Criteria
 
-- **Where tasks live.** [planning/TASKS.md](planning/TASKS.md) lists the tasks (registry type `repo-tasks-md`, prefix `KOS-SENSE`); the proposed task registry is program decision PD-004. Tasks are planning inventory with no weight and no credit until a separately approved baseline amendment.
+- **Where tasks live.** [planning/TASKS.md](planning/TASKS.md) lists the tasks (registry type `repo-tasks-md`, prefix `KOS-SENSE`); the task registry was approved by program decision D-080 (PD-004). Weights are baselined centrally (v3, D-078; v4, D-082); credit needs a central approval bound to immutable evidence.
 - **Acceptance.** [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) holds the criteria and test gates; they were approved with the tasks (A076, A077). Unimplemented gates are reported as NOT_IMPLEMENTED and are never counted as a pass. [planning/REVIEW_CHECKLIST.md](planning/REVIEW_CHECKLIST.md) is the review list.
 - Work is not accepted because a commit or merged pull request exists, a check is green or a milestone says it is proposed. Interface and boundary changes, safety and security behaviour and dependency changes need human review ([AGENTS.md](AGENTS.md)).
 
 ## 10. Status Reporting and Program Integration
 
-[status/status.json](status/status.json) (schema 2.0, workstream `SENSE`) is maintained by hand and checked against `planning/TASKS.md` by `tests/status`; there is no status generator yet. It lists KOS-SENSE-001 and KOS-SENSE-002 with execution COMPLETE, meaning the implementation is finished and submitted for review. The program lists this repository as a status source in kritva-program (`v2/tracking/sources.json`, program decision D-077, Stage 1 plan `v2/planning/STATUS_INGESTION_PLAN.md`). Both tasks are in the central baseline v3 (D-078) without an approval, so they earn no credit. The program tracks its tasks through the registry named in `.github/kritva-gate.json` (`planning/TASKS.md`, type `repo-tasks-md`). This repository reports facts only and earns no program credit; nothing in it adds baseline weight (kritva-program decides baseline, weights, approvals and gates).
+[status/status.json](status/status.json) (schema 2.0, workstream `SENSE`) is maintained by hand and checked against `planning/TASKS.md` by `tests/status`; there is no status generator yet. It lists KOS-SENSE-001 and KOS-SENSE-002 with execution COMPLETE, meaning the implementation is finished and submitted for review. The program lists this repository as a status source in kritva-program (`v2/tracking/sources.json`, program decision D-077, Stage 1 plan `v2/planning/STATUS_INGESTION_PLAN.md`). Both tasks are in the central baseline (v3, D-078) and were approved centrally (A076, A077; re-recorded on v4 under D-027), and KOS-SENSE-003 (v4, D-082) is baselined with no approval and no evidence, so it earns no credit. The program tracks its tasks through the registry named in `.github/kritva-gate.json` (`planning/TASKS.md`, type `repo-tasks-md`). This repository reports facts only and earns no program credit; nothing in it adds baseline weight (kritva-program decides baseline, weights, approvals and gates).
 
 | Dimension | Source record | Authority |
 |---|---|---|
