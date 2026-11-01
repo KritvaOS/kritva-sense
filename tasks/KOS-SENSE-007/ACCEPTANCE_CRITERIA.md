@@ -16,7 +16,7 @@ Standard: kritva-program `v2/planning/ACCEPTANCE_STANDARD.md` (approved by D-080
 
 ## Test boundaries
 
-All inputs are synthetic. No registry, network service or external runtime library is required. Platform: the CI platform only. No coverage threshold is imposed (none is approved, D-080).
+All inputs are synthetic. No network service or external runtime library is required. The one network access of the tests is the fetch of the build tools that `release/build-requirements.txt` pins by version and SHA-256; with a prepared wheelhouse (`KRITVA_WHEELHOUSE`) the whole suite runs offline (clarified after the independent review of the implementation). Platform: the CI platform only. No coverage threshold is imposed (none is approved, D-080).
 
 ## Definition of done
 

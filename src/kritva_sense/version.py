@@ -51,32 +51,50 @@ def contract_dir():
     return None
 
 
+def _scan(directory):
+    """Read the version of every shipped contract file. Returns (found, errors): found maps each file role to a
+    version string or None; errors lists the files that could not be read or parsed, with the reason."""
+    directory = Path(directory) if directory is not None else contract_dir()
+    found, errors = {}, []
+    for key, (doc_name, schema_name) in FILES.items():
+        version = None
+        if directory is not None and (directory / doc_name).is_file():
+            try:
+                text = (directory / doc_name).read_text(encoding="utf-8")
+            except (OSError, ValueError) as exc:
+                errors.append("%s: cannot be read (%s)" % (doc_name, exc))
+            else:
+                m = re.search(_DOC_ROW[key], text, re.M)
+                version = m.group(1) if m else None
+        found[key + "_document"] = version
+        version = None
+        if directory is not None and (directory / schema_name).is_file():
+            try:
+                doc = json.loads((directory / schema_name).read_text(encoding="utf-8"))
+                props = doc.get("properties", {}) if isinstance(doc, dict) else {}
+                field = props.get("stream_version" if key == "stream" else "contract_version", {})
+                if not isinstance(field, dict):
+                    field = {}
+            except (OSError, ValueError) as exc:  # JSONDecodeError and UnicodeDecodeError are ValueError
+                errors.append("%s: cannot be read as JSON (%s)" % (schema_name, exc))
+                field = {}
+            if "const" in field:
+                version = field["const"]
+            elif isinstance(field.get("enum"), list) and len(field["enum"]) == 1:
+                version = field["enum"][0]
+        found[key + "_schema"] = version
+    return found, errors
+
+
 def shipped_versions(directory=None):
     """The versions read from the contract files themselves: the version row of each contract document and the
     version constant of each schema. A value that cannot be read is None."""
-    directory = Path(directory) if directory is not None else contract_dir()
-    found = {}
-    for key, (doc_name, schema_name) in FILES.items():
-        doc = directory / doc_name if directory else None
-        text = doc.read_text(encoding="utf-8") if doc and doc.is_file() else ""
-        m = re.search(_DOC_ROW[key], text, re.M)
-        found[key + "_document"] = m.group(1) if m else None
-        schema = directory / schema_name if directory else None
-        value = None
-        if schema and schema.is_file():
-            props = json.loads(schema.read_text(encoding="utf-8")).get("properties", {})
-            field = props.get("stream_version" if key == "stream" else "contract_version", {})
-            if "const" in field:
-                value = field["const"]
-            elif isinstance(field.get("enum"), list) and len(field["enum"]) == 1:
-                value = field["enum"][0]
-        found[key + "_schema"] = value
-    return found
+    return _scan(directory)[0]
 
 
 def check_shipped_contracts(directory=None, declared=None):
     """Compare the declared contract versions with the shipped contract files: a list of problems, empty when they
-    agree. A file that is missing or has no readable version is a problem, never a pass."""
+    agree. A file that is missing, malformed or without a readable version is a problem, never a pass."""
     declared = declared or declared_versions()
     directory = Path(directory) if directory is not None else contract_dir()
     if directory is None:
@@ -86,13 +104,15 @@ def check_shipped_contracts(directory=None, declared=None):
         for name in (doc_name, schema_name):
             if not (directory / name).is_file():
                 problems.append("%s is missing" % name)
-    found = shipped_versions(directory)
+    found, errors = _scan(directory)
+    problems.extend(errors)
+    unreadable = {e.split(":")[0] for e in errors}
     for key in FILES:
         want = declared[key + "_contract_version"]
         for part, name in (("document", FILES[key][0]), ("schema", FILES[key][1])):
             got = found[key + "_" + part]
             if got is None:
-                if (directory / name).is_file():
+                if (directory / name).is_file() and name not in unreadable:
                     problems.append("%s: no readable version" % name)
             elif got != want:
                 problems.append("%s declares %s but the code implements %s" % (name, got, want))

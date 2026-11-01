@@ -1,5 +1,5 @@
 # Package metadata for kritva-sense (KOS-SENSE-007). The runtime has no dependency outside the Python
-# standard library. Build tools are pinned here and in packaging/build-requirements.txt, never as runtime
+# standard library. Build tools are pinned here and in release/build-requirements.txt, never as runtime
 # dependencies. The package version is not a contract version: see RELEASE.md.
 [build-system]
 requires = ["setuptools==80.9.0"]

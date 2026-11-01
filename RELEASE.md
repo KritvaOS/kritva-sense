@@ -37,7 +37,7 @@ Exit codes are those of each module's documentation: 0 conformant, 1 not conform
 - Software only, on synthetic data. A conformant sample, graph or stream is a software property. This release is not hardware or safety validation and says nothing about any sensor or robot.
 - No release is published: nothing is uploaded to PyPI or any other registry. Publication would be a separate owner decision and a separate task.
 - Signed tags are not required by this release (an open owner decision).
-- The wheel is reproducible byte for byte; the source distribution is reproducible after the normalisation described under Build and reproducibility, not byte for byte.
+- The wheel and the shipped source distribution are reproducible byte for byte on the CI platform; the shipped source distribution is the setuptools archive rewritten by `release/normalise_sdist.py`, as described under Build and reproducibility.
 
 ## Contract compatibility
 
@@ -49,28 +49,34 @@ This repository uses one repository release tag per release, an annotated tag `v
 
 ## Build and reproducibility
 
-The wheel and the source distribution are built from a clean copy of the tracked files in a pinned, isolated build environment:
+The wheel and the source distribution are built from a clean copy of the tracked files in a pinned, isolated build environment, and the source distribution is then normalised by a script of this repository:
 
 ```bash
 python3 -m venv build-env
 build-env/bin/python -m pip install -r release/build-requirements.txt
 SOURCE_DATE_EPOCH=1700000000 build-env/bin/python -m build --no-isolation --outdir dist .
+SOURCE_DATE_EPOCH=1700000000 build-env/bin/python release/normalise_sdist.py dist/kritva_sense-0.2.0.tar.gz
 ```
 
-`release/build-requirements.txt` pins every build tool and its dependencies to an exact version (build, packaging, pyproject_hooks, setuptools); the same setuptools pin is the `[build-system]` requirement of `pyproject.toml`. Build tools are never runtime dependencies, which are empty. The build downloads nothing (`--no-isolation`); the tests check the log. README.md and RELEASE.md are not part of either distribution, so a documentation change never changes a hash.
+`release/build-requirements.txt` pins every build tool and its dependencies to an exact version and the SHA-256 of its wheel (build, packaging, pyproject_hooks, setuptools); pip refuses a file with another hash. The same setuptools pin is the `[build-system]` requirement of `pyproject.toml`. Build tools are never runtime dependencies, which are empty. The build downloads nothing (`--no-isolation`); the tests check the log. README.md and RELEASE.md are not part of either distribution, so a documentation change never changes a hash.
+
+Network use of the tests. The only network access of `tests/packaging/` is the one fetch of the hash-pinned build tools into a local wheelhouse. If the environment variable `KRITVA_WHEELHOUSE` names a directory that already holds those wheels (for example prepared once with `pip download --only-binary :all: --no-deps -r release/build-requirements.txt -d DIR`), the whole suite runs without any network access; a wheel whose hash differs is refused.
 
 `tests/packaging/` builds twice from the same revision in the same pinned environment, from two copies at different paths and with different file modification times, with `SOURCE_DATE_EPOCH` fixed:
 
 - **Wheel:** byte-identical, same SHA-256. No normalisation is needed.
-- **Source distribution:** not byte-identical. The non-deterministic fields are the tar member modification time of the members that the build creates (the directory entries, `PKG-INFO`, `setup.cfg` and the `egg-info` files), the owner and group names that the build user supplies, and the gzip header time. Cause: the pinned setuptools writes the current time and the build user into the archive and does not read `SOURCE_DATE_EPOCH` for the source distribution. Impact: the SHA-256 of the file differs between two builds, the content does not. The comparison therefore uses the normalised-content hash: the SHA-256 of a sorted list of every member's name, type, mode, size and content SHA-256, which leaves out exactly those fields. A test checks that nothing else differs and that the comparison still detects a change in content, name or mode.
+- **Source distribution as built by setuptools:** not byte-identical. The fields that differ are the tar member modification time of every member (also as an extended header), the owner and group (numeric ids and names) that the build user supplies, and the gzip header time. Cause: the pinned setuptools writes the build time and the build user into the archive and does not read `SOURCE_DATE_EPOCH` for the source distribution. Impact: the SHA-256 of the file differs between two builds, the content does not. A test checks that nothing else differs: names, types, modes, sizes, link targets, extended headers other than times, and every content byte are equal.
+- **Source distribution as shipped:** `release/normalise_sdist.py` (standard library only) rewrites the archive deterministically: members sorted by name, modification time `SOURCE_DATE_EPOCH`, owner and group 0 and `root`, no time in the extended headers, gzip header time 0. Two builds are then byte-identical with equal SHA-256, and running the script twice changes nothing. This is the file recorded below.
 
-The SHA-256 of the shipped file and the normalised-content hash are different values and are recorded separately in the Release record section. Both are valid for the CI platform only: they depend on the pinned tools, on Python 3.12 and on its zlib, which is why a developer machine with another zlib skips the comparison with the reason and CI fails on a difference.
+The normalised-content hash is the SHA-256 of a sorted list of every member's name, type, mode, size, link target, extended headers other than times, and content SHA-256. It leaves out exactly the time, owner, group and gzip-header fields listed above, so it identifies the content independently of the compression library. It is kept apart from the SHA-256 of the shipped file, which is the identity of the file itself. A test shows that the content comparison ignores those fields and detects a change in content, name, mode, link target or extended header.
 
-Missing build tools. A developer run without git, the venv module or network access prints an explicit SKIP with the reason. In CI (the `CI` variable is `true`) the same situation fails the run, a skipped mandatory test is never a pass, and each run prints one `PACKAGING-EVIDENCE` line that lists the mandatory tests that ran.
+The SHA-256 of a wheel or of a source distribution depends on the pinned tools, on Python 3.12 and on its zlib (CI platform only): a developer machine with another zlib skips that comparison with the reason, and CI fails on a difference. The normalised-content hash does not depend on zlib and is compared everywhere.
+
+Missing build tools. A developer run without git, the venv module or the build tools (no network and no prepared wheelhouse) prints an explicit SKIP with the reason. In CI (the `CI` variable is `true`) the same situation fails the run, a skipped mandatory test is never a pass, and each run prints one `PACKAGING-EVIDENCE` line that lists the mandatory tests that ran.
 
 ## Release record
 
-Filled from the CI run of the closing commit (the `unit-tests` log prints a `PACKAGING-HASH` line). A value is `PENDING` until the task closes. The hashes are those of the distributions built from the closing commit; they do not depend on this file.
+Filled from the CI run of the artifact-input commit (the `unit-tests` log prints a `PACKAGING-HASH` line). A value is `PENDING` until the task is submitted for review; the test refuses a pending value once the task is IN_REVIEW or ACCEPTED. The source commit is the artifact-input commit: the commit whose tree the recorded artifacts were built from. The commit that records the values is a later commit that changes only files outside both distributions; it builds identical artifacts, and `tests/packaging/` rebuilds and compares all three hashes on every run, so a record that no longer matches the tree fails.
 
 | Field | Value |
 |---|---|
