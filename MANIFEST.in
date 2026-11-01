@@ -1,0 +1,4 @@
+# The source distribution carries the package, the contract files and the pinned build list only. README.md is
+# excluded and RELEASE.md is not included, so a documentation change never changes a distribution hash.
+include release/build-requirements.txt
+exclude README.md
