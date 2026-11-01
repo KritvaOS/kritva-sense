@@ -1,6 +1,6 @@
 # Acceptance Criteria: KOS-SENSE-008
 
-Standard: kritva-program `v2/planning/ACCEPTANCE_STANDARD.md` (approved by D-080). Task: [KOS-SENSE-008](TASK.md), baselined in v7 (D-090). Status of these criteria: the implementation target for KOS-SENSE-008 since the baseline v7 freeze was merged and KOS-SENSE-007 was accepted (D-091); they are not yet demonstrated, and the task is accepted only by a separate central approval; the accepted criteria of KOS-SENSE-001 to KOS-SENSE-007 are not edited. All criteria are software-only and use synthetic data.
+Standard: kritva-program `v2/planning/ACCEPTANCE_STANDARD.md` (approved by D-080). Task: [KOS-SENSE-008](TASK.md), baselined in v7 (D-090). Status of these criteria: the implementation target for KOS-SENSE-008 since the baseline v7 freeze was merged and KOS-SENSE-007 was accepted (D-091); they are accepted by the central approval D-092 on closing commit a8dfb5a (`unit-tests` run 41298259048 PASS); the accepted criteria of KOS-SENSE-001 to KOS-SENSE-007 are not edited. All criteria are software-only and use synthetic data.
 
 ## Functional criteria
 

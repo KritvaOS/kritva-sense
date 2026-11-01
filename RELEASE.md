@@ -4,7 +4,7 @@
 |---|---|
 | Task | KOS-SENSE-007 (Python package and reproducible release) |
 | Package | `kritva-sense`, built from `pyproject.toml` (standard library only at runtime; no runtime dependency) |
-| Status | ACCEPTED (KOS-SENSE-007, central approval D-091); KOS-SENSE-008 IN_REVIEW: the release record is refreshed from the CI run 41298259048 of the closing commit of KOS-SENSE-008. No release is published and no tag is created yet. This file is checked against the real build by `tests/packaging/` |
+| Status | ACCEPTED (KOS-SENSE-007, central approval D-091; KOS-SENSE-008, central approval D-092): the release record is refreshed from the CI run 41298259048 of the closing commit of KOS-SENSE-008. No release is published and no tag is created yet. This file is checked against the real build by `tests/packaging/` |
 | Scope | software only, synthetic data; not hardware or safety validation |
 
 This file is the release note of the repository. It keeps five version numbers apart, states what the package does and does not do, describes how a release is built and checked, and records the hashes of the closing build. It does not publish anything.
