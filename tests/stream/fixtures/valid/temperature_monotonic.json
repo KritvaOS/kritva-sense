@@ -1,0 +1,86 @@
+{
+  "records": [
+    {
+      "clock": "monotonic",
+      "index": 0,
+      "kind": "temperature",
+      "record": "open",
+      "sensor_id": "temp.board",
+      "stream_id": "stream_one"
+    },
+    {
+      "index": 1,
+      "record": "sample",
+      "sample": {
+        "contract_version": "0.1.0",
+        "frame_id": "sensor",
+        "kind": "temperature",
+        "measurements": {
+          "temperature": {
+            "unit": "K",
+            "value": 311.58553
+          }
+        },
+        "sensor_id": "temp.board",
+        "sequence": 0,
+        "timestamp": {
+          "clock": "monotonic",
+          "unit": "ns",
+          "value": 1000000000
+        },
+        "validity": "VALID"
+      }
+    },
+    {
+      "index": 2,
+      "record": "sample",
+      "sample": {
+        "contract_version": "0.1.0",
+        "frame_id": "sensor",
+        "kind": "temperature",
+        "measurements": {
+          "temperature": {
+            "unit": "K",
+            "value": 289.584395
+          }
+        },
+        "sensor_id": "temp.board",
+        "sequence": 1,
+        "timestamp": {
+          "clock": "monotonic",
+          "unit": "ns",
+          "value": 1010000000
+        },
+        "validity": "VALID"
+      }
+    },
+    {
+      "index": 3,
+      "record": "sample",
+      "sample": {
+        "contract_version": "0.1.0",
+        "frame_id": "sensor",
+        "kind": "temperature",
+        "measurements": {
+          "temperature": {
+            "unit": "K",
+            "value": 304.792634
+          }
+        },
+        "sensor_id": "temp.board",
+        "sequence": 2,
+        "timestamp": {
+          "clock": "monotonic",
+          "unit": "ns",
+          "value": 1020000000
+        },
+        "validity": "VALID"
+      }
+    },
+    {
+      "index": 4,
+      "record": "close"
+    }
+  ],
+  "stream_version": "0.1.0"
+}

@@ -1,0 +1,109 @@
+{
+  "records": [
+    {
+      "clock": "utc",
+      "index": 0,
+      "kind": "range",
+      "record": "open",
+      "sensor_id": "range.front",
+      "stream_id": "stream_one"
+    },
+    {
+      "index": 1,
+      "record": "sample",
+      "sample": {
+        "contract_version": "0.1.0",
+        "frame_id": "sensor",
+        "kind": "range",
+        "measurements": {
+          "distance": {
+            "unit": "m",
+            "value": 3.196632
+          }
+        },
+        "sensor_id": "range.front",
+        "sequence": 0,
+        "timestamp": {
+          "clock": "utc",
+          "unit": "ns",
+          "value": 1700000000000000000
+        },
+        "validity": "VALID"
+      }
+    },
+    {
+      "index": 2,
+      "record": "sample",
+      "sample": {
+        "contract_version": "0.1.0",
+        "frame_id": "sensor",
+        "kind": "range",
+        "measurements": {
+          "distance": {
+            "unit": "m",
+            "value": 2.660533
+          }
+        },
+        "sensor_id": "range.front",
+        "sequence": 1,
+        "timestamp": {
+          "clock": "utc",
+          "unit": "ns",
+          "value": 1700000000010000000
+        },
+        "validity": "VALID"
+      }
+    },
+    {
+      "index": 3,
+      "record": "sample",
+      "sample": {
+        "contract_version": "0.1.0",
+        "frame_id": "sensor",
+        "kind": "range",
+        "measurements": {
+          "distance": {
+            "unit": "m",
+            "value": 6.398521
+          }
+        },
+        "sensor_id": "range.front",
+        "sequence": 2,
+        "timestamp": {
+          "clock": "utc",
+          "unit": "ns",
+          "value": 1700000000020000000
+        },
+        "validity": "VALID"
+      }
+    },
+    {
+      "index": 4,
+      "record": "sample",
+      "sample": {
+        "contract_version": "0.1.0",
+        "frame_id": "sensor",
+        "kind": "range",
+        "measurements": {
+          "distance": {
+            "unit": "m",
+            "value": 5.07091
+          }
+        },
+        "sensor_id": "range.front",
+        "sequence": 3,
+        "timestamp": {
+          "clock": "utc",
+          "unit": "ns",
+          "value": 1700000000030000000
+        },
+        "validity": "VALID"
+      }
+    },
+    {
+      "index": 5,
+      "record": "close"
+    }
+  ],
+  "stream_version": "0.1.0"
+}

@@ -1,0 +1,17 @@
+{
+  "records": [
+    {
+      "clock": "monotonic",
+      "index": 0,
+      "kind": "imu",
+      "record": "open",
+      "sensor_id": "imu.main",
+      "stream_id": "stream_one"
+    },
+    {
+      "index": 1,
+      "record": "close"
+    }
+  ],
+  "stream_version": "0.1.0"
+}

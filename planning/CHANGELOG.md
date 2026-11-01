@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-005: telemetry stream contract 0.1.0 (`contract/STREAM_CONTRACT.md`, `contract/stream.schema.json`) and reference validator (`src/kritva_sense/stream.py`): a document of `open`, `sample` and `close` records with a record index, lifecycle rules, `STREAM_` diagnostics for duplicate, regression and gap sequences, stated first and last sequence bounds, timestamp, clock and identity checks, an incremental checker whose result does not depend on how the records are batched, sample violations kept apart with contract 0.1.0 codes, command line `python3 -m kritva_sense.stream`; `tests/stream/` (57 fixtures with hand-written expectations, partly made with the generator) is run by `make test-unit`. Proposed, not accepted. Sense contract 0.1.0, frame graph contract 0.1.0, the validator, the frame graph reference and the generator are unchanged (pinned by tests). Tasks: KOS-SENSE-005.
+
 - KOS-SENSE-005 started after the baseline v6 freeze (D-087): status IN_PROGRESS in TASKS.md, the task record, its criteria and the status report; KOS-SENSE-006 is baselined and stays NOT_STARTED until KOS-SENSE-005 is accepted. No contract, schema or code change. Tasks: None (status change; implementation follows in its own pull request).
 
 - KOS-SENSE-005 and KOS-SENSE-006 planning records: task and criteria added (005 AC-501 to AC-507, telemetry stream contract and reference validator, proposed weight 4; 006 AC-601 to AC-607, consumer conformance harness, proposed weight 5, cannot start before 005 is accepted), both under milestone V2-M7-SENSE-001; to be baselined in v6 after D-087; status NOT_STARTED. No contract, schema or code change. Tasks: None (planning records; tasks not started).

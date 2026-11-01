@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/KritvaOS/kritva-sense/contract/stream.schema.json",
+  "title": "Kritva Sense telemetry stream document, stream contract 0.1.0",
+  "description": "Structural subset of contract/STREAM_CONTRACT.md. It does not express the lifecycle order, the record index rule, the sequence, timestamp, clock and identity checks, or the first and last sequence bounds; those are checked by the reference validator (src/kritva_sense/stream.py) only. Each embedded sample is validated against sense-sample.schema.json and by the Sense data contract 0.1.0, which this document does not change. Where the schema and the contract document differ, the contract document and the reference validator are normative.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["stream_version", "records"],
+  "properties": {
+    "stream_version": { "const": "0.1.0" },
+    "records": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "$ref": "#/$defs/open" },
+          { "$ref": "#/$defs/sample" },
+          { "$ref": "#/$defs/close" }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "index": { "type": "integer", "minimum": 0 },
+    "identity": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]{0,31}(\\.[a-z0-9_]{1,32}){0,3}$"
+    },
+    "open": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record", "index", "stream_id", "sensor_id", "kind", "clock"],
+      "properties": {
+        "record": { "const": "open" },
+        "index": { "$ref": "#/$defs/index" },
+        "stream_id": { "$ref": "#/$defs/identity" },
+        "sensor_id": { "$ref": "#/$defs/identity" },
+        "kind": { "enum": ["imu", "range", "encoder", "temperature"] },
+        "clock": { "enum": ["monotonic", "utc"] },
+        "first_sequence": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "sample": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record", "index", "sample"],
+      "properties": {
+        "record": { "const": "sample" },
+        "index": { "$ref": "#/$defs/index" },
+        "sample": { "$ref": "sense-sample.schema.json" }
+      }
+    },
+    "close": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record", "index"],
+      "properties": {
+        "record": { "const": "close" },
+        "index": { "$ref": "#/$defs/index" },
+        "last_sequence": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

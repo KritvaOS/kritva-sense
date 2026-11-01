@@ -1,0 +1,542 @@
+{
+  "clock_mismatch": {
+    "samples": [],
+    "stream": [
+      [
+        3,
+        "STREAM_CLOCK_MISMATCH"
+      ]
+    ]
+  },
+  "close_last_sequence_malformed": {
+    "samples": [],
+    "stream": [
+      [
+        6,
+        "STREAM_MALFORMED"
+      ]
+    ]
+  },
+  "close_repeated": {
+    "samples": [],
+    "stream": [
+      [
+        5,
+        "STREAM_CLOSE_REPEATED"
+      ]
+    ]
+  },
+  "conformant_samples_stream_defects": {
+    "samples": [],
+    "stream": [
+      [
+        3,
+        "STREAM_CLOCK_MISMATCH"
+      ]
+    ]
+  },
+  "defects_in_combination": {
+    "samples": [
+      [
+        2,
+        "INVALID_UNIT"
+      ]
+    ],
+    "stream": [
+      [
+        2,
+        "STREAM_CLOCK_MISMATCH"
+      ],
+      [
+        2,
+        "STREAM_SEQUENCE_GAP"
+      ],
+      [
+        3,
+        "STREAM_SEQUENCE_REGRESSION"
+      ],
+      [
+        4,
+        "STREAM_SENSOR_CHANGE"
+      ]
+    ]
+  },
+  "document_not_object": {
+    "samples": [],
+    "stream": [
+      [
+        -1,
+        "STREAM_MALFORMED"
+      ]
+    ]
+  },
+  "duplicate_from_generator": {
+    "samples": [],
+    "stream": [
+      [
+        4,
+        "STREAM_SEQUENCE_DUPLICATE"
+      ],
+      [
+        5,
+        "STREAM_SEQUENCE_GAP"
+      ]
+    ]
+  },
+  "duplicate_regression_gap_together": {
+    "samples": [],
+    "stream": [
+      [
+        2,
+        "STREAM_SEQUENCE_DUPLICATE"
+      ],
+      [
+        3,
+        "STREAM_SEQUENCE_REGRESSION"
+      ],
+      [
+        4,
+        "STREAM_SEQUENCE_GAP"
+      ]
+    ]
+  },
+  "empty_stream": {
+    "samples": [],
+    "stream": [
+      [
+        -1,
+        "STREAM_OPEN_MISSING"
+      ]
+    ]
+  },
+  "first_sequence_unmet": {
+    "samples": [],
+    "stream": [
+      [
+        1,
+        "STREAM_FIRST_SEQUENCE_UNMET"
+      ]
+    ]
+  },
+  "first_unmet_unterminated_without_samples": {
+    "samples": [],
+    "stream": [
+      [
+        -1,
+        "STREAM_FIRST_SEQUENCE_UNMET"
+      ],
+      [
+        -1,
+        "STREAM_UNTERMINATED"
+      ]
+    ]
+  },
+  "first_unmet_without_samples": {
+    "samples": [],
+    "stream": [
+      [
+        1,
+        "STREAM_FIRST_SEQUENCE_UNMET"
+      ]
+    ]
+  },
+  "gap_from_generator": {
+    "samples": [],
+    "stream": [
+      [
+        4,
+        "STREAM_SEQUENCE_GAP"
+      ]
+    ]
+  },
+  "index_duplicated": {
+    "samples": [],
+    "stream": [
+      [
+        3,
+        "STREAM_INDEX_MISMATCH"
+      ]
+    ]
+  },
+  "index_malformed": {
+    "samples": [],
+    "stream": [
+      [
+        3,
+        "STREAM_MALFORMED"
+      ]
+    ]
+  },
+  "index_mismatch": {
+    "samples": [],
+    "stream": [
+      [
+        3,
+        "STREAM_INDEX_MISMATCH"
+      ]
+    ]
+  },
+  "index_missing": {
+    "samples": [],
+    "stream": [
+      [
+        3,
+        "STREAM_MISSING_FIELD"
+      ]
+    ]
+  },
+  "kind_change": {
+    "samples": [],
+    "stream": [
+      [
+        3,
+        "STREAM_KIND_CHANGE"
+      ]
+    ]
+  },
+  "last_sequence_unmet": {
+    "samples": [],
+    "stream": [
+      [
+        6,
+        "STREAM_LAST_SEQUENCE_UNMET"
+      ]
+    ]
+  },
+  "last_unmet_without_samples": {
+    "samples": [],
+    "stream": [
+      [
+        1,
+        "STREAM_LAST_SEQUENCE_UNMET"
+      ]
+    ]
+  },
+  "lifecycle_combination": {
+    "samples": [],
+    "stream": [
+      [
+        0,
+        "STREAM_SAMPLE_BEFORE_OPEN"
+      ],
+      [
+        1,
+        "STREAM_CLOSE_BEFORE_OPEN"
+      ],
+      [
+        2,
+        "STREAM_OPEN_NOT_FIRST"
+      ],
+      [
+        5,
+        "STREAM_SAMPLE_AFTER_CLOSE"
+      ],
+      [
+        6,
+        "STREAM_CLOSE_REPEATED"
+      ],
+      [
+        7,
+        "STREAM_OPEN_REPEATED"
+      ]
+    ]
+  },
+  "missing_records": {
+    "samples": [],
+    "stream": [
+      [
+        -1,
+        "STREAM_MISSING_FIELD"
+      ]
+    ]
+  },
+  "missing_version": {
+    "samples": [],
+    "stream": [
+      [
+        -1,
+        "STREAM_MISSING_FIELD"
+      ]
+    ]
+  },
+  "open_malformed_fields": {
+    "samples": [],
+    "stream": [
+      [
+        0,
+        "STREAM_MALFORMED"
+      ],
+      [
+        0,
+        "STREAM_MALFORMED"
+      ],
+      [
+        0,
+        "STREAM_MALFORMED"
+      ],
+      [
+        0,
+        "STREAM_MALFORMED"
+      ],
+      [
+        0,
+        "STREAM_MALFORMED"
+      ]
+    ]
+  },
+  "open_missing": {
+    "samples": [],
+    "stream": [
+      [
+        -1,
+        "STREAM_OPEN_MISSING"
+      ],
+      [
+        0,
+        "STREAM_SAMPLE_BEFORE_OPEN"
+      ],
+      [
+        1,
+        "STREAM_SAMPLE_BEFORE_OPEN"
+      ],
+      [
+        2,
+        "STREAM_SAMPLE_BEFORE_OPEN"
+      ],
+      [
+        3,
+        "STREAM_CLOSE_BEFORE_OPEN"
+      ]
+    ]
+  },
+  "open_missing_fields": {
+    "samples": [],
+    "stream": [
+      [
+        0,
+        "STREAM_MISSING_FIELD"
+      ],
+      [
+        0,
+        "STREAM_MISSING_FIELD"
+      ]
+    ]
+  },
+  "open_not_first": {
+    "samples": [],
+    "stream": [
+      [
+        0,
+        "STREAM_SAMPLE_BEFORE_OPEN"
+      ],
+      [
+        1,
+        "STREAM_OPEN_NOT_FIRST"
+      ]
+    ]
+  },
+  "open_only": {
+    "samples": [],
+    "stream": [
+      [
+        -1,
+        "STREAM_UNTERMINATED"
+      ]
+    ]
+  },
+  "open_repeated": {
+    "samples": [],
+    "stream": [
+      [
+        2,
+        "STREAM_OPEN_REPEATED"
+      ]
+    ]
+  },
+  "record_kind_missing": {
+    "samples": [],
+    "stream": [
+      [
+        2,
+        "STREAM_MISSING_FIELD"
+      ],
+      [
+        3,
+        "STREAM_SEQUENCE_GAP"
+      ]
+    ]
+  },
+  "record_not_object": {
+    "samples": [],
+    "stream": [
+      [
+        2,
+        "STREAM_MALFORMED"
+      ],
+      [
+        3,
+        "STREAM_SEQUENCE_GAP"
+      ]
+    ]
+  },
+  "records_not_array": {
+    "samples": [],
+    "stream": [
+      [
+        -1,
+        "STREAM_MALFORMED"
+      ]
+    ]
+  },
+  "regression_below_start": {
+    "samples": [],
+    "stream": [
+      [
+        3,
+        "STREAM_SEQUENCE_REGRESSION"
+      ],
+      [
+        4,
+        "STREAM_SEQUENCE_GAP"
+      ]
+    ]
+  },
+  "regression_then_continue": {
+    "samples": [],
+    "stream": [
+      [
+        4,
+        "STREAM_SEQUENCE_REGRESSION"
+      ]
+    ]
+  },
+  "sample_after_close": {
+    "samples": [],
+    "stream": [
+      [
+        4,
+        "STREAM_SAMPLE_AFTER_CLOSE"
+      ]
+    ]
+  },
+  "sample_missing": {
+    "samples": [],
+    "stream": [
+      [
+        2,
+        "STREAM_MISSING_FIELD"
+      ],
+      [
+        3,
+        "STREAM_SEQUENCE_GAP"
+      ]
+    ]
+  },
+  "sample_not_object": {
+    "samples": [],
+    "stream": [
+      [
+        2,
+        "STREAM_MALFORMED"
+      ],
+      [
+        3,
+        "STREAM_SEQUENCE_GAP"
+      ]
+    ]
+  },
+  "sample_violation_only": {
+    "samples": [
+      [
+        3,
+        "INVALID_UNIT"
+      ]
+    ],
+    "stream": []
+  },
+  "sensor_change": {
+    "samples": [],
+    "stream": [
+      [
+        3,
+        "STREAM_SENSOR_CHANGE"
+      ]
+    ]
+  },
+  "timestamp_regression": {
+    "samples": [],
+    "stream": [
+      [
+        4,
+        "STREAM_TIMESTAMP_REGRESSION"
+      ]
+    ]
+  },
+  "unknown_document_field": {
+    "samples": [],
+    "stream": [
+      [
+        -1,
+        "STREAM_UNKNOWN_FIELD"
+      ]
+    ]
+  },
+  "unknown_record_field": {
+    "samples": [],
+    "stream": [
+      [
+        2,
+        "STREAM_UNKNOWN_FIELD"
+      ]
+    ]
+  },
+  "unknown_record_kind": {
+    "samples": [],
+    "stream": [
+      [
+        2,
+        "STREAM_UNKNOWN_RECORD"
+      ],
+      [
+        3,
+        "STREAM_SEQUENCE_GAP"
+      ]
+    ]
+  },
+  "unsupported_version": {
+    "samples": [],
+    "stream": [
+      [
+        -1,
+        "STREAM_UNSUPPORTED_VERSION"
+      ]
+    ]
+  },
+  "unterminated": {
+    "samples": [],
+    "stream": [
+      [
+        -1,
+        "STREAM_UNTERMINATED"
+      ]
+    ]
+  },
+  "version_not_string": {
+    "samples": [],
+    "stream": [
+      [
+        -1,
+        "STREAM_MALFORMED"
+      ]
+    ]
+  },
+  "worked_example_gap": {
+    "samples": [],
+    "stream": [
+      [
+        2,
+        "STREAM_SEQUENCE_GAP"
+      ]
+    ]
+  }
+}

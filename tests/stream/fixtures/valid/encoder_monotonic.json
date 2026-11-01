@@ -1,0 +1,109 @@
+{
+  "records": [
+    {
+      "clock": "monotonic",
+      "index": 0,
+      "kind": "encoder",
+      "record": "open",
+      "sensor_id": "enc.left",
+      "stream_id": "stream_one"
+    },
+    {
+      "index": 1,
+      "record": "sample",
+      "sample": {
+        "contract_version": "0.1.0",
+        "frame_id": "sensor",
+        "kind": "encoder",
+        "measurements": {
+          "position": {
+            "unit": "rad",
+            "value": 0.497007
+          }
+        },
+        "sensor_id": "enc.left",
+        "sequence": 5,
+        "timestamp": {
+          "clock": "monotonic",
+          "unit": "ns",
+          "value": 1000000000
+        },
+        "validity": "VALID"
+      }
+    },
+    {
+      "index": 2,
+      "record": "sample",
+      "sample": {
+        "contract_version": "0.1.0",
+        "frame_id": "sensor",
+        "kind": "encoder",
+        "measurements": {
+          "position": {
+            "unit": "rad",
+            "value": 2.761227
+          }
+        },
+        "sensor_id": "enc.left",
+        "sequence": 6,
+        "timestamp": {
+          "clock": "monotonic",
+          "unit": "ns",
+          "value": 1010000000
+        },
+        "validity": "VALID"
+      }
+    },
+    {
+      "index": 3,
+      "record": "sample",
+      "sample": {
+        "contract_version": "0.1.0",
+        "frame_id": "sensor",
+        "kind": "encoder",
+        "measurements": {
+          "position": {
+            "unit": "rad",
+            "value": -1.666684
+          }
+        },
+        "sensor_id": "enc.left",
+        "sequence": 7,
+        "timestamp": {
+          "clock": "monotonic",
+          "unit": "ns",
+          "value": 1020000000
+        },
+        "validity": "VALID"
+      }
+    },
+    {
+      "index": 4,
+      "record": "sample",
+      "sample": {
+        "contract_version": "0.1.0",
+        "frame_id": "sensor",
+        "kind": "encoder",
+        "measurements": {
+          "position": {
+            "unit": "rad",
+            "value": 2.543677
+          }
+        },
+        "sensor_id": "enc.left",
+        "sequence": 8,
+        "timestamp": {
+          "clock": "monotonic",
+          "unit": "ns",
+          "value": 1030000000
+        },
+        "validity": "VALID"
+      }
+    },
+    {
+      "index": 5,
+      "record": "close"
+    }
+  ],
+  "stream_version": "0.1.0"
+}
