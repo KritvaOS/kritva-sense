@@ -4,7 +4,7 @@
 |---|---|
 | Task | KOS-SENSE-007 (Python package and reproducible release) |
 | Package | `kritva-sense`, built from `pyproject.toml` (standard library only at runtime; no runtime dependency) |
-| Status | ACCEPTED (KOS-SENSE-007, central approval D-091): the release record is filled from the CI run of the artifact-input commit. No release is published and no tag is created yet. This file is checked against the real build by `tests/packaging/` |
+| Status | ACCEPTED (KOS-SENSE-007, central approval D-091); KOS-SENSE-008 IN_REVIEW: the release record is refreshed from the CI run 41298259048 of the closing commit of KOS-SENSE-008. No release is published and no tag is created yet. This file is checked against the real build by `tests/packaging/` |
 | Scope | software only, synthetic data; not hardware or safety validation |
 
 This file is the release note of the repository. It keeps five version numbers apart, states what the package does and does not do, describes how a release is built and checked, and records the hashes of the closing build. It does not publish anything.
@@ -76,13 +76,13 @@ Missing build tools. A developer run without git, the venv module or the build t
 
 ## Release record
 
-Filled from the `unit-tests` CI run 41292919590 on the artifact-input commit (merge of pull request #45; the log prints a `PACKAGING-HASH` line and a `PACKAGING-EVIDENCE` line showing that all 27 mandatory packaging tests ran). A value is `PENDING` until the task is submitted for review; the test refuses a pending value once the task is IN_REVIEW or ACCEPTED. The source commit is the artifact-input commit: the commit whose tree the recorded artifacts were built from. The commit that records the values is a later commit that changes only files outside both distributions; it builds identical artifacts, and `tests/packaging/` rebuilds and compares all three hashes on every run, so a record that no longer matches the tree fails.
+Filled from the `unit-tests` CI run 41298259048 on the artifact-input commit (the closing commit of KOS-SENSE-008, merge of pull request #52; the record of KOS-SENSE-007 is kept in the refresh note below; the log prints a `PACKAGING-HASH` line and a `PACKAGING-EVIDENCE` line showing that all 27 mandatory packaging tests ran). A value is `PENDING` until the task is submitted for review; the test refuses a pending value once the task is IN_REVIEW or ACCEPTED. The source commit is the artifact-input commit: the commit whose tree the recorded artifacts were built from. The commit that records the values is a later commit that changes only files outside both distributions; it builds identical artifacts, and `tests/packaging/` rebuilds and compares all three hashes on every run, so a record that no longer matches the tree fails.
 
 | Field | Value |
 |---|---|
-| Source commit | PENDING |
-| Wheel SHA-256 | PENDING |
-| Source distribution SHA-256 | PENDING |
-| Source distribution normalised-content hash | PENDING |
+| Source commit | a8dfb5a7827e9888a5bfae0bbcea1598727bd400 |
+| Wheel SHA-256 | a83093fae5aefe6f26ec1d4d42d62209653b6b4f7c94538af8d636cf3f41da29 |
+| Source distribution SHA-256 | bd272c2c58d9e14451e079bbe8c2099488c8e9b9a8ada254779ecdd6d8fe73aa |
+| Source distribution normalised-content hash | fbb471f66b58b403ff8b26f7c7a2724738bb145880e82326ee4cb50ff9d05556 |
 
-Refresh by KOS-SENSE-008. KOS-SENSE-008 fixes three findings in packaged modules (`__main__.py`, `frame_graph.py`, `stream.py`, `conformance.py` and `generator.py`: F-001 to F-003 in `tasks/KOS-SENSE-008/SECURITY_REVIEW.md`), so the artifacts built from the closing commit of that task differ from those that KOS-SENSE-007 accepted. The package version stays 0.2.0 and no tag exists or was published. While KOS-SENSE-008 is in progress every field above is `PENDING` together; the status change that submits KOS-SENSE-008 for review fills them from the CI run of the closing commit, and from then on `tests/packaging/` fails a record that does not match the build. The values accepted by KOS-SENSE-007 (artifact-input commit 5f1aa7a34c5aec9e0c12fc66add6d3bc6efaa7bc, `unit-tests` run 41292919590) are: wheel 47ed3803b02aafb285cfee9aa620142676e30f5f0dc6fa67e383b283a24f2415, source distribution f6f8284b7eef220a65d40359a0ab013ced2ee64d0ae068cee8f8fe960ca6d192, normalised-content hash bd5e68f34eb028a2b786adf6a83286bfd8243335325b9865dee498c5c438ee32; they stay in the decision record D-091.
+Refresh by KOS-SENSE-008. KOS-SENSE-008 fixed three findings in packaged modules (`__main__.py`, `frame_graph.py`, `stream.py`, `conformance.py` and `generator.py`: F-001 to F-003 in `tasks/KOS-SENSE-008/SECURITY_REVIEW.md`), so the artifacts above differ from those that KOS-SENSE-007 accepted. The values above come from the `unit-tests` CI run 41298259048 on commit a8dfb5a (the closing commit of KOS-SENSE-008, merge of pull request #52; its log prints the `PACKAGING-HASH` line and a `PACKAGING-EVIDENCE` line showing that all 27 mandatory packaging tests ran). The packaged files last changed in pull request #49, so the artifacts are the same as those of the first run on the merged fixes (run 41296452969 on c1d6b10 printed the same three hashes). The package version stays 0.2.0 and no tag exists or was published. The values accepted by KOS-SENSE-007 (artifact-input commit 5f1aa7a34c5aec9e0c12fc66add6d3bc6efaa7bc, `unit-tests` run 41292919590) were: wheel 47ed3803b02aafb285cfee9aa620142676e30f5f0dc6fa67e383b283a24f2415, source distribution f6f8284b7eef220a65d40359a0ab013ced2ee64d0ae068cee8f8fe960ca6d192, normalised-content hash bd5e68f34eb028a2b786adf6a83286bfd8243335325b9865dee498c5c438ee32; they stay in the decision record D-091. From now on `tests/packaging/` fails a record that does not match the build.

@@ -3,13 +3,13 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M8-SENSE-001 |
-| Status | IN_PROGRESS (baselined in v7, D-090; all of KOS-SENSE-001 to KOS-SENSE-007 are accepted; KOS-SENSE-007 accepted by D-091) |
+| Status | IN_REVIEW (implemented in pull requests #49 to #52; baselined in v7, D-090; all of KOS-SENSE-001 to KOS-SENSE-007 are accepted; KOS-SENSE-007 accepted by D-091) |
 | Weight | 6 (initial planning weight, 6 effort days; baselined in v7, D-090; effort risk: scope creep into general infrastructure, findings that need fixes) |
 | Depends on | KOS-SENSE-001 to KOS-SENSE-006 (all accepted). Acceptance prerequisite, not an implementation dependency (the baseline has no dependency field): implementation and review work on KOS-SENSE-008 may proceed independently of KOS-SENSE-007, but KOS-SENSE-008 cannot become ACCEPTED until KOS-SENSE-007 has been accepted under the program approval process, and the final review must cover the actual release artifacts produced and verified under KOS-SENSE-007 |
 | Requires physical | No (software only, synthetic data) |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) (AC-801 to AC-807) |
 | Deliverables | `tasks/KOS-SENSE-008/THREAT_MODEL.md`, `tasks/KOS-SENSE-008/SECURITY_REVIEW.md` (findings register and final report), `tests/security/`, `make test-unit` |
-| Acceptance evidence | Not yet: immutable closing SHA, `unit-tests` CI run on that SHA, review record and central approval are recorded when the task closes |
+| Acceptance evidence | Closing commit a8dfb5a (merge of pull request #52, after the advisory review fixes); `unit-tests` CI run 41298259048 PASS on it (make check, docs-check and test-unit, including the security suite and the real network-namespace run; 27 of 27 mandatory packaging tests executed); release record in `RELEASE.md` refreshed from that run. Not yet: review record and central approval (recorded in kritva-program) |
 
 ## Purpose
 
