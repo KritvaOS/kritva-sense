@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-003 ACCEPTED: central approval recorded in kritva-program (D-085) on closing commit c92e841 (`unit-tests` run 41267842700 PASS); frame graph contract 0.1.0 approved as v0.1.0. Status wording only: no contract rule, schema or code change. Tasks: None (status and approval wording; no contract or code change).
+
 - KOS-SENSE-004: deterministic synthetic sample and frame graph generator (`src/kritva_sense/generator.py`, documented in `src/kritva_sense/GENERATOR.md`): SplitMix64 PRNG implemented in the repository, valid samples for every sensor kind, explicitly requested faults with the stated contract code, conformant and defective frame graphs, Python API and command line; `tests/generator/` is run by `make test-unit`. Proposed, not accepted. Sense contract 0.1.0, frame graph contract 0.1.0 and their schemas are unchanged (pinned by tests). Tasks: KOS-SENSE-004.
 
 - KOS-SENSE-004 started after the baseline v5 freeze (D-083): status IN_PROGRESS in TASKS.md, the task record, its criteria and the status report. No contract, schema or code change. Tasks: None (status change; implementation follows in its own pull request).

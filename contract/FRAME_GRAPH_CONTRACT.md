@@ -6,7 +6,7 @@
 | Repository | `KritvaOS/kritva-sense` |
 | Task | KOS-SENSE-003 (Deterministic frame graph and transform validation for simulated samples) |
 | Version | Frame graph contract version: 0.1.0 |
-| Status | PROPOSED: delivered for review with KOS-SENSE-003; not accepted, tagged or credited |
+| Status | APPROVED as frame graph contract v0.1.0 by the owner (program decision D-085); KOS-SENSE-003 ACCEPTED. A 0.x contract: it may still change by the rules of section 11 |
 | Owner | Dinesh (interim architecture and safety reviewer, program decision D-047) |
 | Related contract | [SENSE_CONTRACT.md](SENSE_CONTRACT.md) 0.1.0 (accepted, tag `v0.1.0`); it is not changed by this document |
 | Machine-readable form | [frame-transform.schema.json](frame-transform.schema.json) |
@@ -112,7 +112,7 @@ A point at (1, 0, 0) in `sensor` is at (1.1, 0, 0.2) in `base` (add the offset).
 
 ## 11. Versioning and lifecycle
 
-This is frame graph contract 0.1.0, delivered as a proposal with KOS-SENSE-003. It is accepted only by a central approval recorded in kritva-program; until then nothing here is accepted. While the major version is 0, a change may be breaking; every change needs a changelog entry in [planning/CHANGELOG.md](../planning/CHANGELOG.md) and a decision, and supported versions are listed in section 3. Adding a rotation representation, a time field or a new unit is a change to this contract. Changing the meaning of `world`, `base` or `sensor` is a change to the Sense data contract, with its own version.
+This is frame graph contract 0.1.0. The owner approved it as frame graph contract v0.1.0 (program decision D-085) and KOS-SENSE-003 is ACCEPTED by the central approval recorded in kritva-program (review is the interim D-047 role, not independent). Whether and how to tag it is the owner's choice (D-080). While the major version is 0, a change may be breaking; every change needs a changelog entry in [planning/CHANGELOG.md](../planning/CHANGELOG.md) and a decision, and supported versions are listed in section 3. Adding a rotation representation, a time field or a new unit is a change to this contract. Changing the meaning of `world`, `base` or `sensor` is a change to the Sense data contract, with its own version.
 
 ## 12. Verification
 

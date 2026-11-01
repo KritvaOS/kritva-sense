@@ -3,13 +3,13 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M5-SENSE-001 |
-| Status | IN_REVIEW (implemented in pull request #21; baselined in v4, D-082) |
+| Status | ACCEPTED (implemented in pull request #21; baselined in v4, D-082; central approval, D-085) |
 | Weight | 5 (initial planning weight, 4 to 5 effort days; baseline v4, D-082) |
 | Depends on | KOS-SENSE-001 and KOS-SENSE-002 (Sense contract 0.1.0, tag `v0.1.0`) |
 | Requires physical | No (software only, synthetic data) |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) (AC-301 to AC-307) |
 | Deliverables | `contract/FRAME_GRAPH_CONTRACT.md`, `contract/frame-transform.schema.json`, `src/kritva_sense/frame_graph.py`, `tests/frame_graph/`, `make test-unit` |
-| Acceptance evidence | Closing commit c92e841 (merge of pull request #21); `unit-tests` CI run 41267842700 PASS on it. Not yet: review record and central approval (recorded in kritva-program) |
+| Acceptance evidence | Closing commit c92e841 (merge of pull request #21); `unit-tests` CI run 41267842700 PASS on it. Central approval recorded in kritva-program (D-085), bound to that commit and run |
 
 ## Purpose
 
