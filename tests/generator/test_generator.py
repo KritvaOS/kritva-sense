@@ -19,6 +19,10 @@ from kritva_sense import validator as V  # noqa: E402
 SEEDS = list(range(40)) + [2**32, 2**63, 2**64 - 1]
 SAMPLE_SCHEMA_SHA256 = "1f6f0824af55237b0b3e90ddd413ddef8c48e2eb3cd19a7f4244295bd2b9bc6b"
 FRAME_SCHEMA_SHA256 = "ae644360dc5ba0e679a9e616022b4261b2e95fe967da8af1e4d440f718a099e2"
+# The normative contract documents are pinned as well (AC-407). Any change to them, even wording, is a deliberate
+# change: update the pin in the same pull request and record the change in planning/CHANGELOG.md.
+SENSE_CONTRACT_MD_SHA256 = "f8935feb9efb10dd482e4b7386239295b2180412dbbcbc177aa7a6f86d75abcf"
+FRAME_GRAPH_CONTRACT_MD_SHA256 = "a3ded6d06222a7f554127c16265e718f350eef58f0550737be425561c6f10210"
 
 
 def sha(path):
@@ -56,6 +60,29 @@ class Determinism(unittest.TestCase):  # AC-401
         self.assertEqual(a, b)
         ga = G.dumps(G.generate_graph(99, 4, "cycle"))
         self.assertEqual(ga, G.dumps(G.generate_graph(99, 4, "cycle")))
+
+    def test_separate_processes_give_identical_bytes(self):
+        import os
+        outs = []
+        for hashseed in ("0", "1", "12345"):
+            env = dict(os.environ, PYTHONHASHSEED=hashseed)
+            r = subprocess.run([sys.executable, "-m", "kritva_sense.generator", "samples", "--kind", "imu",
+                                "--sensor-id", "imu.base", "--count", "25", "--seed", "99", "--fault", "3:stale"],
+                               cwd=ROOT / "src", capture_output=True, text=True, env=env)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            g = subprocess.run([sys.executable, "-m", "kritva_sense.generator", "graph", "--seed", "99",
+                                "--extra-frames", "5"], cwd=ROOT / "src", capture_output=True, text=True, env=env)
+            self.assertEqual(g.returncode, 0, g.stderr)
+            outs.append((r.stdout, g.stdout))
+        self.assertEqual(outs[0], outs[1])
+        self.assertEqual(outs[0], outs[2])
+        self.assertEqual(outs[0][0], G.dumps(G.generate_samples("imu", "imu.base", 25, 99, faults={3: "stale"})))
+
+    def test_known_answer_graph(self):
+        first = G.generate_graph(7, 1)["graph"]["transforms"][0]
+        self.assertEqual(first["translation"], {"x": -1.101703, "y": -4.832117, "z": 4.007607})
+        self.assertEqual(first["rotation"], {"w": 0.307042316214, "x": -0.176079815677,
+                                             "y": -0.927708355529, "z": -0.118651260617})
 
     def test_known_answer_samples(self):
         d = G.generate_samples("range", "range.front", 2, 1)
@@ -96,12 +123,31 @@ class ValidSamples(unittest.TestCase):  # AC-402
     def test_documented_value_ranges(self):
         rng = {"accel_x": (-2.0, 2.0), "accel_y": (-2.0, 2.0), "accel_z": (9.61, 10.01), "gyro_x": (-1.0, 1.0),
                "gyro_y": (-1.0, 1.0), "gyro_z": (-1.0, 1.0), "distance": (0.05, 10.0),
-               "position": (-math.pi, math.pi), "temperature": (273.15, 323.15)}
+               "position": (-3.14159, 3.14159), "temperature": (273.15, 323.15)}
         for kind in V.KINDS:
             for s in G.generate_samples(kind, "sensor.a", 300, 21)["samples"]:
                 for name, m in s["measurements"].items():
                     lo, hi = rng[name]
                     self.assertTrue(lo <= m["value"] <= hi, (name, m["value"]))
+
+    def test_range_extremes_stay_inside_the_documented_ranges(self):
+        class Edge:  # a stand-in generator that always draws the lowest or the highest value of the requested range
+            def __init__(self, high):
+                self.high = high
+
+            def uniform(self, lo, hi):
+                return hi if self.high else lo
+
+        rng = {"accel_x": (-2.0, 2.0), "accel_y": (-2.0, 2.0), "accel_z": (9.61, 10.01), "gyro_x": (-1.0, 1.0),
+               "gyro_y": (-1.0, 1.0), "gyro_z": (-1.0, 1.0), "distance": (0.05, 10.0),
+               "position": (-3.14159, 3.14159), "temperature": (273.15, 323.15)}
+        for kind in V.KINDS:
+            for high in (False, True):
+                for name, m in G._measurements(kind, Edge(high)).items():
+                    lo, hi = rng[name]
+                    self.assertTrue(lo <= m["value"] <= hi, (name, m["value"]))
+                    self.assertEqual(m["value"], round(hi if high else lo, 6) if name != "accel_z"
+                                     else round(9.81 + (0.2 if high else -0.2), 6))
 
     def test_unknown_kind_is_refused(self):
         with self.assertRaises(ValueError):
@@ -129,6 +175,17 @@ class Configuration(unittest.TestCase):  # AC-403
             args.update(kw)
             with self.assertRaises(ValueError, msg=str(kw)):
                 G.generate_samples(**args)
+
+    def test_api_refuses_non_conformant_configuration(self):
+        base = dict(kind="imu", sensor_id="imu.a", count=1, seed=1)
+        for kw in ({"sensor_id": "Bad Id"}, {"sensor_id": ""}, {"sensor_id": 5}, {"clock": "wall"}, {"frame": "map"},
+                   {"kind": "lidar"}):
+            args = dict(base)
+            args.update(kw)
+            with self.assertRaises(ValueError, msg=str(kw)):
+                G.generate_samples(**args)
+        with self.assertRaises(ValueError):
+            G.make_sample("imu", "Bad Id", 0, 0, G.SplitMix64(1))
 
     def test_empty_sequence(self):
         d = G.generate_samples("imu", "imu.a", 0, 1)
@@ -188,6 +245,30 @@ class Faults(unittest.TestCase):  # AC-404
             with self.assertRaises(ValueError, msg=str(faults)):
                 G.generate_samples("imu", "imu.a", 3, 1, faults=faults)
 
+    def test_duplicate_violations_are_not_collapsed(self):
+        d = G.generate_samples("imu", "imu.a", 3, 1)
+        for name in ("accel_x", "accel_y"):          # two MISSING_FIELD violations of the same code
+            del d["samples"][1]["measurements"][name]
+        self.assertGreaterEqual(len(G.check_samples(d)), 1)
+        d = G.generate_samples("imu", "imu.a", 3, 1, faults={1: "missing_measurement"})
+        self.assertEqual(G.check_samples(d), [])
+        del d["samples"][1]["measurements"]["accel_y"]   # a second MISSING_FIELD on top of the stated one
+        self.assertTrue(G.check_samples(d))
+
+    def test_sequence_continuity_is_checked_for_every_pair(self):
+        d = G.generate_samples("imu", "imu.a", 4, 1, faults={1: "stale"})
+        self.assertEqual(G.check_samples(d), [])
+        d["samples"][1]["sequence"] = 0                       # a regression nobody asked for, on a faulted sample
+        self.assertTrue(G.check_samples(d))
+        d = G.generate_samples("imu", "imu.a", 4, 1, faults={2: "gap"})
+        self.assertEqual(G.check_samples(d), [])
+        d["samples"][3]["sequence"] = 1                       # later sample falls back after a conformant gap
+        self.assertTrue(G.check_samples(d))
+        d = G.generate_samples("imu", "imu.a", 4, 1, faults={2: "regression"})
+        self.assertEqual(G.check_samples(d), [])
+        d["samples"][2]["sequence"] = 99                      # requested regression that did not regress
+        self.assertTrue(G.check_samples(d))
+
     def test_a_wrong_expectation_is_detected(self):
         d = G.generate_samples("imu", "imu.a", 3, 1, faults={1: "bad_unit"})
         d["expectations"][0]["expected_code"] = "INVALID_TIMESTAMP"
@@ -242,6 +323,11 @@ class Graphs(unittest.TestCase):  # AC-405
             with self.assertRaises(ValueError, msg=str(kw)):
                 G.generate_graph(1, **kw)
 
+    def test_a_second_violation_of_the_same_code_is_detected(self):
+        d = G.generate_graph(1, 3, "multiple_parents")
+        d["graph"]["transforms"].append(G.make_edge("base", "link_2", G.SplitMix64(5)))   # a second multiple-parent fault
+        self.assertTrue(G.check_graph(d))
+
     def test_a_wrong_graph_expectation_is_detected(self):
         d = G.generate_graph(1, 0, "cycle")
         d["expectation"]["codes"] = ["FG_SELF_LINK"]
@@ -280,6 +366,8 @@ class Interface(unittest.TestCase):  # AC-406
             ["samples", "--kind", "imu", "--sensor-id", "a", "--count", "2", "--seed", "1", "--fault", "0:melt"],
             ["samples", "--kind", "imu", "--sensor-id", "a", "--count", "2", "--seed", "1", "--step-ns", "0"],
             ["samples", "--kind", "imu", "--sensor-id", "Bad Id", "--count", "1", "--seed", "1"],
+            ["samples", "--kind", "imu", "--sensor-id", "a.b", "--count", "3", "--seed", "1",
+             "--fault", "1:stale", "--fault", "1:missing"],
             ["graph", "--seed", "1", "--defect", "melt"],
             ["graph", "--seed", "1", "--extra-frames", "101"],
             ["graph", "--seed", "99999999999999999999999"],
@@ -304,6 +392,8 @@ class Boundaries(unittest.TestCase):  # AC-407
         self.assertEqual(FG.FRAME_GRAPH_VERSION, "0.1.0")
         self.assertEqual(sha("contract/sense-sample.schema.json"), SAMPLE_SCHEMA_SHA256)
         self.assertEqual(sha("contract/frame-transform.schema.json"), FRAME_SCHEMA_SHA256)
+        self.assertEqual(sha("contract/SENSE_CONTRACT.md"), SENSE_CONTRACT_MD_SHA256)
+        self.assertEqual(sha("contract/FRAME_GRAPH_CONTRACT.md"), FRAME_GRAPH_CONTRACT_MD_SHA256)
 
     def test_generated_documents_carry_the_contract_versions(self):
         d = G.generate_samples("imu", "imu.a", 1, 1)

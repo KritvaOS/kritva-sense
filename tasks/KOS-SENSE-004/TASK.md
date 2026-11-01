@@ -17,7 +17,7 @@ Tests of Sense contract 0.1.0 and of the frame graph contract 0.1.0 use hand-wri
 
 ## Scope
 
-- A documented pseudo-random generator that is implemented in this repository (not Python's `random` module), so the same seed gives byte-identical output on every supported Python version and platform.
+- A documented pseudo-random generator that is implemented in this repository (not Python's `random` module), so the same seed gives byte-identical output across runs and processes on platforms with IEEE 754 double arithmetic (only exactly rounded operations are used, no libm function; tested on the CI platform only).
 - Generation of valid samples for every sensor kind of contract 0.1.0 (`imu`, `range`, `encoder`, `temperature`) with configurable sensor id, start sequence, timestamps (clock and step in nanoseconds) and frame.
 - Generation of sample sequences with deliberately introduced conditions, each chosen explicitly and never at random by default: stale, missing and invalid validity states, sequence regression and sequence gaps, and boundary values.
 - Generation of conformant frame graphs and of graphs with a stated defect (cycle, duplicate edge, multiple parents, non-unit rotation), using the frame graph contract 0.1.0.
