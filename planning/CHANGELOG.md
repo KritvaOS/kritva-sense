@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- KOS-SENSE-005 and KOS-SENSE-006 planning records: task and criteria added (005 AC-501 to AC-507, telemetry stream contract and reference validator, proposed weight 4; 006 AC-601 to AC-607, consumer conformance harness, proposed weight 5, cannot start before 005 is accepted), both under milestone V2-M7-SENSE-001; to be baselined in v6 after D-087; status NOT_STARTED. No contract, schema or code change. Tasks: None (planning records; tasks not started).
 - KOS-SENSE-004 ACCEPTED: central approval recorded in kritva-program (D-086) on closing commit 82b3174 (`unit-tests` run 41275942226 PASS). Status wording only: no contract, schema or code change. Tasks: None (status and approval wording; no contract or code change).
 
 - KOS-SENSE-004 submitted for review: status IN_REVIEW with the `unit-tests` CI run 41275942226 PASS on closing commit 82b3174 as evidence. No contract, schema or code change; not accepted. Tasks: KOS-SENSE-004.
