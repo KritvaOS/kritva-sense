@@ -4,7 +4,7 @@
 |---|---|
 | Task | KOS-SENSE-007 (Python package and reproducible release) |
 | Package | `kritva-sense`, built from `pyproject.toml` (standard library only at runtime; no runtime dependency) |
-| Status | ACCEPTED (KOS-SENSE-007, central approval D-091; KOS-SENSE-008, central approval D-092): the release record is refreshed from the CI run 41298259048 of the closing commit of KOS-SENSE-008. No release is published and no tag is created yet. This file is checked against the real build by `tests/packaging/` |
+| Status | ACCEPTED (KOS-SENSE-007, central approval D-091; KOS-SENSE-008, central approval D-092): the release record is refreshed from the CI run 41298259048 of the closing commit of KOS-SENSE-008. No release is published; milestone V2-M8-SENSE-001 is closed by `COMPLETION_RECORD.md` once the owner merges it, and the tag `v0.2.0` is created by the owner after that merge. This file is checked against the real build by `tests/packaging/` |
 | Scope | software only, synthetic data; not hardware or safety validation |
 
 This file is the release note of the repository. It keeps five version numbers apart, states what the package does and does not do, describes how a release is built and checked, and records the hashes of the closing build. It does not publish anything.
@@ -45,7 +45,7 @@ This package implements exactly Sense data contract 0.1.0, frame graph contract 
 
 ## Release tag
 
-This repository uses one repository release tag per release, an annotated tag `vMAJOR.MINOR.PATCH` that names the package version (`v0.2.0` for this release). The tag is created by the owner after the approved merge and after the task is accepted; no tool creates it and no task evidence depends on it. The tag identifies the repository release. It does not imply that the component versions are equal: the contract versions, the harness version and the generator version are listed in the Versions section, and they are not the tag. Creating the tag is a release action of the owner and is not part of the acceptance evidence of KOS-SENSE-007; closing milestone V2-M8-SENSE-001 also needs the separate owner action recorded in `planning/MILESTONE_STATUS.md`.
+This repository uses one repository release tag per release, an annotated tag `vMAJOR.MINOR.PATCH` that names the package version (`v0.2.0` for this release). The tag is created by the owner after the approved merge and after the task is accepted; no tool creates it and no task evidence depends on it. The tag identifies the repository release. It does not imply that the component versions are equal: the contract versions, the harness version and the generator version are listed in the Versions section, and they are not the tag. Creating the tag is a release action of the owner and is not part of the acceptance evidence of KOS-SENSE-007; the tag message names `COMPLETION_RECORD.md` and the exact commit, and the tag is evidence, not closure authority.
 
 ## Build and reproducibility
 
