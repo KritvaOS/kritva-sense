@@ -3,13 +3,13 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M2-SENSE-001 |
-| Status | IN_REVIEW (implemented in pull requests #26 and #28; baselined in v5, D-083) |
+| Status | ACCEPTED (implemented in pull requests #26 and #28; baselined in v5, D-083; central approval, D-086) |
 | Weight | 4 (initial planning weight, 4 to 5 effort days; baseline v5, D-083) |
 | Depends on | KOS-SENSE-001, KOS-SENSE-002 (Sense contract 0.1.0, tag `v0.1.0`) and KOS-SENSE-003 (frame graph contract 0.1.0) |
 | Requires physical | No (software only, synthetic data) |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) (AC-401 to AC-407) |
 | Deliverables | `src/kritva_sense/generator.py`, `tests/generator/`, `make test-unit` |
-| Acceptance evidence | Closing commit 82b3174 (merge of pull request #28, after the independent review fixes); `unit-tests` CI run 41275942226 PASS on it. Not yet: review record and central approval (recorded in kritva-program) |
+| Acceptance evidence | Closing commit 82b3174 (merge of pull request #28, after the independent review fixes); `unit-tests` CI run 41275942226 PASS on it. Central approval recorded in kritva-program (D-086), bound to that commit and run |
 
 ## Purpose
 

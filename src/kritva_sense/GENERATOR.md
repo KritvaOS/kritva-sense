@@ -4,7 +4,7 @@
 |---|---|
 | Task | KOS-SENSE-004 (Deterministic synthetic sensor sample generator) |
 | Generator version | Generator version: 0.1.0 |
-| Status | PROPOSED: delivered for review with KOS-SENSE-004; not accepted |
+| Status | ACCEPTED: KOS-SENSE-004 central approval (program decision D-086); a test utility, it defines no contract |
 | Code | [generator.py](generator.py) (standard library only) |
 | Tests | `tests/generator/` (run by `make test-unit`) |
 | Contracts used | Sense data contract 0.1.0 ([SENSE_CONTRACT.md](../../contract/SENSE_CONTRACT.md)) and frame graph contract 0.1.0 ([FRAME_GRAPH_CONTRACT.md](../../contract/FRAME_GRAPH_CONTRACT.md)); the generator changes neither |
