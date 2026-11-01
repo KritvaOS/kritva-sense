@@ -8,6 +8,6 @@
 | Depends on | KOS-SENSE-001 (the validator implements the approved contract and never changes it) |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](../../ACCEPTANCE_CRITERIA.md) section 3A (AC-201 to AC-206) |
 | Deliverables | `src/kritva_sense/`, `tests/contract/`, `make test-unit` |
-| Evidence needed | `make test-unit` from a clean checkout at the closing SHA, CI runs, review record |
+| Acceptance evidence | Central approval A077 (kritva-program) on commit e949b9f9eeb3e67eb1278b5069f999aea4eb36af, `unit-tests` run 40994325092 PASS (`make check`, `docs-check`, `make test-unit`). Review is the interim D-047 role, not independent |
 
 Out of scope: integration and regression gates, hardware-in-loop, safety validation of physical sensors, coverage thresholds.

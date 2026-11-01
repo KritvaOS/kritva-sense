@@ -1,12 +1,12 @@
 # kritva-sense
 
-> Planning and governance repository for the Sense data contract of the Kritva OS V2 plan. There is no implementation yet: the repository holds acceptance criteria, planning records, pull-request checks and rules, and no source code. The visibility class of this repository is PUBLIC (D-063).
+> Planning and governance repository for the Sense data contract of the Kritva OS V2 plan. The repository holds the accepted Sense data contract 0.1.0 (tag `v0.1.0`), a standard-library reference validator with synthetic fixtures and unit tests, acceptance criteria, planning records and pull-request checks. There is no hardware, integration or regression testing, and no sensor driver. The visibility class of this repository is PUBLIC (D-063).
 
 | Property | Value |
 |---|---|
 | Project | KritvaOS (Kritva OS V2) |
 | Repository | `KritvaOS/kritva-sense` |
-| Repository Type | Capability (contract only; planning baseline, no implementation) |
+| Repository Type | Capability (data contract and reference validator, software scope; no hardware) |
 | Visibility Class | PUBLIC (owner decision D-063 in kritva-program; it is an exception to the D-039 recommendation of PRIVATE, and no release review is recorded) |
 | GitHub Setting | PUBLIC, the same as the class (D-063 in kritva-program keeps this repository public and takes it out of the return-to-private plan); OWNER-ATTESTED: no independent check of the setting and no verification date is recorded here |
 | Lifecycle Status | PLANNING (governance baseline only) |
@@ -23,7 +23,7 @@ This README follows the Kritva README standard (`v2/planning/standards/README_ST
 
 ## 1. Purpose and Scope
 
-Kritva Sense is the part of Kritva OS V2 that will own the Sense data contract. Today this repository only plans that work.
+Kritva Sense is the part of Kritva OS V2 that owns the Sense data contract. Today this repository holds the accepted contract 0.1.0 and its reference validator, tested on synthetic data only, and it plans the later work.
 
 **This repository owns** (as planned): sensor identity, timestamps, units, frame and coordinate conventions, validity and stale-data behaviour, errors and versioning of the Sense data contract and its reference validation.
 
@@ -68,7 +68,7 @@ Labels: INPUT is edited by hand and read by a tool or review; GENERATED is writt
 | [src/kritva_sense/](src/kritva_sense/) | Reference validator (standard library only); `python3 -m kritva_sense FILE.json` | INPUT; ACCEPTED (KOS-SENSE-002) | Implements the contract and never changes it |
 | [tasks/](tasks/) | `KOS-SENSE-001/TASK.md` and `KOS-SENSE-002/TASK.md` | INPUT; ACCEPTED | Planning records; weights are baselined in v3 (D-078) |
 | [scripts/](scripts/) | `docs_check.py` (link check), `pipeline/pr_gate.py` (PR gate), `security/` (commit checkers), `check_readme.py` (README check) | INPUT; IMPLEMENTED | `pipeline/` and `security/` are protected paths of the gate |
-| [tests/](tests/) | `commit_message_check/`, `readme_check/` (checker tests) and `contract/` (validator, fixtures and CLI tests) | EVIDENCE; IMPLEMENTED | The contract tests use synthetic data only and are draft evidence until KOS-SENSE-002 is approved |
+| [tests/](tests/) | `commit_message_check/`, `readme_check/` (checker tests) and `contract/` (validator, fixtures and CLI tests) | EVIDENCE; IMPLEMENTED | The contract tests use synthetic data only; their CI run is the approved evidence for KOS-SENSE-002 (A077) |
 | [.github/](.github/) | CODEOWNERS, pull request template, `kritva-gate.json` and five workflows | AUTHORITATIVE | `kritva-gate.json` configures the PR gate |
 | [Makefile](Makefile) | Check targets; unimplemented gates exit 3 | INPUT; IMPLEMENTED | See section 11 |
 | [AGENTS.md](AGENTS.md), [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md), [LICENSE](LICENSE) | Rules, contribution steps, security policy, licence | AUTHORITATIVE | |
@@ -83,7 +83,7 @@ Labels: INPUT is edited by hand and read by a tool or review; GENERATED is writt
 | GNU make | Convenience wrapper | any | `make --version` |
 | Git | Branching and the commit checker | any | `git --version` |
 
-There is no build, compiler or package toolchain because there is no implementation. Work follows [planning/GIT_COMMIT_STEP.md](planning/GIT_COMMIT_STEP.md): branch from an up-to-date `main`, commit with the format in section 12, run the checks, open a pull request.
+There is no build, compiler or package toolchain: the reference validator is plain Python (standard library only) and is run by `make test-unit`. Work follows [planning/GIT_COMMIT_STEP.md](planning/GIT_COMMIT_STEP.md): branch from an up-to-date `main`, commit with the format in section 12, run the checks, open a pull request.
 
 ```bash
 make check          # check: required planning files exist; commit-message checker tests pass
@@ -108,8 +108,8 @@ Proposed milestones, from [planning/MILESTONE.md](planning/MILESTONE.md) (genera
 | ID | Program milestone | Status recorded here | Outcome (proposed) |
 |---|---|---|---|
 | V2-M0-SENSE-001 | V2-M0 FOUNDATION | IN_REVIEW (this change) | Repository governance baseline merged: acceptance criteria, CI checks, CODEOWNERS, AGENTS.md. |
-| V2-M1-SENSE-001 | V2-M1 STUDIO | PROPOSED | Sense architecture and data contract (task 001) reviewed and tagged v0.1.0. |
-| V2-M2-SENSE-001 | V2-M2 BUILD & ARTIFACT | PROPOSED | Contract validation and synthetic-data tests pass; unit, integration and regression gates implemented. |
+| V2-M1-SENSE-001 | V2-M1 STUDIO | TASK ACCEPTED (KOS-SENSE-001; tag v0.1.0); milestone not formally closed | Sense architecture and data contract (task 001) reviewed and tagged v0.1.0. |
+| V2-M2-SENSE-001 | V2-M2 BUILD & ARTIFACT | TASK ACCEPTED (KOS-SENSE-002); milestone not formally closed: integration and regression gates are not implemented | Contract validation and synthetic-data tests pass; unit, integration and regression gates implemented. |
 | V2-M5-SENSE-001 | V2-M5 EXECUTION | PROPOSED | Sense frames validated in simulated execution. |
 | V2-M7-SENSE-001 | V2-M7 LIVE & RESULTS | PROPOSED | Telemetry stream contract validated end to end (software scope). |
 | V2-M8-SENSE-001 | V2-M8 PRODUCTION | PROPOSED | Release and security review complete. |
