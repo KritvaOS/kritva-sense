@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-005 ACCEPTED: central approval recorded in kritva-program (D-088) on closing commit 0bee5ed (`unit-tests` run 41278515695 PASS); stream contract 0.1.0 approved as v0.1.0. Status wording only: no contract rule, schema or code change. Tasks: None (status and approval wording; no contract or code change).
+
 - KOS-SENSE-005 submitted for review: status IN_REVIEW with the `unit-tests` CI run 41278515695 PASS on closing commit 0bee5ed as evidence. One cross-reference in the stream contract status row is corrected (section 14, not 13); no rule, schema or code change; not accepted, and the stream contract is not yet approved. Tasks: KOS-SENSE-005.
 
 - KOS-SENSE-005 review fixes (independent review of bce5ab5): AC-502 no longer calls `close` optional, as the contract requires one; a `sample` that is not an object is also given to the contract 0.1.0 validator; a usable timestamp now requires the unit `ns` as well as a clock and an integer value (the clock comparison needs only a recognised clock); the contract states the schema is a structural subset and that unknown record kinds are reported by the validator; the fixture for the generator's repeated-sequence fault is renamed `duplicate_then_gap_from_generator`; tests add exact positions, paths and messages, odd types and random partitions of the 10,000-record stream. No change to Sense contract 0.1.0, frame graph contract 0.1.0, the validator, the frame graph reference or the generator. Tasks: KOS-SENSE-005.
