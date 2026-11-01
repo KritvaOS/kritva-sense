@@ -61,11 +61,30 @@
     },
     {
       "task_id": "KOS-SENSE-003",
-      "execution": "IN_PROGRESS",
+      "execution": "COMPLETE",
       "git_sync": "SYNCED",
       "readiness": "IMPLEMENTABLE",
-      "evidence": []
+      "evidence": [
+        {
+          "type": "software",
+          "uri": "tests/frame_graph/test_frame_graph.py",
+          "description": "Frame graph contract 0.1.0, reference implementation, synthetic fixtures and unit tests; criteria AC-301 to AC-307 (reference only; not completion proof)",
+          "commit": null,
+          "ci_run": null,
+          "report_sha256": null,
+          "result": null
+        },
+        {
+          "type": "software",
+          "uri": "https://github.com/KritvaOS/kritva-sense/actions/runs/41267842700",
+          "description": "unit-tests CI run 41267842700 PASS on c92e841 (make check, docs-check and test-unit; closing commit, merge of pull request #21); later commits change wording only, not the frame graph code or fixtures",
+          "commit": "c92e841523f5d194de25a9a890e365c13bfc3f59",
+          "ci_run": "41267842700",
+          "report_sha256": null,
+          "result": "PASS"
+        }
+      ]
     }
   ],
-  "updated_at": "2026-11-01T04:10:00Z"
+  "updated_at": "2026-11-01T05:00:00Z"
 }
