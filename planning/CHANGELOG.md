@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-004 ACCEPTED: central approval recorded in kritva-program (D-086) on closing commit 82b3174 (`unit-tests` run 41275942226 PASS). Status wording only: no contract, schema or code change. Tasks: None (status and approval wording; no contract or code change).
+
 - KOS-SENSE-004 submitted for review: status IN_REVIEW with the `unit-tests` CI run 41275942226 PASS on closing commit 82b3174 as evidence. No contract, schema or code change; not accepted. Tasks: KOS-SENSE-004.
 
 - KOS-SENSE-004 review fixes (independent review of fb4fdf6): generator checks compare complete lists of violation codes and check sequence continuity for every adjacent pair; the API refuses an invalid sensor id, clock or frame; rotations no longer use `sin` and `cos`, and the determinism claim is narrowed to exactly rounded operations on IEEE 754 platforms (separate-process test added); encoder range stays inside the angle range; duplicate `--fault` indices are refused; the two normative contract documents are pinned by SHA-256 in the tests. Generator output for graphs differs from fb4fdf6 (seed values are not stable across this fix, as the task has no accepted evidence yet). No contract, schema or accepted-code change. Tasks: KOS-SENSE-004.
