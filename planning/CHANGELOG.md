@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- KOS-SENSE-009 (synthetic integration gate, AC-901 to AC-907, proposed weight 6) and KOS-SENSE-010 (regression gate and compatibility suite, AC-1001 to AC-1007, proposed weight 5) added as planning records under V2-M2-SENSE-001, proposed for baseline v8 and not started; they carry no weight until the owner freezes the baseline. No contract, schema or code change; `make test-integration`, `make test-regression` and `make test` stay NOT_IMPLEMENTED (exit 3). Tasks: None (planning records; tasks not started)
+
 - Pre-tag corrections after the external audit by ChatGPT (2026-11-01): README status, task, release and required-check wording brought up to the accepted state (eight accepted tasks, V2-M8-SENSE-001 closed, four required checks, tests/security listed, unit-tests described fully); the completion-record sentence about the changes since a8dfb5a corrected and the approval mechanism of pull request #55 recorded (owner ruleset bypass); the tag target is the merge commit of this correction. Tasks: None (documentation and status wording; no package or code change)
 
 - Milestone V2-M8-SENSE-001 completion record: `COMPLETION_RECORD.md` added at the repository root (scope KOS-SENSE-007 and KOS-SENSE-008, merge commits, `unit-tests` runs 41292919590 and 41298259048, criteria AC-701 to AC-807 PASS, deferred work and the owner's approval by merge); status wording updated. The tag `v0.2.0` is created by the owner after the merge; nothing is published. Tasks: None (milestone closure record and status wording; no package or code change)
