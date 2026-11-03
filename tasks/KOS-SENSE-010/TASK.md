@@ -3,8 +3,8 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M2-SENSE-001 |
-| Status | NOT_STARTED (proposed for baseline v8; not yet baselined) |
-| Weight | 5 (proposed planning weight, 5 effort days, range 4 to 7; not baselined: it carries no weight until the owner freezes the baseline; effort risk: deciding which behaviours are compatibility guarantees takes longer than writing the tests, and tests must not freeze accidental implementation details) |
+| Status | NOT_STARTED (baselined in v8, D-099; acceptance prerequisite: KOS-SENSE-009 accepted) |
+| Weight | 5 (initial planning weight, 5 effort days, range 4 to 7; baselined in v8, D-099; effort risk: deciding which behaviours are compatibility guarantees takes longer than writing the tests, and tests must not freeze accidental implementation details) |
 | Depends on | KOS-SENSE-001 to KOS-SENSE-008 (all accepted). Acceptance prerequisite, not an implementation dependency (the baseline has no dependency field): KOS-SENSE-010 cannot become ACCEPTED until KOS-SENSE-009 has been accepted, because the aggregate gate runs the integration gate |
 | Requires physical | No (software only, synthetic data) |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) (AC-1001 to AC-1007) |

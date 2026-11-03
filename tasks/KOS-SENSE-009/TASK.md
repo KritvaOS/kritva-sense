@@ -3,8 +3,8 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M2-SENSE-001 |
-| Status | NOT_STARTED (proposed for baseline v8; not yet baselined) |
-| Weight | 6 (proposed planning weight, 6 effort days, range 5 to 8; not baselined: it carries no weight until the owner freezes the baseline; effort risk: deciding which component boundaries are meaningful integration in a repository with no top-level runtime pipeline) |
+| Status | IN_PROGRESS (baselined in v8, D-099; all of KOS-SENSE-001 to KOS-SENSE-008 are accepted) |
+| Weight | 6 (initial planning weight, 6 effort days, range 5 to 8; baselined in v8, D-099; effort risk: deciding which component boundaries are meaningful integration in a repository with no top-level runtime pipeline) |
 | Depends on | KOS-SENSE-001 to KOS-SENSE-008 (all accepted). Direct technical dependencies: KOS-SENSE-002 to KOS-SENSE-007 |
 | Requires physical | No (software only, synthetic data) |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) (AC-901 to AC-907) |
