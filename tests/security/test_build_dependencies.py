@@ -98,11 +98,24 @@ class BuildConfiguration(unittest.TestCase):
         gate = makefile[makefile.index("test-unit:"):makefile.index("test-integration:")]
         listed = set(re.findall(r"discover -s tests/(\w+)", gate))
         present = {p.name for p in (ROOT / "tests").iterdir() if p.is_dir() and any(p.glob("test_*.py"))}
-        # `integration` is run by `make test-integration` (scripts/integration_gate.py, KOS-SENSE-009). `integration_gate`
-        # tests that gate; it moves into the unit gate when the Makefile change of KOS-SENSE-009 is merged.
-        self.assertLessEqual(present - listed, {"commit_message_check", "readme_check", "integration", "integration_gate"},
+        # `integration` is run by `make test-integration` (scripts/integration_gate.py, KOS-SENSE-009); the tests of that
+        # gate (`integration_gate`) are in the unit gate.
+        self.assertLessEqual(present - listed, {"commit_message_check", "readme_check", "integration"},
                              "a test directory is not run by make test-unit or make check")
         self.assertIn("security", listed)
+        self.assertIn("integration_gate", listed)
+
+    def test_integration_gate_is_a_real_gate_in_make_and_in_ci(self):
+        """KOS-SENSE-009 AC-906 and AC-907: make test-integration runs the gate script (it is no longer NOT_IMPLEMENTED)
+        and the unit-tests workflow runs it as its own visible step, with no new required check."""
+        makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+        body = makefile[makefile.index("test-integration:"):makefile.index("test-regression:")]
+        self.assertIn("python3 scripts/integration_gate.py", body)
+        self.assertNotIn("not_implemented", body)
+        workflow = (ROOT / ".github" / "workflows" / "unit-tests.yml").read_text(encoding="utf-8")
+        self.assertRegex(workflow, r"(?m)^      - name: Integration gate\n        run: make test-integration$")
+        self.assertEqual(workflow.count("\n  unit-tests:"), 1)
+        self.assertEqual(len(re.findall(r"(?m)^  [a-z0-9-]+:$", workflow[workflow.index("jobs:"):])), 1)
 
 
 if __name__ == "__main__":
