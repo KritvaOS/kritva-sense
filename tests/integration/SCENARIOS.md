@@ -1,0 +1,28 @@
+# Integration scenarios (KOS-SENSE-009)
+
+Status: written before the tests it governs (AC-901). Every mandatory scenario is listed in the table below, and each test module names the scenario it implements with a `SCENARIO = "INT-nn"` class attribute. `scripts/integration_gate.py` and `tests/integration_gate/` check that every listed scenario has a test and that every integration test belongs to a listed scenario.
+
+**Reference fixture.** The producer and consumer in `fixture.py` are a synthetic reference fixture built from the accepted contracts. They are not a Mind, Motion or Skill consumer and show nothing about any real consumer, sensor, robot or safety property. All input is synthetic and generated from a fixed seed (`fixture.SEED`). Expected results below are written by hand from the clause named in the last column, not produced by running the component under test.
+
+A scenario that only repeats a unit test is not an integration scenario and is not listed: each row crosses a boundary between two or more accepted components.
+
+## Mandatory scenarios
+
+| ID | Component boundary | Synthetic input | Expected result | Clause |
+|---|---|---|---|---|
+| INT-01 | generator -> validator | Valid samples for every kind (`imu`, `range`, `encoder`, `temperature`), seeded | Every generated sample is conformant (no violation) | GENERATOR 3; SENSE_CONTRACT 4 |
+| INT-02 | generator faults -> validator | One sample per fault in the generator fault table | Structural faults give exactly their stated code (`bad_unit` `INVALID_UNIT`, `unknown_frame` `UNKNOWN_FRAME`, `missing_measurement` `MISSING_FIELD`, `bad_timestamp` `INVALID_TIMESTAMP`, `bad_version` `UNSUPPORTED_CONTRACT_VERSION`); declared states (`stale`, `missing`, `invalid`), `gap`, `boundary` and the sample-level view of `regression` are conformant | GENERATOR 3; SENSE_CONTRACT 4, 6 |
+| INT-03 | generator -> frame graph reference | Generated graphs with 0 and 2 extra frames, and one graph per defect | A clean graph resolves `world` to its last frame and back, and the two transforms compose to the identity within 1e-9; each defect gives exactly its code (`FG_CYCLE`, `FG_DUPLICATE_EDGE`, `FG_MULTIPLE_PARENTS`, `FG_NOT_UNIT_QUATERNION`) and resolves nothing | GENERATOR 4; FRAME_GRAPH_CONTRACT 5, 6, 7 |
+| INT-04 | generator -> stream checker (valid) | Five generated samples wrapped in open, sample and close records; a stream carrying `stale`, `missing` and `invalid` samples | Both are conformant: a declared state is not a stream diagnostic | STREAM_CONTRACT 8 |
+| INT-05 | generator -> stream checker (faulted) | Streams built from generated samples: sequence repeat (`regression` fault at sample 2), `gap` fault, two samples swapped, no open record, no close record, a structurally faulty sample | Each gives exactly the diagnostics derived by hand in the test: duplicate then gap; one gap; gap, regression and timestamp regression; open missing with samples before open; unterminated; a sample violation with no stream diagnostic | STREAM_CONTRACT 4, 5, 6, 7, 8 |
+| INT-06 | fixture consumer -> conformance harness (conforming) | The harness case set, run on the fixture consumer through the module interface and through the command line | Verdict `CONFORMANT`, no failed case, exit 0; the fixture states that it is a reference fixture | CONFORMANCE 1, 4, 5, 6 |
+| INT-07 | fixture consumer -> conformance harness (faulty) | The same case set on a consumer that never applies the age limit | Verdict `NOT_CONFORMANT`; exactly the cases `sample.sequence.after_freshness`, `sample.stale.far_over_limit`, `sample.stale.one_over_limit` and `sample.stale.zero_limit_age_one` fail (each needs an age above the limit); exit 1 on the command line | CONFORMANCE 1 (SENSE_CONTRACT 6, 6.1) |
+| INT-08 | installed-style command lines chained | `kritva-sense-generator` output written to files and read by `kritva-sense-validate`, `kritva-sense-stream` and `kritva-sense-frame-graph`, run from a temporary directory with the source tree not the working directory | Exit code and output equal those of the module interfaces for the same data (0 conformant, 1 not conformant) | GENERATOR 5; each tool's usage |
+| INT-09 | failure propagation at each command line | Missing file, input that is not JSON, wrong number of arguments, a non-conformant document, and an inapplicable generator fault | Documented exit code (2 usage or read error, 1 not conformant), a message on standard error for exit 2 with nothing on standard output, and no traceback anywhere | GENERATOR 5; STREAM_CONTRACT and FRAME_GRAPH_CONTRACT command line sections |
+| INT-10 | determinism across boundaries | The whole chain (generator, stream wrap, stream check, harness result) run twice with different `PYTHONHASHSEED` | Byte-identical generator output and harness result | GENERATOR 2; CONFORMANCE 5 |
+
+## Interpretation notes (for review)
+
+- The five tools read a file path; none reads standard input. "Chained through standard input and output as the documents describe" is therefore tested as the documented flow: a tool writes JSON to standard output, the next tool reads it from a file. No undocumented `/dev/stdin` use is relied on.
+- "Installed command lines" (AC-905) is tested with console-script launchers of the exact form `pip` generates (`from kritva_sense._entry import <name>`), run from a temporary directory. Building and installing the wheel is already tested by `tests/packaging/` (KOS-SENSE-007) and needs build tools and a package index, which the network-disabled run of KOS-SENSE-008 does not have; this suite does not repeat it.
+- The age-limit consumer fault is one rule broken on purpose; it is not a model of any real consumer.

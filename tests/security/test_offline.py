@@ -24,7 +24,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from secutil import IN_CI, ROOT, TempDir, env, unavailable  # noqa: E402
 
-SUITES = ["contract", "frame_graph", "generator", "stream", "conformance", "status", "security"]
+SUITES = ["contract", "frame_graph", "generator", "stream", "conformance", "status", "security", "integration",
+          "integration_gate"]   # KOS-SENSE-009 AC-907: the integration suite and its gate tests also run offline
 # Justification: fetching the pinned build tools needs the package index. This is the single network need.
 NETWORK_TESTS = {"test_packaging_suite_passes_offline_with_a_prepared_wheelhouse",
                  "test_every_mandatory_suite_passes_in_a_network_namespace"}
