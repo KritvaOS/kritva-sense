@@ -217,10 +217,29 @@
     },
     {
       "task_id": "KOS-SENSE-009",
-      "execution": "IN_PROGRESS",
+      "execution": "COMPLETE",
       "git_sync": "SYNCED",
       "readiness": "IMPLEMENTABLE",
-      "evidence": []
+      "evidence": [
+        {
+          "type": "software",
+          "uri": "tests/integration/",
+          "description": "Integration scenarios INT-01 to INT-10 (SCENARIOS.md), synthetic reference fixture, 33 integration tests and the gate runner scripts/integration_gate.py with tests/integration_gate/; criteria AC-901 to AC-907 (reference only; not completion proof)",
+          "commit": null,
+          "ci_run": null,
+          "report_sha256": null,
+          "result": null
+        },
+        {
+          "type": "software",
+          "uri": "https://github.com/KritvaOS/kritva-sense/actions/runs/41761323273",
+          "description": "unit-tests CI run 41761323273 PASS on 55191ab (make check, docs-check, make test-unit including the security suite and the offline runs, and make test-integration as a separate step; closing commit, merge of pull request #60)",
+          "commit": "55191ab4a57f3fad2e7011fbb4ad68eb8bb6dbc2",
+          "ci_run": "41761323273",
+          "report_sha256": null,
+          "result": "PASS"
+        }
+      ]
     },
     {
       "task_id": "KOS-SENSE-010",
@@ -230,5 +249,5 @@
       "evidence": []
     }
   ],
-  "updated_at": "2026-11-03T06:00:00Z"
+  "updated_at": "2026-11-04T06:00:00Z"
 }

@@ -1,6 +1,6 @@
 # Integration gate (KOS-SENSE-009)
 
-Status: IN_PROGRESS (baselined in v8, D-099). Criteria: [AC-901 to AC-907](../../tasks/KOS-SENSE-009/ACCEPTANCE_CRITERIA.md). Task: [KOS-SENSE-009](../../tasks/KOS-SENSE-009/TASK.md).
+Status: IN_REVIEW (baselined in v8, D-099; pull requests #58 to #60). Criteria: [AC-901 to AC-907](../../tasks/KOS-SENSE-009/ACCEPTANCE_CRITERIA.md). Task: [KOS-SENSE-009](../../tasks/KOS-SENSE-009/TASK.md).
 
 The Sense components (validator, frame graph reference, generator, stream checker and conformance harness) are unit tested one by one under `tests/contract`, `tests/frame_graph`, `tests/generator`, `tests/stream` and `tests/conformance`. This directory tests the boundaries between them with deterministic synthetic data, and `scripts/integration_gate.py` decides pass or fail.
 
@@ -9,7 +9,7 @@ The Sense components (validator, frame graph reference, generator, stream checke
 ## Run
 
 ```
-python3 scripts/integration_gate.py          # the gate (what `make test-integration` runs once the Makefile target is in place)
+python3 scripts/integration_gate.py          # the gate (what `make test-integration` runs; CI runs it as a separate step of `unit-tests`)
 python3 -m unittest discover -s tests/integration     # the same tests without the gate decision
 ```
 
