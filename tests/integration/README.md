@@ -1,6 +1,6 @@
 # Integration gate (KOS-SENSE-009)
 
-Status: IN_REVIEW (baselined in v8, D-099; pull requests #58 to #60). Criteria: [AC-901 to AC-907](../../tasks/KOS-SENSE-009/ACCEPTANCE_CRITERIA.md). Task: [KOS-SENSE-009](../../tasks/KOS-SENSE-009/TASK.md).
+Status: ACCEPTED (baselined in v8, D-099; pull requests #58 to #60; central approval D-101). Criteria: [AC-901 to AC-907](../../tasks/KOS-SENSE-009/ACCEPTANCE_CRITERIA.md). Task: [KOS-SENSE-009](../../tasks/KOS-SENSE-009/TASK.md).
 
 The Sense components (validator, frame graph reference, generator, stream checker and conformance harness) are unit tested one by one under `tests/contract`, `tests/frame_graph`, `tests/generator`, `tests/stream` and `tests/conformance`. This directory tests the boundaries between them with deterministic synthetic data, and `scripts/integration_gate.py` decides pass or fail.
 
