@@ -15,7 +15,7 @@ EXECUTION = {"NOT_STARTED": "NOT_STARTED", "READY": "NOT_STARTED", "IN_PROGRESS"
 def tasks_md():
     rows = {}
     for line in (ROOT / "planning" / "TASKS.md").read_text(encoding="utf-8").splitlines():
-        m = re.match(r"^\| (KOS-SENSE-\d+) \| [^|]+ \| ([A-Z_]+)", line)
+        m = re.match(r"^\| (KOS-SENSE-(?:M0-)?\d+) \| [^|]+ \| ([A-Z_]+)", line)
         if m:
             rows[m.group(1)] = m.group(2)
     return rows
