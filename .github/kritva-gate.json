@@ -30,7 +30,8 @@
     "secret-scan",
     "commit-message-check",
     "pr-acceptance-gate",
-    "unit-tests"
+    "unit-tests",
+    "readme-check"
   ],
   "task_prefix": "KOS-SENSE",
   "task_registry": {
