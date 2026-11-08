@@ -1,0 +1,309 @@
+{
+  "conformance.bad_seed": {
+    "exit": 2,
+    "stderr_first_line": "--seed needs an integer >= 0",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "conformance.list_cases": {
+    "exit": 0,
+    "stderr_first_line": "",
+    "stdout_bytes": 10381,
+    "stdout_sha256": "d9c5f43277f5aef9ee22856016bee9b8dac4f24701bea346f5ae8caf7d26e146",
+    "traceback": false
+  },
+  "conformance.list_cases_with_output": {
+    "exit": 2,
+    "stderr_first_line": "--list-cases cannot be combined with --consumer or --output",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "conformance.mutant": {
+    "exit": 1,
+    "files": {
+      "result.json": "2f5982c1ba87555a9efd908e70c19f6de88c6e3de57705e36ac52cdf0e498192"
+    },
+    "stderr_first_line": "",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "conformance.reference": {
+    "exit": 0,
+    "files": {
+      "result.json": "358063b8e823d71187dbae4f5aa0edd962e2f88e7b565284e4b405790863d6b2"
+    },
+    "stderr_first_line": "",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "conformance.unknown_argument": {
+    "exit": 2,
+    "stderr_first_line": "unknown argument '--bogus'",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "conformance.unknown_mutant": {
+    "exit": 2,
+    "stderr_first_line": "unknown mutant 'nope'",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "frame_graph.conformant": {
+    "exit": 0,
+    "stderr_first_line": "",
+    "stdout": "conformant\n",
+    "stdout_bytes": 11,
+    "stdout_sha256": "50c3106acf71d648d887da6e703e4ee7d9e4a50593755afff480076b1b12ecff",
+    "traceback": false
+  },
+  "frame_graph.missing_file": {
+    "exit": 2,
+    "stderr_first_line": "cannot read frame graph: [Errno 2] No such file or directory: 'missing.json'",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "frame_graph.no_argument": {
+    "exit": 2,
+    "stderr_first_line": "usage: python3 -m kritva_sense.frame_graph FILE.json [FROM TO]",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "frame_graph.not_conformant": {
+    "exit": 1,
+    "stderr_first_line": "",
+    "stdout": "FG_CYCLE transforms: cycle among frames: base, world\nnot conformant\n",
+    "stdout_bytes": 68,
+    "stdout_sha256": "11ea15f421c20d2adb2beaa0e0b3e0e89d1e5a3a9b1d51af3ac0acff411e2020",
+    "traceback": false
+  },
+  "frame_graph.resolve": {
+    "exit": 0,
+    "stderr_first_line": "",
+    "stdout": "{\n  \"rotation\": {\n    \"w\": 1.0,\n    \"x\": 0.0,\n    \"y\": 0.0,\n    \"z\": 0.0\n  },\n  \"translation\": {\n    \"x\": -1.0,\n    \"y\": -2.0,\n    \"z\": 0.0\n  },\n  \"translation_unit\": \"m\"\n}\nconformant\n",
+    "stdout_bytes": 184,
+    "stdout_sha256": "bba4334d2a2ed756aee54a722253f4da352ee5619e37c42db3967e1bf0dd8682",
+    "traceback": false
+  },
+  "frame_graph.resolve_unknown_frame": {
+    "exit": 1,
+    "stderr_first_line": "",
+    "stdout": "FG_FRAME_NOT_IN_GRAPH target: frame 'nope' has no transform in this graph\nnot conformant\n",
+    "stdout_bytes": 89,
+    "stdout_sha256": "581f10e4533e28cdb98499d2504415d176cf03c3ad6003f297216432f4cf4fa4",
+    "traceback": false
+  },
+  "frame_graph.three_arguments": {
+    "exit": 2,
+    "stderr_first_line": "usage: python3 -m kritva_sense.frame_graph FILE.json [FROM TO]",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "generator.bad_fault": {
+    "exit": 2,
+    "stderr_first_line": "usage: python3 -m kritva_sense.generator samples [-h]",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "generator.graph": {
+    "exit": 0,
+    "stderr_first_line": "",
+    "stdout_bytes": 1676,
+    "stdout_sha256": "a3fe2a2c22c776b3bb2e4a7778b8bbc465c4b6da61678067d4ff32ee1c9fa990",
+    "traceback": false
+  },
+  "generator.graph_with_defect": {
+    "exit": 0,
+    "stderr_first_line": "",
+    "stdout_bytes": 1329,
+    "stdout_sha256": "60e0fed1d17c1fbf551c452338de5a27217680a8364eac4158772ac117121b52",
+    "traceback": false
+  },
+  "generator.negative_count": {
+    "exit": 2,
+    "stderr_first_line": "usage: python3 -m kritva_sense.generator samples [-h]",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "generator.no_command": {
+    "exit": 2,
+    "stderr_first_line": "usage: python3 -m kritva_sense.generator [-h] {samples,graph} ...",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "generator.samples": {
+    "exit": 0,
+    "stderr_first_line": "",
+    "stdout_bytes": 1720,
+    "stdout_sha256": "f511fcfa7c71336d08e76a1457b0cf27cbf3ff871e09e920ad75c46d240c7369",
+    "traceback": false
+  },
+  "generator.samples_to_file": {
+    "exit": 0,
+    "files": {
+      "out.json": "f511fcfa7c71336d08e76a1457b0cf27cbf3ff871e09e920ad75c46d240c7369"
+    },
+    "stderr_first_line": "",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "generator.samples_utc_clock_world_frame": {
+    "exit": 0,
+    "stderr_first_line": "",
+    "stdout_bytes": 1743,
+    "stdout_sha256": "6c4873526a1aff15e74d4958f9e8747ebde9f5d28fee8b09b71b71e95b990e17",
+    "traceback": false
+  },
+  "generator.samples_with_fault": {
+    "exit": 0,
+    "stderr_first_line": "",
+    "stdout_bytes": 1905,
+    "stdout_sha256": "1411de7d6454a1b1b4db0ac273d31d372005e65ec3e3af0a6a26549fa3c74b6d",
+    "traceback": false
+  },
+  "generator.unknown_kind": {
+    "exit": 2,
+    "stderr_first_line": "usage: python3 -m kritva_sense.generator samples [-h]",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "stream.conformant": {
+    "exit": 0,
+    "stderr_first_line": "",
+    "stdout": "conformant\n",
+    "stdout_bytes": 11,
+    "stdout_sha256": "50c3106acf71d648d887da6e703e4ee7d9e4a50593755afff480076b1b12ecff",
+    "traceback": false
+  },
+  "stream.missing_file": {
+    "exit": 2,
+    "stderr_first_line": "cannot read stream: [Errno 2] No such file or directory: 'missing.json'",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "stream.no_argument": {
+    "exit": 2,
+    "stderr_first_line": "usage: python3 -m kritva_sense.stream FILE.json",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "stream.not_conformant": {
+    "exit": 1,
+    "stderr_first_line": "",
+    "stdout": "STREAM_SEQUENCE_GAP record 2 records[2].sample.sequence: sequence 101 to 101 missing (previous 100, this 102)\nnot conformant\n",
+    "stdout_bytes": 125,
+    "stdout_sha256": "29ab87a61a456eb6be2aebc2050022fe897b10105151ec493bd89a7780dde3e9",
+    "traceback": false
+  },
+  "stream.not_json": {
+    "exit": 2,
+    "stderr_first_line": "cannot read stream: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "validate.conformant": {
+    "exit": 0,
+    "stderr_first_line": "",
+    "stdout": "conformant\n",
+    "stdout_bytes": 11,
+    "stdout_sha256": "50c3106acf71d648d887da6e703e4ee7d9e4a50593755afff480076b1b12ecff",
+    "traceback": false
+  },
+  "validate.missing_file": {
+    "exit": 2,
+    "stderr_first_line": "cannot read sample: [Errno 2] No such file or directory: 'missing.json'",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "validate.no_argument": {
+    "exit": 2,
+    "stderr_first_line": "usage: python3 -m kritva_sense FILE.json",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "validate.not_conformant": {
+    "exit": 1,
+    "stderr_first_line": "",
+    "stdout": "UNKNOWN_FRAME frame_id: 'map' is not a defined frame (world, base, sensor)\nnot conformant\n",
+    "stdout_bytes": 90,
+    "stdout_sha256": "27d7e972caf2cd5e7f5dcf7896d196873111bdf9d1deb71ca116476eceb72f4b",
+    "traceback": false
+  },
+  "validate.not_json": {
+    "exit": 2,
+    "stderr_first_line": "cannot read sample: Expecting value: line 1 column 1 (char 0)",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "validate.two_arguments": {
+    "exit": 2,
+    "stderr_first_line": "usage: python3 -m kritva_sense FILE.json",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "version.bad_option": {
+    "exit": 2,
+    "stderr_first_line": "usage: python3 -m kritva_sense.version [--check]",
+    "stdout": "",
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "traceback": false
+  },
+  "version.check": {
+    "exit": 0,
+    "stderr_first_line": "",
+    "stdout": "{\n  \"frame_graph_contract_version\": \"0.1.0\",\n  \"generator_version\": \"0.1.0\",\n  \"harness_version\": \"0.1.0\",\n  \"package_version\": \"0.2.0\",\n  \"sense_contract_version\": \"0.1.0\",\n  \"shipped_contract_files\": {\n    \"frame_graph_document\": \"0.1.0\",\n    \"frame_graph_schema\": \"0.1.0\",\n    \"sense_document\": \"0.1.0\",\n    \"sense_schema\": \"0.1.0\",\n    \"stream_document\": \"0.1.0\",\n    \"stream_schema\": \"0.1.0\"\n  },\n  \"stream_contract_version\": \"0.1.0\"\n}\nversions consistent\n",
+    "stdout_bytes": 461,
+    "stdout_sha256": "a1de234aff1d3634f64a4d3394f54b260be20a88950d35f5c2800f7c47482fbf",
+    "traceback": false
+  },
+  "version.print": {
+    "exit": 0,
+    "stderr_first_line": "",
+    "stdout": "{\n  \"frame_graph_contract_version\": \"0.1.0\",\n  \"generator_version\": \"0.1.0\",\n  \"harness_version\": \"0.1.0\",\n  \"package_version\": \"0.2.0\",\n  \"sense_contract_version\": \"0.1.0\",\n  \"shipped_contract_files\": {\n    \"frame_graph_document\": \"0.1.0\",\n    \"frame_graph_schema\": \"0.1.0\",\n    \"sense_document\": \"0.1.0\",\n    \"sense_schema\": \"0.1.0\",\n    \"stream_document\": \"0.1.0\",\n    \"stream_schema\": \"0.1.0\"\n  },\n  \"stream_contract_version\": \"0.1.0\"\n}\n",
+    "stdout_bytes": 441,
+    "stdout_sha256": "eb6fbcf86bb8a9e3824c051b247191139feda4d9f595b8e2e5ef5311fbc7bf83",
+    "traceback": false
+  }
+}

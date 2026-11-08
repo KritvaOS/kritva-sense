@@ -1,0 +1,234 @@
+{
+  "case_ids": [
+    "frame.connection.both_missing",
+    "frame.connection.disconnected",
+    "frame.connection.disconnected_other_pair",
+    "frame.connection.missing_frame",
+    "frame.connection.sensor_not_in_graph",
+    "frame.connection.world_not_in_graph",
+    "frame.graph.cycle",
+    "frame.graph.duplicate_edge",
+    "frame.graph.multiple_parents",
+    "frame.graph.non_unit_rotation",
+    "frame.graph.unsupported_version",
+    "frame.identity.empty_graph",
+    "frame.identity.frame_in_graph",
+    "frame.identity.frame_not_in_graph",
+    "frame.identity.graph_local_frame",
+    "frame.input.frame_not_a_string",
+    "frame.input.invalid_frame_id",
+    "frame.resolve.chain_down_is_inverse",
+    "frame.resolve.chain_up",
+    "frame.resolve.graph_local_frame",
+    "frame.resolve.rotation_down_is_inverse",
+    "frame.resolve.rotation_up",
+    "frame.resolve.siblings_via_ancestor",
+    "sample.clock.monotonic_sample_utc_now",
+    "sample.clock.utc_fresh",
+    "sample.clock.utc_sample_monotonic_now",
+    "sample.declared.invalid",
+    "sample.declared.missing",
+    "sample.declared.stale_fresh_age",
+    "sample.fresh.age_equal_to_limit",
+    "sample.fresh.age_zero",
+    "sample.fresh.within_limit",
+    "sample.fresh.zero_limit_zero_age",
+    "sample.future.one_ns_ahead",
+    "sample.precedence.declared_invalid_before_clock",
+    "sample.precedence.declared_missing_before_age",
+    "sample.precedence.declared_stale_before_future",
+    "sample.sequence.after_declared_state",
+    "sample.sequence.after_freshness",
+    "sample.sequence.after_structure",
+    "sample.sequence.equal",
+    "sample.sequence.gap_is_conformant",
+    "sample.sequence.lower",
+    "sample.sequence.next",
+    "sample.sequence.no_previous",
+    "sample.sequence.other_sensor_equal_independent",
+    "sample.sequence.other_sensor_independent",
+    "sample.stale.far_over_limit",
+    "sample.stale.one_over_limit",
+    "sample.stale.zero_limit_age_one",
+    "sample.structural.bad_timestamp",
+    "sample.structural.bad_unit",
+    "sample.structural.bad_version",
+    "sample.structural.before_age",
+    "sample.structural.before_declared",
+    "sample.structural.before_future",
+    "sample.structural.missing_measurement",
+    "sample.structural.not_an_object",
+    "sample.structural.unknown_frame",
+    "sample.valid.boundary_numbers",
+    "stream.clock.mismatch",
+    "stream.combination.gap_and_clock",
+    "stream.document.not_an_object",
+    "stream.document.unsupported_version",
+    "stream.identity.kind_change",
+    "stream.identity.sensor_change",
+    "stream.lifecycle.close_repeated",
+    "stream.lifecycle.empty",
+    "stream.lifecycle.no_open",
+    "stream.lifecycle.open_not_first",
+    "stream.lifecycle.open_repeated",
+    "stream.lifecycle.sample_after_close",
+    "stream.lifecycle.unterminated",
+    "stream.sample.bad_unit",
+    "stream.sequence.duplicate",
+    "stream.sequence.first_unmet",
+    "stream.sequence.gap",
+    "stream.sequence.gap_from_generator",
+    "stream.sequence.last_bound_without_samples",
+    "stream.sequence.last_unmet",
+    "stream.sequence.regression",
+    "stream.timestamp.regression",
+    "stream.valid.bounds_met",
+    "stream.valid.declared_states_are_conformant",
+    "stream.valid.equal_timestamps",
+    "stream.valid.four_samples",
+    "stream.valid.no_bounds_no_inference",
+    "stream.valid.no_samples"
+  ],
+  "harness_version": "0.1.0",
+  "mutants": {
+    "frame_no_path_gets_identity": {
+      "exit": 1,
+      "failed_cases": [
+        "frame.connection.disconnected",
+        "frame.connection.disconnected_other_pair"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    },
+    "frame_self_identity_unchecked": {
+      "exit": 1,
+      "failed_cases": [
+        "frame.identity.empty_graph",
+        "frame.identity.frame_not_in_graph"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    },
+    "frame_unknown_gets_identity": {
+      "exit": 1,
+      "failed_cases": [
+        "frame.connection.both_missing",
+        "frame.connection.missing_frame",
+        "frame.connection.sensor_not_in_graph",
+        "frame.connection.world_not_in_graph",
+        "frame.identity.empty_graph",
+        "frame.identity.frame_not_in_graph"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    },
+    "freshness_clock_ignored": {
+      "exit": 1,
+      "failed_cases": [
+        "sample.clock.monotonic_sample_utc_now",
+        "sample.clock.utc_sample_monotonic_now"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    },
+    "freshness_future_accepted": {
+      "exit": 1,
+      "failed_cases": [
+        "sample.future.one_ns_ahead"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    },
+    "freshness_limit_exclusive": {
+      "exit": 1,
+      "failed_cases": [
+        "sample.fresh.age_equal_to_limit",
+        "sample.fresh.zero_limit_zero_age"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    },
+    "precedence_declared_stale_ignored": {
+      "exit": 1,
+      "failed_cases": [
+        "sample.declared.stale_fresh_age",
+        "sample.precedence.declared_stale_before_future",
+        "sample.sequence.after_declared_state"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    },
+    "precedence_freshness_first": {
+      "exit": 1,
+      "failed_cases": [
+        "sample.precedence.declared_invalid_before_clock",
+        "sample.precedence.declared_missing_before_age",
+        "sample.precedence.declared_stale_before_future"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    },
+    "precedence_structure_unchecked": {
+      "exit": 1,
+      "failed_cases": [
+        "sample.sequence.after_structure",
+        "sample.structural.bad_timestamp",
+        "sample.structural.bad_unit",
+        "sample.structural.bad_version",
+        "sample.structural.before_age",
+        "sample.structural.before_declared",
+        "sample.structural.before_future",
+        "sample.structural.missing_measurement",
+        "sample.structural.unknown_frame"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    },
+    "sequence_before_freshness": {
+      "exit": 1,
+      "failed_cases": [
+        "sample.sequence.after_freshness"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    },
+    "sequence_equal_accepted": {
+      "exit": 1,
+      "failed_cases": [
+        "sample.sequence.equal"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    },
+    "sequence_gap_rejected": {
+      "exit": 1,
+      "failed_cases": [
+        "sample.sequence.gap_is_conformant"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    },
+    "sequence_sensors_mixed": {
+      "exit": 1,
+      "failed_cases": [
+        "sample.sequence.other_sensor_equal_independent",
+        "sample.sequence.other_sensor_independent"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    },
+    "stream_gap_as_regression": {
+      "exit": 1,
+      "failed_cases": [
+        "stream.combination.gap_and_clock",
+        "stream.sequence.gap",
+        "stream.sequence.gap_from_generator"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    },
+    "stream_gap_ignored": {
+      "exit": 1,
+      "failed_cases": [
+        "stream.combination.gap_and_clock",
+        "stream.sequence.gap",
+        "stream.sequence.gap_from_generator"
+      ],
+      "verdict": "NOT_CONFORMANT"
+    }
+  },
+  "reference": {
+    "exit": 0,
+    "failed": 0,
+    "passed": 88,
+    "result_sha256": "358063b8e823d71187dbae4f5aa0edd962e2f88e7b565284e4b405790863d6b2",
+    "verdict": "CONFORMANT"
+  },
+  "seed": 1
+}

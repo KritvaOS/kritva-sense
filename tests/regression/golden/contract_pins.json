@@ -1,0 +1,15 @@
+{
+  "contract/FRAME_GRAPH_CONTRACT.md": "a3ded6d06222a7f554127c16265e718f350eef58f0550737be425561c6f10210",
+  "contract/SENSE_CONTRACT.md": "f8935feb9efb10dd482e4b7386239295b2180412dbbcbc177aa7a6f86d75abcf",
+  "contract/STREAM_CONTRACT.md": "ac6aafea196224509a673c6f4e71c6a983575a24b816cb794669b17e1ff62bf4",
+  "contract/frame-transform.schema.json": "ae644360dc5ba0e679a9e616022b4261b2e95fe967da8af1e4d440f718a099e2",
+  "contract/sense-sample.schema.json": "1f6f0824af55237b0b3e90ddd413ddef8c48e2eb3cd19a7f4244295bd2b9bc6b",
+  "contract/stream.schema.json": "12f2003ab9144d820ea6f8aeb629e85fcbc888c6933c60060dd49162fee0ff51",
+  "src/kritva_sense/__init__.py": "f0232671bf69983a2240359242f8af6d36739b32895fb53d0bab5c5c6ac95582",
+  "src/kritva_sense/__main__.py": "14f9721f04349b3c644938d58d04f3e2dbe6cbf70465ebb4f613b70960d4d204",
+  "src/kritva_sense/conformance.py": "9b43037a2d922c165965318e10a02f72f136323cf24078402e15a164aa9f6d17",
+  "src/kritva_sense/frame_graph.py": "b955a656ba256c372a849c0e0512aac065b7bda66ab04cae8b0e462e0b7720ef",
+  "src/kritva_sense/generator.py": "e2ad1a243b1c029739774a663a8d3927f413f310a35620355578800adec4a7e8",
+  "src/kritva_sense/stream.py": "7e66e66f6fb0ca7633cdcc118531baf91bc6c16829a419dea02a0302637ae6cd",
+  "src/kritva_sense/validator.py": "cc758f474c21d1963ebbc3c8629a2f59584ce7f463935064f46e5b98061ccaa6"
+}
