@@ -61,6 +61,7 @@ Every entry point names the code or workflow it refers to. The review of each is
 | EP-14 | Build and release path | `pyproject.toml`, `MANIFEST.in`, `release/build-requirements.txt`, `release/normalise_sdist.py`, `tests/packaging/`, `RELEASE.md` | one fetch of the pinned build tools, TB-4, or a prepared wheelhouse (AS-7) | hash pinning, reproducibility, content of the artifacts |
 | EP-15 | Repository governance files | `.github/kritva-gate.json` (protected paths, required checks), `.github/CODEOWNERS`, `SECURITY.md` | contributors, TB-3 | which checks block a merge; accuracy of the security policy. `kritva-gate.json` is a repository-side declaration read by the gate: it does not prove that the GitHub ruleset enforces the same checks (A-8) |
 | EP-16 | Local helper scripts | `scripts/docs_check.py`, `scripts/check_readme.py` | repository files | read-only checks |
+| EP-17 | Workflow `progress-check` | `.github/workflows/progress-check.yml`, `scripts/progress_report.py` | the repository's own `status/` files (a pinned program snapshot and the generated report) | none beyond reading files; added after this review for the program's generated progress view (D-120) |
 
 ## 5. Assumptions
 
