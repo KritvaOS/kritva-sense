@@ -31,4 +31,4 @@ How the expected values come about: the stream cases use the hand-written `tests
 
 - The regression tests are not a second copy of the unit suite. The unit tests check behaviour in detail; a regression case pins what an outside user or a contract can rely on, usually through the command line, and fails with a message that names the rule to follow.
 - F-004 to F-011 of KOS-SENSE-008 are not listed: F-004 and F-005 are repository policy protected by `tests/security` and the workflow tests, F-006 and F-009 by the policy test, F-007, F-008 and F-011 were accepted risks, and F-010 was a documentation correction. The earlier reviews recorded no other fixed defect that a test can protect.
-- The aggregate `make test` and the CI steps that run the three gates are added by the separate owner-merged protected-path pull request of this task.
+- `make test-regression`, the aggregate `make test` (`scripts/test_all.py`, tested with stand-in gates in `tests/regression_gate/test_aggregate.py`) and the CI step "Regression gate" were added by the separate owner-merged protected-path pull request of this task.

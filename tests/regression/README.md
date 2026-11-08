@@ -1,6 +1,6 @@
 # Regression suite (KOS-SENSE-010)
 
-`make test-regression` (from the protected-path pull request of this task: `python3 scripts/regression_gate.py`) runs this suite and decides pass or fail. The mandatory cases are listed in [REGRESSION_INVENTORY.md](REGRESSION_INVENTORY.md). The suite is offline, standard library only, synthetic data only, deterministic, and has no coverage threshold (none is approved).
+`make test-regression` (`python3 scripts/regression_gate.py`) runs this suite and decides pass or fail; `make test` runs it together with the unit and integration gates and shows the three results separately. The mandatory cases are listed in [REGRESSION_INVENTORY.md](REGRESSION_INVENTORY.md). The suite is offline, standard library only, synthetic data only, deterministic, and has no coverage threshold (none is approved).
 
 ## What counts as a regression
 
@@ -31,8 +31,8 @@ The V2 acceptance standard requires that a change to an accepted contract update
 `golden/` holds `contract_cases.json` (violations per fixture), `contract_pins.json` (copy of the pin table of `tests/packaging/test_packaging.py`), `command_lines.json` (exit code, standard output by SHA-256, first line of standard error, with an argparse usage line cut after `[-h]` because Python versions wrap it differently, and written files per command line case) and `conformance.json` (case list, reference result hash, verdict of each mutant). They are written only by:
 
 ```
-python3 scripts/regenerate_regression_golden.py            # shows what would change, writes nothing, exit 1 if different
-python3 scripts/regenerate_regression_golden.py --write    # rewrites the files (from the protected-path change: make regression-golden)
+python3 scripts/regenerate_regression_golden.py            # shows what would change, writes nothing, exit 1 if different (`make regression-golden`)
+python3 scripts/regenerate_regression_golden.py --write    # rewrites the files (`make regression-golden WRITE=1` does the same)
 ```
 
 No test and not the gate ever runs it, and a test checks that no test module imports it. Run it only after the change was decided under the table above; the diff of `golden/` is then part of the pull request and is reviewed like source code. The stream expectations in `tests/stream/fixtures/expected.json` and the `expected_codes` of the Sense and frame graph fixtures are hand-written and are never regenerated.
