@@ -16,7 +16,7 @@
 | Milestones | [planning/MILESTONE.md](planning/MILESTONE.md) and [planning/MILESTONE_STATUS.md](planning/MILESTONE_STATUS.md) |
 | Tasks | [planning/TASKS.md](planning/TASKS.md) |
 | Acceptance Criteria | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) |
-| Status Reporting | [status/status.json](status/status.json): schema 2.0 report listing KOS-SENSE-001 to KOS-SENSE-009 (execution COMPLETE for each), hand-maintained, no generator (see section 10) |
+| Status Reporting | [status/status.json](status/status.json): schema 2.0 report listing KOS-SENSE-001 to KOS-SENSE-009 (execution COMPLETE for each), hand-maintained, no generator (see section 10) Generated progress view: [status/STATUS.md](status/STATUS.md) (see section 10). |
 | License | [LICENSE](LICENSE) (Apache License 2.0; see section 17 for an open question) |
 
 This README follows the Kritva README standard (`v2/planning/standards/README_STANDARD.md` in [kritva-program](https://github.com/KritvaOS/kritva-program)). It is a navigation map; the documents it links own the detail.
@@ -125,6 +125,8 @@ The target dates are in [planning/MILESTONE.md](planning/MILESTONE.md); they are
 - Work is not accepted because a commit or merged pull request exists, a check is green or a milestone says it is proposed. Interface and boundary changes, safety and security behaviour and dependency changes need human review ([AGENTS.md](AGENTS.md)).
 
 ## 10. Status Reporting and Program Integration
+
+**Progress view.** [status/STATUS.md](status/STATUS.md) is a generated progress view: a bar of accepted weight, with execution, evidence, acceptance and release readiness kept apart. `scripts/progress_report.py` renders it from the pinned snapshot `status/program_snapshot.json`, which kritva-program writes (`tools/publish_repo_progress.py`, decision D-120). The `progress-check` workflow runs on pull requests and on pushes to main, runs `python3 scripts/progress_report.py --check` (read-only), and fails when the report and the snapshot differ. The view is a derived snapshot of the program and can lag it; it records no acceptance, and its figures are not repeated in this README (README standard, rule 4).
 
 [status/status.json](status/status.json) (schema 2.0, workstream `SENSE`) is maintained by hand and checked against `planning/TASKS.md` by `tests/status`; there is no status generator yet. It lists KOS-SENSE-001 to KOS-SENSE-009 with execution COMPLETE, meaning the planning records list the task as accepted; it is not central acceptance. The program lists this repository as a status source in kritva-program (`v2/tracking/sources.json`, program decision D-077, Stage 1 plan `v2/planning/STATUS_INGESTION_PLAN.md`). All nine tasks are in the central baseline (v3 to v8, D-078 to D-099) and were approved centrally (A076, A077 re-recorded on v4 under D-027; then D-085, D-088, D-091, D-092 and D-101 for the later tasks); the central status views, not this README, hold the credit. The program tracks its tasks through the registry named in `.github/kritva-gate.json` (`planning/TASKS.md`, type `repo-tasks-md`). This repository reports facts only and earns no program credit; nothing in it adds baseline weight (kritva-program decides baseline, weights, approvals and gates).
 

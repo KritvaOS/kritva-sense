@@ -1,0 +1,79 @@
+{
+  "baseline_tasks": {
+    "accepted_tasks": 10,
+    "baseline_tasks": 11,
+    "rows": 0
+  },
+  "evidence_notes": [
+    "KOS-SENSE-010: the repo reports no commit-bound CI evidence"
+  ],
+  "execution": {
+    "complete": 10,
+    "tasks": 11
+  },
+  "foundation": {
+    "accepted_tasks": 0,
+    "accepted_weight": 0,
+    "tasks": 0,
+    "weight": 0
+  },
+  "milestones": {
+    "M0": {
+      "accepted": 3,
+      "baseline": 3,
+      "point": 0,
+      "rows": 0
+    },
+    "M1": {
+      "accepted": 5,
+      "baseline": 5,
+      "point": 0,
+      "rows": 0
+    },
+    "M2": {
+      "accepted": 14,
+      "baseline": 19,
+      "point": 0,
+      "rows": 0
+    },
+    "M5": {
+      "accepted": 5,
+      "baseline": 5,
+      "point": 0,
+      "rows": 0
+    },
+    "M7": {
+      "accepted": 9,
+      "baseline": 9,
+      "point": 0,
+      "rows": 0
+    },
+    "M8": {
+      "accepted": 11,
+      "baseline": 11,
+      "point": 0,
+      "rows": 0
+    }
+  },
+  "program": {
+    "baseline_approved": true,
+    "baseline_version": 12,
+    "generated_at": "2026-11-08T12:16:37Z",
+    "release_state": "NOT_READY",
+    "view": "https://github.com/KritvaOS/kritva-program/blob/main/v2/tracking/STATUS_VIEW.md"
+  },
+  "repo": "Sense",
+  "repository": "KritvaOS/kritva-sense",
+  "schema_version": 1,
+  "titles": {
+    "M0": "Foundation",
+    "M1": "Studio",
+    "M2": "Build & Artifact",
+    "M3": "Control Plane",
+    "M4": "Booking & Commercial",
+    "M5": "Execution",
+    "M6": "Lab & Robot",
+    "M7": "Live & Results",
+    "M8": "Production"
+  }
+}
