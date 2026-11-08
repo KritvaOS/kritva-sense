@@ -1,0 +1,397 @@
+{
+  "frame_graph": {
+    "tests/frame_graph/fixtures/invalid/cycle_three_frames.json": [
+      [
+        "FG_CYCLE",
+        "transforms"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/cycle_two_frames.json": [
+      [
+        "FG_CYCLE",
+        "transforms"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/cycle_with_a_tail.json": [
+      [
+        "FG_CYCLE",
+        "transforms"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/duplicate_edge.json": [
+      [
+        "FG_DUPLICATE_EDGE",
+        "transforms[1]"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/edge_not_object.json": [
+      [
+        "FG_MALFORMED",
+        "transforms[0]"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/invalid_child_id.json": [
+      [
+        "FG_INVALID_FRAME_ID",
+        "transforms[0].child"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/invalid_parent_id.json": [
+      [
+        "FG_INVALID_FRAME_ID",
+        "transforms[0].parent"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/missing_parent.json": [
+      [
+        "FG_MISSING_FIELD",
+        "transforms[0].parent"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/missing_transforms.json": [
+      [
+        "FG_MISSING_FIELD",
+        "transforms"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/missing_version.json": [
+      [
+        "FG_MISSING_FIELD",
+        "contract_version"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/multiple_parents.json": [
+      [
+        "FG_MULTIPLE_PARENTS",
+        "transforms[1]"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/parent_not_string.json": [
+      [
+        "FG_MALFORMED",
+        "transforms[0].parent"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/quaternion_extra_component.json": [
+      [
+        "FG_UNKNOWN_FIELD",
+        "transforms[0].rotation.extra"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/quaternion_infinite.json": [
+      [
+        "FG_NON_FINITE",
+        "transforms[0].rotation.w"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/quaternion_just_outside_tolerance.json": [
+      [
+        "FG_NOT_UNIT_QUATERNION",
+        "transforms[0].rotation"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/quaternion_missing_z.json": [
+      [
+        "FG_MISSING_FIELD",
+        "transforms[0].rotation.z"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/quaternion_not_unit.json": [
+      [
+        "FG_NOT_UNIT_QUATERNION",
+        "transforms[0].rotation"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/quaternion_zero.json": [
+      [
+        "FG_NOT_UNIT_QUATERNION",
+        "transforms[0].rotation"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/rotation_as_array.json": [
+      [
+        "FG_MALFORMED",
+        "transforms[0].rotation"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/rotation_as_euler.json": [
+      [
+        "FG_MISSING_FIELD",
+        "transforms[0].rotation.w"
+      ],
+      [
+        "FG_MISSING_FIELD",
+        "transforms[0].rotation.x"
+      ],
+      [
+        "FG_MISSING_FIELD",
+        "transforms[0].rotation.y"
+      ],
+      [
+        "FG_MISSING_FIELD",
+        "transforms[0].rotation.z"
+      ],
+      [
+        "FG_UNKNOWN_FIELD",
+        "transforms[0].rotation.pitch"
+      ],
+      [
+        "FG_UNKNOWN_FIELD",
+        "transforms[0].rotation.roll"
+      ],
+      [
+        "FG_UNKNOWN_FIELD",
+        "transforms[0].rotation.yaw"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/self_link.json": [
+      [
+        "FG_SELF_LINK",
+        "transforms[0]"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/several_faults.json": [
+      [
+        "FG_NOT_UNIT_QUATERNION",
+        "transforms[1].rotation"
+      ],
+      [
+        "FG_SELF_LINK",
+        "transforms[0]"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/transforms_not_array.json": [
+      [
+        "FG_MALFORMED",
+        "transforms"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/translation_array.json": [
+      [
+        "FG_MALFORMED",
+        "transforms[0].translation"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/translation_boolean.json": [
+      [
+        "FG_MALFORMED",
+        "transforms[0].translation.x"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/translation_extra_component.json": [
+      [
+        "FG_UNKNOWN_FIELD",
+        "transforms[0].translation.w"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/translation_infinite.json": [
+      [
+        "FG_NON_FINITE",
+        "transforms[0].translation.x"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/translation_missing_z.json": [
+      [
+        "FG_MISSING_FIELD",
+        "transforms[0].translation.z"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/translation_string.json": [
+      [
+        "FG_MALFORMED",
+        "transforms[0].translation.x"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/unknown_edge_field.json": [
+      [
+        "FG_UNKNOWN_FIELD",
+        "transforms[0].extra"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/unknown_top_field.json": [
+      [
+        "FG_UNKNOWN_FIELD",
+        "extra"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/unsupported_version.json": [
+      [
+        "FG_UNSUPPORTED_VERSION",
+        "contract_version"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/version_not_string.json": [
+      [
+        "FG_MALFORMED",
+        "contract_version"
+      ]
+    ],
+    "tests/frame_graph/fixtures/invalid/wrong_unit.json": [
+      [
+        "FG_INVALID_UNIT",
+        "transforms[0].translation_unit"
+      ]
+    ],
+    "tests/frame_graph/fixtures/valid/chain_world_base_sensor.json": [],
+    "tests/frame_graph/fixtures/valid/empty_graph.json": [],
+    "tests/frame_graph/fixtures/valid/extra_frame_chain.json": [],
+    "tests/frame_graph/fixtures/valid/negated_quaternion_same_rotation.json": [],
+    "tests/frame_graph/fixtures/valid/rotation_180_about_x.json": [],
+    "tests/frame_graph/fixtures/valid/siblings_through_world.json": [],
+    "tests/frame_graph/fixtures/valid/single_edge.json": [],
+    "tests/frame_graph/fixtures/valid/unit_norm_within_tolerance.json": []
+  },
+  "sense": {
+    "tests/contract/fixtures/invalid/bad_sensor_id.json": [
+      [
+        "INVALID_SENSOR_ID",
+        "sensor_id"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/extra_measurement.json": [
+      [
+        "UNKNOWN_FIELD",
+        "measurements.pressure"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/invalid_validity.json": [
+      [
+        "INVALID_VALIDITY",
+        "validity"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/missing_measurement.json": [
+      [
+        "MISSING_FIELD",
+        "measurements.gyro_z"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/missing_sensor_id.json": [
+      [
+        "MISSING_FIELD",
+        "sensor_id"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/missing_with_data.json": [
+      [
+        "MALFORMED_FIELD",
+        "measurements"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/negative_sequence.json": [
+      [
+        "MALFORMED_FIELD",
+        "sequence"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/not_valid_without_error.json": [
+      [
+        "MISSING_FIELD",
+        "error_code"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/timestamp_float.json": [
+      [
+        "INVALID_TIMESTAMP",
+        "timestamp.value"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/timestamp_negative.json": [
+      [
+        "INVALID_TIMESTAMP",
+        "timestamp.value"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/timestamp_not_object.json": [
+      [
+        "INVALID_TIMESTAMP",
+        "timestamp"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/timestamp_wrong_clock.json": [
+      [
+        "INVALID_TIMESTAMP",
+        "timestamp.clock"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/timestamp_wrong_unit.json": [
+      [
+        "INVALID_TIMESTAMP",
+        "timestamp.unit"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/unknown_error_code.json": [
+      [
+        "MALFORMED_FIELD",
+        "error_code"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/unknown_field.json": [
+      [
+        "UNKNOWN_FIELD",
+        "extra"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/unknown_frame.json": [
+      [
+        "UNKNOWN_FRAME",
+        "frame_id"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/unknown_kind.json": [
+      [
+        "MALFORMED_FIELD",
+        "kind"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/unsupported_version.json": [
+      [
+        "UNSUPPORTED_CONTRACT_VERSION",
+        "contract_version"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/valid_with_error.json": [
+      [
+        "MALFORMED_FIELD",
+        "error_code"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/value_is_bool.json": [
+      [
+        "MALFORMED_FIELD",
+        "measurements.gyro_x.value"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/value_is_string.json": [
+      [
+        "MALFORMED_FIELD",
+        "measurements.gyro_x.value"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/value_nan.json": [
+      [
+        "NON_FINITE_VALUE",
+        "measurements.gyro_x.value"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/version_not_string.json": [
+      [
+        "MALFORMED_FIELD",
+        "contract_version"
+      ]
+    ],
+    "tests/contract/fixtures/invalid/wrong_unit.json": [
+      [
+        "INVALID_UNIT",
+        "measurements.accel_x.unit"
+      ]
+    ],
+    "tests/contract/fixtures/valid/encoder_valid.json": [],
+    "tests/contract/fixtures/valid/imu_valid.json": [],
+    "tests/contract/fixtures/valid/invalid_declared.json": [],
+    "tests/contract/fixtures/valid/missing_declared.json": [],
+    "tests/contract/fixtures/valid/range_valid.json": [],
+    "tests/contract/fixtures/valid/stale_declared.json": [],
+    "tests/contract/fixtures/valid/temperature_valid.json": []
+  }
+}
