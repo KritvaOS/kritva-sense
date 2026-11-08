@@ -18,6 +18,7 @@ POLICY = {
     "commit-message-check.yml": {"permissions": {"contents": "read"}, "actions": {"actions/checkout", "actions/setup-python"}},
     "pr-acceptance-gate.yml": {"permissions": {"contents": "read", "pull-requests": "write"},
                                "actions": {"actions/checkout", "actions/setup-python"}},
+    "progress-check.yml": {"permissions": {"contents": "read"}, "actions": {"actions/checkout", "actions/setup-python"}},
     "readme-check.yml": {"permissions": {"contents": "read"}, "actions": {"actions/checkout", "actions/setup-python"}},
     "secret-scan.yml": {"permissions": {"contents": "read"}, "actions": {"actions/checkout"}},
     "unit-tests.yml": {"permissions": {"contents": "read"}, "actions": {"actions/checkout", "actions/setup-python"}},
