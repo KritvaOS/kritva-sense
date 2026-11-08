@@ -175,6 +175,15 @@ def _normalise(case_id, data):
     return data
 
 
+def first_line(stderr):
+    """The first line of standard error. argparse wraps its usage line at different places in different Python
+    versions, so a usage line is cut after `[-h]`, the part every supported version prints the same way."""
+    line = stderr.splitlines()[0] if stderr.strip() else ""
+    if line.startswith("usage:") and " [-h]" in line:
+        line = line[:line.index(" [-h]") + len(" [-h]")]
+    return line
+
+
 def run_case(case, hashseed="0"):
     """Run one command line case in a fresh temporary directory; returns the observable record."""
     case_id, _, module, args, inputs, outputs = case
@@ -191,7 +200,7 @@ def run_case(case, hashseed="0"):
         stdout = _normalise(case_id, r.stdout)
         stderr = r.stderr.decode("utf-8", "replace")
         rec = {"exit": r.returncode, "stdout_sha256": sha256_bytes(stdout), "stdout_bytes": len(stdout),
-               "stderr_first_line": stderr.splitlines()[0] if stderr.strip() else "",
+               "stderr_first_line": first_line(stderr),
                "traceback": "Traceback" in stderr}
         if len(stdout) <= 600:
             rec["stdout"] = stdout.decode("utf-8", "replace")

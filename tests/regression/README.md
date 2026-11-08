@@ -28,7 +28,7 @@ The V2 acceptance standard requires that a change to an accepted contract update
 
 ## Golden data
 
-`golden/` holds `contract_cases.json` (violations per fixture), `contract_pins.json` (copy of the pin table of `tests/packaging/test_packaging.py`), `command_lines.json` (exit code, standard output by SHA-256, first line of standard error and written files per command line case) and `conformance.json` (case list, reference result hash, verdict of each mutant). They are written only by:
+`golden/` holds `contract_cases.json` (violations per fixture), `contract_pins.json` (copy of the pin table of `tests/packaging/test_packaging.py`), `command_lines.json` (exit code, standard output by SHA-256, first line of standard error, with an argparse usage line cut after `[-h]` because Python versions wrap it differently, and written files per command line case) and `conformance.json` (case list, reference result hash, verdict of each mutant). They are written only by:
 
 ```
 python3 scripts/regenerate_regression_golden.py            # shows what would change, writes nothing, exit 1 if different

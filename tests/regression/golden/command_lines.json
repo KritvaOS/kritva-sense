@@ -148,7 +148,7 @@
   },
   "generator.no_command": {
     "exit": 2,
-    "stderr_first_line": "usage: python3 -m kritva_sense.generator [-h] {samples,graph} ...",
+    "stderr_first_line": "usage: python3 -m kritva_sense.generator [-h]",
     "stdout": "",
     "stdout_bytes": 0,
     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
