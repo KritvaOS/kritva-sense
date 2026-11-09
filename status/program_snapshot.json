@@ -64,7 +64,108 @@
   },
   "repo": "Sense",
   "repository": "KritvaOS/kritva-sense",
-  "schema_version": 1,
+  "schema_version": 2,
+  "tasks": [
+    {
+      "accepted": true,
+      "execution": "COMPLETE",
+      "id": "KOS-SENSE-001",
+      "kind": "baselined",
+      "milestone": "M1",
+      "title": "Sense architecture and data contract",
+      "weight": 5
+    },
+    {
+      "accepted": true,
+      "execution": "COMPLETE",
+      "id": "KOS-SENSE-002",
+      "kind": "baselined",
+      "milestone": "M2",
+      "title": "Contract validation and synthetic-data tests",
+      "weight": 4
+    },
+    {
+      "accepted": true,
+      "execution": "COMPLETE",
+      "id": "KOS-SENSE-003",
+      "kind": "baselined",
+      "milestone": "M5",
+      "title": "Deterministic frame graph and transform validation for simulated samples",
+      "weight": 5
+    },
+    {
+      "accepted": true,
+      "execution": "COMPLETE",
+      "id": "KOS-SENSE-004",
+      "kind": "baselined",
+      "milestone": "M2",
+      "title": "Deterministic synthetic sensor sample generator",
+      "weight": 4
+    },
+    {
+      "accepted": true,
+      "execution": "COMPLETE",
+      "id": "KOS-SENSE-005",
+      "kind": "baselined",
+      "milestone": "M7",
+      "title": "Telemetry stream contract and reference validator",
+      "weight": 4
+    },
+    {
+      "accepted": true,
+      "execution": "COMPLETE",
+      "id": "KOS-SENSE-006",
+      "kind": "baselined",
+      "milestone": "M7",
+      "title": "Consumer conformance harness",
+      "weight": 5
+    },
+    {
+      "accepted": true,
+      "execution": "COMPLETE",
+      "id": "KOS-SENSE-007",
+      "kind": "baselined",
+      "milestone": "M8",
+      "title": "Python package and reproducible release",
+      "weight": 5
+    },
+    {
+      "accepted": true,
+      "execution": "COMPLETE",
+      "id": "KOS-SENSE-008",
+      "kind": "baselined",
+      "milestone": "M8",
+      "title": "Repository security and CI assurance review",
+      "weight": 6
+    },
+    {
+      "accepted": true,
+      "execution": "COMPLETE",
+      "id": "KOS-SENSE-009",
+      "kind": "baselined",
+      "milestone": "M2",
+      "title": "Synthetic integration gate",
+      "weight": 6
+    },
+    {
+      "accepted": false,
+      "execution": "IN_PROGRESS",
+      "id": "KOS-SENSE-010",
+      "kind": "baselined",
+      "milestone": "M2",
+      "title": "Regression gate and compatibility suite",
+      "weight": 5
+    },
+    {
+      "accepted": true,
+      "execution": "COMPLETE",
+      "id": "KOS-SENSE-M0-001",
+      "kind": "baselined",
+      "milestone": "M0",
+      "title": "Sense governance and acceptance review",
+      "weight": 3
+    }
+  ],
   "titles": {
     "M0": "Foundation",
     "M1": "Studio",

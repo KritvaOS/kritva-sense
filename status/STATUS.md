@@ -29,6 +29,24 @@ Accepted weight over total weight, where total covers completed Foundation work,
 
 Milestone dates are owner-approved planning dates in the program, not delivery commitments.
 
+## Baselined tasks
+
+Tasks in the approved program baseline. Weight is the baseline weight. Acceptance is decided by kritva-program; execution is this repository's own report.
+
+| Task | Title | Milestone | Weight | Execution | Acceptance |
+|---|---|---|---|---|---|
+| `KOS-SENSE-M0-001` | Sense governance and acceptance review | M0 | 3 | COMPLETE | ACCEPTED |
+| `KOS-SENSE-001` | Sense architecture and data contract | M1 | 5 | COMPLETE | ACCEPTED |
+| `KOS-SENSE-002` | Contract validation and synthetic-data tests | M2 | 4 | COMPLETE | ACCEPTED |
+| `KOS-SENSE-004` | Deterministic synthetic sensor sample generator | M2 | 4 | COMPLETE | ACCEPTED |
+| `KOS-SENSE-009` | Synthetic integration gate | M2 | 6 | COMPLETE | ACCEPTED |
+| `KOS-SENSE-010` | Regression gate and compatibility suite | M2 | 5 | IN_PROGRESS | NOT ACCEPTED |
+| `KOS-SENSE-003` | Deterministic frame graph and transform validation for simulated samples | M5 | 5 | COMPLETE | ACCEPTED |
+| `KOS-SENSE-005` | Telemetry stream contract and reference validator | M7 | 4 | COMPLETE | ACCEPTED |
+| `KOS-SENSE-006` | Consumer conformance harness | M7 | 5 | COMPLETE | ACCEPTED |
+| `KOS-SENSE-007` | Python package and reproducible release | M8 | 5 | COMPLETE | ACCEPTED |
+| `KOS-SENSE-008` | Repository security and CI assurance review | M8 | 6 | COMPLETE | ACCEPTED |
+
 ## Four states, kept apart
 
 | State | This repository | Decided by |
