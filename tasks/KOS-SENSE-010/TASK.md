@@ -3,13 +3,13 @@
 | Property | Value |
 |---|---|
 | Milestone | V2-M2-SENSE-001 |
-| Status | IN_PROGRESS (baselined in v8, D-099; KOS-SENSE-009 accepted by D-101, so the acceptance prerequisite is met) |
+| Status | IN_REVIEW (implemented in pull requests #63, #69 and #72; baselined in v8, D-099; KOS-SENSE-009 accepted by D-101, so the acceptance prerequisite is met) |
 | Weight | 5 (initial planning weight, 5 effort days, range 4 to 7; baselined in v8, D-099; effort risk: deciding which behaviours are compatibility guarantees takes longer than writing the tests, and tests must not freeze accidental implementation details) |
 | Depends on | KOS-SENSE-001 to KOS-SENSE-009 (all accepted; KOS-SENSE-009 by D-101). Acceptance prerequisite, not an implementation dependency (the baseline has no dependency field): KOS-SENSE-010 could not become ACCEPTED until KOS-SENSE-009 was accepted, because the aggregate gate runs the integration gate; that prerequisite is met |
 | Requires physical | No (software only, synthetic data) |
 | Acceptance | [ACCEPTANCE_CRITERIA.md](ACCEPTANCE_CRITERIA.md) (AC-1001 to AC-1007) |
 | Deliverables | `tests/regression/` with `REGRESSION_INVENTORY.md`, the regression test modules and golden data, `make test-regression`, the aggregate `make test`, the CI step that runs them, and the documentation of what counts as a regression |
-| Acceptance evidence | Not yet: closing commit, CI run and central approval (recorded in kritva-program) |
+| Acceptance evidence | Closing commit a072cee (squash merge of pull request #72); `unit-tests` CI run 43139244187 PASS on it (make check, docs-check, make test-unit, and make test-integration and make test-regression as separate steps). Not yet: review record and central approval (recorded in kritva-program) |
 
 ## Purpose
 
