@@ -98,15 +98,14 @@ class BuildConfiguration(unittest.TestCase):
         gate = makefile[makefile.index("test-unit:"):makefile.index("test-integration:")]
         listed = set(re.findall(r"discover -s tests/(\w+)", gate))
         present = {p.name for p in (ROOT / "tests").iterdir() if p.is_dir() and any(p.glob("test_*.py"))}
-        # `integration` is run by `make test-integration` (scripts/integration_gate.py, KOS-SENSE-009); the tests of that
-        # gate (`integration_gate`) are in the unit gate. `regression` is run by scripts/regression_gate.py and
-        # `regression_gate` holds the tests of that gate and of the shared engine (KOS-SENSE-010). Until the owner-merged
-        # Makefile change of KOS-SENSE-010 lands, neither is wired into make; that change tightens this test.
-        self.assertLessEqual(present - listed, {"commit_message_check", "readme_check", "integration", "regression",
-                                                "regression_gate"},
+        # `integration` is run by `make test-integration` (scripts/integration_gate.py, KOS-SENSE-009) and `regression` by
+        # `make test-regression` (scripts/regression_gate.py, KOS-SENSE-010); the tests of those two gates and of their
+        # shared engine (`integration_gate`, `regression_gate`) are in the unit gate.
+        self.assertLessEqual(present - listed, {"commit_message_check", "readme_check", "integration", "regression"},
                              "a test directory is not run by make test-unit or make check")
         self.assertIn("security", listed)
         self.assertIn("integration_gate", listed)
+        self.assertIn("regression_gate", listed)
 
     def test_integration_gate_is_a_real_gate_in_make_and_in_ci(self):
         """KOS-SENSE-009 AC-906 and AC-907: make test-integration runs the gate script (it is no longer NOT_IMPLEMENTED)
@@ -118,6 +117,19 @@ class BuildConfiguration(unittest.TestCase):
         workflow = (ROOT / ".github" / "workflows" / "unit-tests.yml").read_text(encoding="utf-8")
         self.assertRegex(workflow, r"(?m)^      - name: Integration gate\n        run: make test-integration$")
         self.assertEqual(workflow.count("\n  unit-tests:"), 1)
+        self.assertEqual(len(re.findall(r"(?m)^  [a-z0-9-]+:$", workflow[workflow.index("jobs:"):])), 1)
+
+
+    def test_regression_gate_is_a_real_gate_in_make_and_in_ci(self):
+        """KOS-SENSE-010 AC-1006 and AC-1007: make test-regression runs the gate script (no longer NOT_IMPLEMENTED), the
+        aggregate make test runs the three gates, and the workflow has a separate Regression gate step with no new
+        required check. The aggregate itself is tested in tests/regression_gate/test_aggregate.py."""
+        makefile = (ROOT / "Makefile").read_text(encoding="utf-8")
+        body = makefile[makefile.index("test-regression:"):makefile.index("\ntest:")]
+        self.assertIn("python3 scripts/regression_gate.py", body)
+        self.assertNotIn("not_implemented", body)
+        workflow = (ROOT / ".github" / "workflows" / "unit-tests.yml").read_text(encoding="utf-8")
+        self.assertRegex(workflow, r"(?m)^      - name: Regression gate\n        run: make test-regression$")
         self.assertEqual(len(re.findall(r"(?m)^  [a-z0-9-]+:$", workflow[workflow.index("jobs:"):])), 1)
 
 

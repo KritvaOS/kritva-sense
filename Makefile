@@ -30,14 +30,14 @@ check-readme: ## Structural check of README.md (metadata, topics, relative links
 	@python3 scripts/check_readme.py README.md
 
 ##@ Gates (unimplemented gates exit 3)
-.PHONY: lint test-unit test-integration test-regression test acceptance
+.PHONY: lint test-unit test-integration test-regression test regression-golden acceptance
 define not_implemented
 	@echo "NOT_IMPLEMENTED: $(1) has no tests yet; this is not a pass"; exit 3
 endef
 
 lint: ## Static analysis and lint (NOT_IMPLEMENTED: exits 3)
 	$(call not_implemented,lint)
-test-unit: ## Unit tests: contract validator, frame graph, generator, stream, consumer conformance harness, synthetic fixtures, status report consistency, packaging, install and reproducible build, security regression tests and the tests of the integration gate (KOS-SENSE-002 to KOS-SENSE-009)
+test-unit: ## Unit tests: contract validator, frame graph, generator, stream, consumer conformance harness, synthetic fixtures, status report consistency, packaging, install and reproducible build, security regression tests and the tests of the integration gate, the regression gate and the shared gate engine (KOS-SENSE-002 to KOS-SENSE-010)
 	@python3 -m unittest discover -s tests/contract
 	@python3 -m unittest discover -s tests/frame_graph
 	@python3 -m unittest discover -s tests/generator
@@ -47,12 +47,15 @@ test-unit: ## Unit tests: contract validator, frame graph, generator, stream, co
 	@python3 -m unittest discover -s tests/packaging
 	@python3 -m unittest discover -s tests/security
 	@python3 -m unittest discover -s tests/integration_gate
+	@python3 -m unittest discover -s tests/regression_gate
 test-integration: ## Integration gate: synthetic scenarios INT-01 to INT-10 on the reference fixture; fails on a failing, skipped or missing scenario (KOS-SENSE-009)
 	@python3 scripts/integration_gate.py
-test-regression: ## Regression tests (NOT_IMPLEMENTED: exits 3)
-	$(call not_implemented,test-regression)
-test: ## All tests (NOT_IMPLEMENTED: exits 3)
-	$(call not_implemented,test)
+test-regression: ## Regression gate: cases REG-01 to REG-16 of tests/regression/REGRESSION_INVENTORY.md; fails on a failing, skipped or missing case, zero tests or an incomplete run (KOS-SENSE-010)
+	@python3 scripts/regression_gate.py
+test: ## All tests: runs test-unit, test-integration and test-regression once each, shows the three results separately and fails if any one fails, is missing or is incomplete (KOS-SENSE-010)
+	@python3 scripts/test_all.py
+regression-golden: ## Show whether the regression golden data are current; WRITE=1 rewrites them (only after the change was decided, tests/regression/README.md)
+	@python3 scripts/regenerate_regression_golden.py $(if $(WRITE),--write,)
 acceptance: ## Acceptance gate (NOT_IMPLEMENTED: exits 3)
 	$(call not_implemented,acceptance)
 
