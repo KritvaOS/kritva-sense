@@ -2,15 +2,15 @@
 
 # Progress: KritvaOS/kritva-sense
 
-Derived snapshot of the kritva-program status view, taken 2026-11-08T12:16:37Z at baseline v12 (APPROVED). It can lag the program. The program view is the record: [https://github.com/KritvaOS/kritva-program/blob/main/v2/tracking/STATUS_VIEW.md](https://github.com/KritvaOS/kritva-program/blob/main/v2/tracking/STATUS_VIEW.md).
+Derived snapshot of the kritva-program status view, taken 2026-11-13T17:29:34Z at baseline v13 (APPROVED). It can lag the program. The program view is the record: [https://github.com/KritvaOS/kritva-program/blob/main/v2/tracking/STATUS_VIEW.md](https://github.com/KritvaOS/kritva-program/blob/main/v2/tracking/STATUS_VIEW.md).
 
 This repository sends facts only and earns no program credit by itself. Acceptance is decided by kritva-program, and this file never approves anything.
 
 ## Accepted progress
 
 ```text
-Accepted weight: 90.4%  (47 / 52 weight, 10 of 11 tasks)
-██████████████████░░
+Accepted weight: 100.0%  (52 / 52 weight, 11 of 11 tasks)
+████████████████████
 ```
 
 Accepted weight over total weight, where total covers completed Foundation work, baselined V2 tasks and owner-approved V2 planning tasks that are not baselined yet. Planning-only tasks are in the total and earn nothing until they are baselined and accepted. Weights are estimates.
@@ -21,11 +21,11 @@ Accepted weight over total weight, where total covers completed Foundation work,
 |---|---|---|---|
 | M0 Foundation | `████████████████████` | 3 / 3 | 100.0% |
 | M1 Studio | `████████████████████` | 5 / 5 | 100.0% |
-| M2 Build & Artifact | `███████████████░░░░░` | 14 / 19 | 73.7% |
+| M2 Build & Artifact | `████████████████████` | 19 / 19 | 100.0% |
 | M5 Execution | `████████████████████` | 5 / 5 | 100.0% |
 | M7 Live & Results | `████████████████████` | 9 / 9 | 100.0% |
 | M8 Production | `████████████████████` | 11 / 11 | 100.0% |
-| **All** | `██████████████████░░` | **47 / 52** | **90.4%** |
+| **All** | `████████████████████` | **52 / 52** | **100.0%** |
 
 Milestone dates are owner-approved planning dates in the program, not delivery commitments.
 
@@ -40,7 +40,7 @@ Tasks in the approved program baseline. Weight is the baseline weight. Acceptanc
 | `KOS-SENSE-002` | Contract validation and synthetic-data tests | M2 | 4 | COMPLETE | ACCEPTED |
 | `KOS-SENSE-004` | Deterministic synthetic sensor sample generator | M2 | 4 | COMPLETE | ACCEPTED |
 | `KOS-SENSE-009` | Synthetic integration gate | M2 | 6 | COMPLETE | ACCEPTED |
-| `KOS-SENSE-010` | Regression gate and compatibility suite | M2 | 5 | IN_PROGRESS | NOT ACCEPTED |
+| `KOS-SENSE-010` | Regression gate and compatibility suite | M2 | 5 | COMPLETE | ACCEPTED |
 | `KOS-SENSE-003` | Deterministic frame graph and transform validation for simulated samples | M5 | 5 | COMPLETE | ACCEPTED |
 | `KOS-SENSE-005` | Telemetry stream contract and reference validator | M7 | 4 | COMPLETE | ACCEPTED |
 | `KOS-SENSE-006` | Consumer conformance harness | M7 | 5 | COMPLETE | ACCEPTED |
@@ -51,9 +51,9 @@ Tasks in the approved program baseline. Weight is the baseline weight. Acceptanc
 
 | State | This repository | Decided by |
 |---|---|---|
-| Execution | 10 of 11 baselined tasks reported COMPLETE by this repository | this repository's own report |
-| Evidence | KOS-SENSE-010: the repo reports no commit-bound CI evidence | the program's CI run verification |
-| Acceptance | 47 / 52 weight (bar above) | kritva-program approvals |
-| Release readiness | NOT_READY for the program; this progress figure is not readiness | program gates |
+| Execution | 11 of 11 baselined tasks reported COMPLETE by this repository | this repository's own report |
+| Evidence | no evidence gap recorded for this repository in the program's evidence health | the program's CI run verification |
+| Acceptance | 52 / 52 weight (bar above) | kritva-program approvals |
+| Release readiness | READY for the program; this progress figure is not readiness | program gates |
 
 Reported execution is not acceptance, and a bar is not release readiness. Refresh this file by running `tools/publish_repo_progress.py` in kritva-program and merging the resulting pull request here.
