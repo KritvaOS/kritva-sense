@@ -10,3 +10,11 @@ As of 2026-11-12 (KOS-SENSE-001 to KOS-SENSE-010 accepted; program decisions D-0
 | V2-M5-SENSE-001 | TASK ACCEPTED, NOT CLOSED (no completion record) | KOS-SENSE-003: central approval (D-085); `unit-tests` run 41267842700 PASS on c92e841 |
 | V2-M7-SENSE-001 | TASKS ACCEPTED, NOT CLOSED (baselined in v6, D-087; no completion record) | KOS-SENSE-005: central approval (D-088); `unit-tests` run 41278515695 PASS on 0bee5ed; KOS-SENSE-006: central approval (D-089); `unit-tests` run 41289421496 PASS on 67590bc |
 | V2-M8-SENSE-001 | CLOSED by the approved `COMPLETION_RECORD.md` (KOS-SENSE-007 accepted, D-091; KOS-SENSE-008 accepted, D-092; baselined in v7, D-090); the record was merged by the owner in pull request #55; the annotated tag `v0.2.0` is a separate owner release action after closure | KOS-SENSE-007: central approval (D-091); `unit-tests` run 41292919590 PASS on 5f1aa7a. KOS-SENSE-008: central approval (D-092); `unit-tests` run 41298259048 PASS on a8dfb5a (closing commit, merge of pull request #52). Completion condition: KOS-SENSE-007 accepted; KOS-SENSE-008 accepted after it; release artifacts and the version mapping reviewed; the internal security report complete with every Critical and High finding fixed or dispositioned by the risk owner; the owner's release tag action is separate from the task evidence and is not a closure condition. Closure record: `COMPLETION_RECORD.md` at the repository root |
+
+## Owner confirmations (2026-11-13)
+
+Confirmed by Dinesh in chat; no reviewer name, date or findings were supplied, and none are recorded here.
+
+- Required checks: the repository ruleset requires `unit-tests`, `readme-check` and `progress-check`.
+- Independent review: the independent review of KOS-SENSE-010 is completed. This note records the owner's confirmation only; it does not amend D-127 and it is not a completion record for any milestone.
+- Commit author display: commits in this repository are attributed on GitHub to `@dineshannayya`.
