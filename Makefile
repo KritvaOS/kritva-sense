@@ -59,6 +59,58 @@ regression-golden: ## Show whether the regression golden data are current; WRITE
 acceptance: ## Acceptance gate (NOT_IMPLEMENTED: exits 3)
 	$(call not_implemented,acceptance)
 
+##@ Preflight
+# "make preflight" is the one command to run before pushing. It runs the checks CI runs on a pull request,
+# keeps going after a failure, prints a summary, fixes nothing and never fetches or installs anything.
+# Not mirrored: secret-scan (gitleaks) and the PR gate's remote rules (required workflows and approvals).
+# PREFLIGHT_BASE is the branch the commits are compared with; run "git fetch origin" first.
+.PHONY: preflight preflight-commits readme-test python-check progress-check hooks-install preflight-hook-on preflight-hook-off
+
+PREFLIGHT_BASE ?= origin/main
+PREFLIGHT_STEPS := python-check check docs-check check-readme readme-test progress-check preflight-commits test-unit test-integration test-regression
+
+preflight: ## Run the CI checks locally and report every failure (PREFLIGHT_BASE=origin/main)
+	@fail=""; \
+	for step in $(PREFLIGHT_STEPS); do \
+	  echo ""; echo "[preflight] >>> $$step"; \
+	  if $(MAKE) --no-print-directory $$step; then :; else fail="$$fail $$step"; fi; \
+	done; \
+	echo ""; \
+	if [ -n "$$fail" ]; then \
+	  echo "[preflight] FAILED:$$fail"; \
+	  echo "[preflight] Fix these, then run make preflight again. CI would reject this push."; \
+	  exit 1; \
+	fi; \
+	echo "[preflight] All preflight checks passed. CI also runs secret-scan."
+
+preflight-commits: ## Check the commits since PREFLIGHT_BASE: message rules, commit format and the PR gate (static)
+	@git rev-parse --verify --quiet "$(PREFLIGHT_BASE)^{commit}" >/dev/null || { echo "[preflight-commits] $(PREFLIGHT_BASE) not found. Run: git fetch origin"; exit 2; }
+	@python3 scripts/security/check_commit_messages.py --range "$(PREFLIGHT_BASE)..HEAD"
+	@python3 scripts/security/check_commit_format.py --range "$(PREFLIGHT_BASE)..HEAD"
+	@python3 scripts/pipeline/pr_gate.py static --gate .github/kritva-gate.json --base "$(PREFLIGHT_BASE)" --head HEAD
+
+readme-test: ## Run the README checker unit tests (same as the readme-check workflow)
+	@python3 -m unittest discover -s tests/readme_check -v
+
+python-check: ## Check python3 is Python 3.11 or newer (CI uses 3.12; the packaging tests need tomllib)
+	@python3 -c 'import sys; sys.exit(0 if sys.version_info >= (3, 11) else 1)' || { echo "[python-check] python3 is older than 3.11 (CI uses 3.12). Put Python 3.12 first on PATH, for example: python3.12 -m venv ~/.venvs/kritva312 && . ~/.venvs/kritva312/bin/activate (the pre-push hook uses the same python3)."; exit 1; }
+
+progress-check: ## Check status/STATUS.md against its pinned program snapshot (same as the progress-check workflow)
+	@python3 scripts/progress_report.py --check
+
+hooks-install: ## Enable the repository Git hooks (.githooks): make preflight runs before every git push
+	git config core.hooksPath .githooks
+	@echo "[hooks] core.hooksPath set to .githooks; pre-push runs make preflight."
+	@echo "[hooks] Turn it off with: make preflight-hook-off. Skip it once with: git push --no-verify"
+
+preflight-hook-on: ## Run "make preflight" before every git push (the default after hooks-install)
+	git config kritva.preflightOnPush true
+	@echo "[hooks] pre-push preflight is ON for this clone. It needs core.hooksPath (make hooks-install)."
+
+preflight-hook-off: ## Turn off the pre-push preflight in this clone (CI still runs every check)
+	git config kritva.preflightOnPush false
+	@echo "[hooks] pre-push preflight is OFF for this clone."
+
 ##@ Git
 .PHONY: git_sync
 git_sync: ## Switch to main, fast-forward from origin, prune, delete merged local branches
